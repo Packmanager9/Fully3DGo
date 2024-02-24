@@ -1,0 +1,3009 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+
+<head>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+<canvas id="canvas" width="1280" height="850"></canvas>
+<canvas hidden id="canvas2" width="1280" height="850"></canvas>
+<script>
+
+        window.addEventListener('keydown', (event) => {
+            console.log(event.key)
+            keysPressed[event.key] = true;
+        });
+        window.addEventListener('keyup', (event) => {
+            console.log(event.key)
+            delete keysPressed[event.key];
+        });
+
+
+
+    let ws
+    let HOST = location.origin.replace(/^http/, 'ws')
+    ws = new WebSocket(HOST);
+    let playerID = -1 //Math.floor(Math.random()*2)
+
+
+    let roomslist = []
+
+    const squaretable = {} // this section of code is an optimization for use of the hypotenuse function on Line and LineOP objects
+    for (let t = 0; t < 10000000; t++) {
+        squaretable[`${t}`] = Math.sqrt(t)
+        if (t > 999) {
+            t += 9
+        }
+    }
+
+    let setup_canvas = document.getElementById('canvas')
+    let canvas2 = document.getElementById('canvas2')
+
+    let canvas_context2 = canvas2.getContext('2d');
+    let canvas
+    let canvas_context
+    let keysPressed = {}
+    let FLEX_engine
+    let TIP_engine = {}
+    let XS_engine
+    let YS_engine
+    setUp(setup_canvas)
+
+    class Data {
+    constructor(input = -100) {
+        this.delta = 0
+        this.outputConnections = []
+        if (input == -100) {
+            this.value = this.weight()
+        } else {
+            this.value = input
+        }
+    }
+    valueOf() {
+        return this.value
+    }
+    weight() {
+        return Math.random() - .5
+    }
+}
+
+    class LineOP {
+        constructor(object, target, color, width) {
+            this.object = object
+            this.target = target
+            this.color = color
+            this.width = width
+        }
+
+        intersects(line) {
+
+            if ((this.object.y == line.object.y && this.object.x == line.object.x) || (this.target.y == line.object.y && this.target.x == line.object.x) || (this.target.y == line.target.y && this.target.x == line.target.x) || (this.object.y == line.target.y && this.object.x == line.target.x)) {
+                return false
+            }
+
+            var det, gm, lm;
+            if (line) {
+                if (this.target) {
+                    if (this.object) {
+                        if (line.object) {
+                            if (line.target) {
+                                det = (this.target.x - this.object.x) * (line.target.y - line.object.y) - (line.target.x - line.object.x) * (this.target.y - this.object.y);
+                            }
+                        }
+                    }
+                }
+            }
+            if (det === 0) {
+                return false;
+            } else {
+                if (line) {
+                    if (this.target) {
+                        if (this.object) {
+                            if (line.object) {
+                                if (line.target) {
+                                    lm = ((line.target.y - line.object.y) * (line.target.x - this.object.x) + (line.object.x - line.target.x) * (line.target.y - this.object.y)) / det;
+                                    gm = ((this.object.y - this.target.y) * (line.target.x - this.object.x) + (this.target.x - this.object.x) * (line.target.y - this.object.y)) / det;
+
+
+                                    return (0 <= lm && lm <= 1) && (0 <= gm && gm <= 1);
+                                }
+                            }
+                        }
+                    }
+                }
+                return false
+            }
+        }
+        squareDistance() {
+            let xdif = this.object.x - this.target.x
+            let ydif = this.object.y - this.target.y
+            let squareDistance = (xdif * xdif) + (ydif * ydif)
+            return squareDistance
+        }
+        hypotenuse() {
+            let xdif = this.object.x - this.target.x
+            let ydif = this.object.y - this.target.y
+            let hypotenuse = (xdif * xdif) + (ydif * ydif)
+            if (hypotenuse < 10000000 - 1) {
+                if (hypotenuse > 1000) {
+                    return squaretable[`${Math.round(10 * Math.round((hypotenuse * .1)))}`]
+                } else {
+                    return squaretable[`${Math.round(hypotenuse)}`]
+                }
+            } else {
+                return Math.sqrt(hypotenuse)
+            }
+        }
+        angle() {
+            return Math.atan2(this.object.y - this.target.y, this.object.x - this.target.x)
+        }
+    
+    squareDistance() {
+        let xdif = this.object.x - this.target.x
+        let ydif = this.object.y - this.target.y
+        let squareDistance = (xdif * xdif) + (ydif * ydif)
+        return squareDistance
+    }
+    hypotenuse() {
+        let xdif = this.object.x - this.target.x
+        let ydif = this.object.y - this.target.y
+        let hypotenuse = (xdif * xdif) + (ydif * ydif)
+        return Math.sqrt(hypotenuse)
+    }
+    hypotenuseZ() {
+        let xdif = this.object.x - this.target.x
+        let ydif = this.object.z - this.target.z
+        let hypotenuse = (xdif * xdif) + (ydif * ydif)
+        return Math.sqrt(hypotenuse)
+    }
+    angleZ() {
+        return Math.atan2(this.object.z - this.target.z, this.object.x - this.target.x)
+    }
+
+        draw() {
+            let linewidthstorage = canvas_context.lineWidth
+            canvas_context.strokeStyle = this.color
+            canvas_context.lineWidth = this.width
+            canvas_context.beginPath()
+            canvas_context.moveTo(this.object.x, this.object.y)
+            canvas_context.lineTo(this.target.x, this.target.y)
+            canvas_context.stroke()
+            canvas_context.lineWidth = linewidthstorage
+        }
+    }
+    class Point {
+        constructor(x, y) {
+            this.x = x
+            this.y = y
+            this.radius = 0
+        }
+        pointDistance(point) {
+            return (new LineOP(this, point, "transparent", 0)).hypotenuse()
+        }
+    }
+    class Rectangle {
+        constructor(x, y, w, h, c) {
+            this.x = x
+            this.y = y
+            this.h = h
+            this.w = w
+            this.color = c
+        }
+        draw() {
+            canvas_context.fillStyle = this.color
+            canvas_context.fillRect(this.x, this.y, this.w, this.h)
+        }
+        isPointInside(point) {
+            if (point.x >= this.x) {
+                if (point.y >= this.y) {
+                    if (point.x <= this.x + this.w) {
+                        if (point.y <= this.y + this.h) {
+                            return true
+                        }
+                    }
+                }
+            }
+            return false
+        }
+    }
+
+    class Circle {
+        constructor(x, y, radius, color) {
+            this.x = x
+            this.y = y
+            this.radius = radius
+            this.color = color
+        }
+        draw() {
+            canvas_context.lineWidth = this.strokeWidth
+            canvas_context.strokeStyle = this.color
+            canvas_context.beginPath();
+            canvas_context.arc(this.x, this.y, this.radius, 0, (Math.PI * 2), true)
+            canvas_context.fillStyle = this.color
+            canvas_context.fill()
+        }
+        adraw() {
+            canvas_context.lineWidth = this.strokeWidth
+            canvas_context.strokeStyle = "white"
+            canvas_context.beginPath();
+            canvas_context.arc(this.x, this.y, this.radius, 0, (Math.PI * 2), true)
+            canvas_context.fillStyle = this.color
+            canvas_context.stroke()
+            canvas_context.closePath()
+        }
+
+    }
+
+    // let rock = new Image()
+    // rock.src = "https://ditzbitz.com/rockRPS.png"
+    // let paper = new Image()
+    // paper.src = "https://ditzbitz.com/paperRPS.png"
+    // let scissors = new Image()
+    // scissors.src = "https://ditzbitz.com/scissorsRPS.png"
+
+    // class Crew {
+    //     constructor(tile, side, queen) {
+    //         this.health = 100
+    //         this.maxhealth = this.health
+    //         this.queen = queen
+    //         this.selected = 0
+    //         this.side = side
+    //         this.tile = tile
+    //         this.body = new Circle(b.grid[tile].x + 32, b.grid[tile].y, 17, "")
+    //         this.body.color = "red"
+    //         if (this.side == 1) {
+    //             this.body.color = "#00ff00"
+    //         }
+    //     }
+    //     draw() {
+    //         if (this.health > 0) {
+
+    //         } else {
+    //             return
+    //         }
+
+    //         if (this.selected == 1) {
+    //             let x1 = Math.max(100, this.body.x - 160)
+    //             let y1 = Math.max(100, this.body.y - 160)
+    //             let wcap = Math.max(160 - (this.body.x - 100), 0)
+    //             let hcap = Math.max(160 - (this.body.y - 100), 0)
+
+    //             let rect = new Rectangle(x1, y1, 320 - wcap, 320 - hcap, "")
+    //             if (rect.x + rect.w > (64 * 9) + 100) {
+    //                 let d = (rect.x + rect.w) - ((64 * 9) + 100)
+    //                 // rect.x -=d
+    //                 rect.w -= d
+    //             }
+    //             if (rect.y + rect.h > (64 * 9) + 100) {
+    //                 let d = (rect.y + rect.h) - ((64 * 9) + 100)
+    //                 // rect.y -=d
+    //                 rect.h -= d
+    //             }
+    //             rect.color = "#00ff0044"
+    //             if (this.side == 1) {
+    //                 rect.color = "#00ff0044"
+    //             }
+    //             rect.draw()
+    //         }
+    //         this.body.radius = 15
+    //         this.body.x = b.grid[this.tile].x + 32
+    //         this.body.y = b.grid[this.tile].y + 32
+    //         if (b.turn == this.side) {
+    //             this.body.color = "white"
+    //             this.body.radius += 2 + (this.selected * 5)
+    //             this.body.adraw()
+    //             this.body.radius -= 2 + (this.selected * 5)
+    //         }
+    //         this.body.color = "#FFFFFF"
+    //         if (this.side == 1) {
+    //             this.body.color = "#000000"
+    //         }
+    //         this.healthbar = new Rectangle(this.body.x - 32, this.body.y - 32, 64 * (this.health / this.maxhealth), 4, "cyan")
+    //         // this.body.draw()
+    //         if (this.queen == 0) {
+    //             canvas_context.drawImage(rock, 0, 0, 30, 30, this.body.x - 15, this.body.y - 15, 30, 30)
+    //         }
+    //         if (this.queen == 1) {
+    //             canvas_context.drawImage(paper, 0, 0, 30, 30, this.body.x - 15, this.body.y - 15, 30, 30)
+    //         }
+    //         if (this.queen == 2) {
+    //             canvas_context.drawImage(scissors, 0, 0, 30, 30, this.body.x - 15, this.body.y - 15, 30, 30)
+    //         }
+    //         this.healthbar.draw()
+    //     }
+    // }
+
+    // class Team {
+    //     constructor(side) {
+    //         this.crew = []
+    //         if (side == 0) {
+    //             let crew1 = new Crew(0, 0, 0)
+    //             let crew2 = new Crew(1, 0, 1)
+    //             let crew3 = new Crew(2, 0, 2)
+    //             let crew4 = new Crew(3, 0, 0)
+    //             let crew5 = new Crew(4, 0, 1)
+    //             let crew6 = new Crew(5, 0, 2)
+    //             let crew7 = new Crew(6, 0, 0)
+    //             let crew8 = new Crew(7, 0, 1)
+    //             let crew9 = new Crew(8, 0, 2)
+    //             let crew10 = new Crew(9, 0, 2)
+    //             let crew11 = new Crew(10, 0, 0)
+    //             let crew12 = new Crew(11, 0, 1)
+    //             let crew13 = new Crew(12, 0, 2)
+    //             let crew14 = new Crew(13, 0, 0)
+    //             let crew15 = new Crew(14, 0, 1)
+    //             let crew16 = new Crew(15, 0, 2)
+    //             let crew17 = new Crew(16, 0, 0)
+    //             let crew18 = new Crew(17, 0, 1)
+    //             this.crew.push(crew1)
+    //             this.crew.push(crew2)
+    //             this.crew.push(crew3)
+    //             this.crew.push(crew4)
+    //             this.crew.push(crew5)
+    //             this.crew.push(crew6)
+    //             this.crew.push(crew7)
+    //             this.crew.push(crew8)
+    //             this.crew.push(crew9)
+    //             this.crew.push(crew10)
+    //             this.crew.push(crew11)
+    //             this.crew.push(crew12)
+    //             this.crew.push(crew13)
+    //             this.crew.push(crew14)
+    //             this.crew.push(crew15)
+    //             this.crew.push(crew16)
+    //             this.crew.push(crew17)
+    //             this.crew.push(crew18)
+    //         } else {
+
+    //             // let crew1 = new Crew(80-0, 1,1)
+    //             // let crew2 = new Crew(80-1, 1, 0)
+    //             // let crew3 = new Crew(80-6, 1, 1)
+    //             // let crew4 = new Crew(80-7, 1, 0)
+    //             // let crew5 = new Crew(80-2, 1, 2)
+    //             // let crew6 = new Crew(80-3, 1, 1)
+    //             // let crew7 = new Crew(80-8, 1, 2)
+    //             // let crew8 = new Crew(80-9, 1, 1)
+    //             // let crew9 = new Crew(80-4, 1, 0)
+    //             // let crew10 = new Crew(80-5, 1, 2)
+    //             // let crew11 = new Crew(80-10, 1, 0)
+    //             // let crew12 = new Crew(80-11, 1, 2)
+    //             // let crew13 = new Crew(80-12, 1, 1)
+    //             // let crew14 = new Crew(80-13, 1, 0)
+    //             // let crew15 = new Crew(80-14, 1, 2)
+    //             // let crew16 = new Crew(80-15, 1, 1)
+    //             // let crew17 = new Crew(80-16, 1, 0)
+    //             // let crew18 = new Crew(80-17, 1, 2)
+
+    //             let crew1 = new Crew(80 - 0, 1, 0)
+    //             let crew2 = new Crew(80 - 1, 1, 1)
+    //             let crew3 = new Crew(80 - 2, 1, 2)
+    //             let crew4 = new Crew(80 - 3, 1, 0)
+    //             let crew5 = new Crew(80 - 4, 1, 1)
+    //             let crew6 = new Crew(80 - 5, 1, 2)
+    //             let crew7 = new Crew(80 - 6, 1, 0)
+    //             let crew8 = new Crew(80 - 7, 1, 1)
+    //             let crew9 = new Crew(80 - 8, 1, 2)
+    //             let crew10 = new Crew(80 - 9, 1, 2)
+    //             let crew11 = new Crew(80 - 10, 1, 0)
+    //             let crew12 = new Crew(80 - 11, 1, 1)
+    //             let crew13 = new Crew(80 - 12, 1, 2)
+    //             let crew14 = new Crew(80 - 13, 1, 0)
+    //             let crew15 = new Crew(80 - 14, 1, 1)
+    //             let crew16 = new Crew(80 - 15, 1, 2)
+    //             let crew17 = new Crew(80 - 16, 1, 0)
+    //             let crew18 = new Crew(80 - 17, 1, 1)
+    //             this.crew.push(crew1)
+    //             this.crew.push(crew2)
+    //             this.crew.push(crew3)
+    //             this.crew.push(crew4)
+    //             this.crew.push(crew5)
+    //             this.crew.push(crew6)
+    //             this.crew.push(crew7)
+    //             this.crew.push(crew8)
+    //             this.crew.push(crew9)
+    //             this.crew.push(crew10)
+    //             this.crew.push(crew11)
+    //             this.crew.push(crew12)
+    //             this.crew.push(crew13)
+    //             this.crew.push(crew14)
+    //             this.crew.push(crew15)
+    //             this.crew.push(crew16)
+    //             this.crew.push(crew17)
+    //             this.crew.push(crew18)
+    //         }
+    //         this.side = side
+    //     }
+    //     checkSel() {
+    //         let wet = 0
+    //         for (let t = 0; t < this.crew.length; t++) {
+    //             if (this.crew[t].selected == 1) {
+    //                 wet = 1
+    //             }
+    //         }
+    //         if (wet == 1) {
+    //             return true
+    //         }
+    //         return false
+
+    //     }
+    //     draw() {
+    //         this.links = []
+
+    //         let cap3 = [0, 0, 0]
+
+    //         for (let t = 0; t < this.crew.length; t++) {
+    //             this.crew[t].conflict = 0
+    //         }
+    //         for (let t = 0; t < this.crew.length; t++) {
+    //             for (let k = t; k < this.crew.length; k++) {
+    //                 if (this.crew[t] != this.crew[k]) {//new
+    //                     if (this.crew[t].queen == this.crew[k].queen) {
+    //                         let link = new LineOP(this.crew[t].body, this.crew[k].body, this.crew[t].body.color, 2)
+    //                         link.guy1 = this.crew[t]
+    //                         link.guy2 = this.crew[k]
+    //                         if (this.crew[t].queen == 0) {
+    //                             if (this.side == 0) {
+    //                                 link.color = "#FF8888"
+    //                             } else {
+    //                                 link.color = "#AA4444"
+    //                             }
+    //                         }
+    //                         if (this.crew[t].queen == 1) {
+    //                             if (this.side == 0) {
+    //                                 link.color = "#88FF88"
+    //                             } else {
+    //                                 link.color = "#44AA44"
+    //                             }
+    //                         }
+    //                         if (this.crew[t].queen == 2) {
+    //                             if (this.side == 0) {
+    //                                 link.color = "#8888FF"
+    //                             } else {
+    //                                 link.color = "#4444AA"
+    //                             }
+    //                         }
+    //                         this.links.push(link)
+    //                         cap3[this.crew[t].queen] = 1
+    //                         if (link.hypotenuse() <= 70) {
+    //                             link.guy1.conflict = 1
+    //                             link.guy2.conflict = 1
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         if (cap3[0] + cap3[1] + cap3[2] == 3) {
+
+    //         } else {
+    //             if (this.side == 0) {
+    //                 canvas_context.font = "40px arial"
+    //                 canvas_context.fillStyle = "Black"
+    //                 canvas_context.fillText("Black wins", 900, 350 + (this.side * 300))
+    //             } else {
+    //                 canvas_context.font = "40px arial"
+    //                 canvas_context.fillStyle = "White"
+    //                 canvas_context.fillText("White wins", 900, 350 + (this.side * 300))
+    //             }
+    //         }
+
+    //         this.total = 0
+    //         for (let t = 0; t < this.links.length; t++) {
+    //             this.links[t].draw()
+    //         }
+    //         for (let t = 0; t < this.crew.length; t++) {
+    //             this.crew[t].draw()
+    //             this.total += this.crew[t].health
+    //         }
+    //         canvas_context.font = "40px arial"
+    //         canvas_context.fillStyle = this.crew[0].body.color
+    //         canvas_context.fillText(Math.round(this.total), 900, 300 + (this.side * 300))
+    //         for (let t = 0; t < this.crew.length; t++) {
+    //             if (this.crew[t].health <= 0) {
+    //                 this.crew.splice(t, 1)
+    //             }
+    //         }
+    //     }
+    // }
+
+    // class Board {
+    //     constructor() {
+    //         this.turn = 0
+    //         this.grid = []
+    //         for (let t = 0; t < 9; t++) {
+    //             for (let k = 0; k < 9; k++) {
+    //                 let box = new Rectangle(100 + (64 * t), 100 + (64 * k), 64, 64, "")
+    //                 if (t % 2 == 1) {
+
+    //                     if (k % 2 == 1) {
+
+    //                         box.color = "#888800"
+    //                     } else {
+    //                         box.color = "#880088"
+    //                     }
+    //                 }
+    //                 if (t % 2 == 0) {
+
+    //                     if (k % 2 == 0) {
+
+    //                         box.color = "#888800"
+    //                     } else {
+    //                         box.color = "#880088"
+    //                     }
+    //                 }
+    //                 this.grid.push(box)
+    //             }
+    //         }
+    //         this.first = 0
+    //         this.teams = []
+    //     }
+    //     check() {
+    //         if (playerID != this.turn) {
+    //             return
+    //         }
+    //         let wet = 0
+    //         for (let t = 0; t < this.teams.length; t++) {
+    //             if (this.teams[t].checkSel()) {
+    //                 wet = 1
+    //             }
+    //         }
+    //         if (wet == 0) {
+    //             for (let t = 0; t < this.teams.length; t++) {
+    //                 for (let k = 0; k < this.teams[t].crew.length; k++) {
+    //                     this.teams[t].crew[k].selected = 0
+    //                 }
+    //             }
+    //             for (let t = 0; t < this.teams.length; t++) {
+    //                 for (let k = 0; k < this.teams[t].crew.length; k++) {
+    //                     let link = new LineOP(this.teams[t].crew[k].body, TIP_engine)
+    //                     if (link.hypotenuse() < this.teams[t].crew[k].body.radius) {
+    //                         if (t == this.turn) {
+    //                             this.teams[t].crew[k].selected = 1
+    //                         }
+    //                     }
+    //                 }
+    //             }
+
+    //         } else {
+
+    //             for (let t = 0; t < this.teams.length; t++) {
+    //                 for (let k = 0; k < this.teams[t].crew.length; k++) {
+    //                     let link = new LineOP(this.teams[t].crew[k].body, TIP_engine)
+    //                     if (link.hypotenuse() < this.teams[t].crew[k].body.radius) {
+    //                         if (t == this.turn) {
+    //                             if (this.teams[t].crew[k].selected == 1) {
+    //                                 this.teams[t].crew[k].selected = 0
+    //                                 return
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+
+
+    //             for (let t = 0; t < this.grid.length; t++) {
+    //                 if (this.grid[t].isPointInside(TIP_engine)) {
+
+    //                     let guy = {}
+    //                     let wet = 0
+    //                     let gf = -1
+    //                     for (let r = 0; r < this.teams.length; r++) {
+    //                         for (let w = 0; w < this.teams[r].crew.length; w++) {
+    //                             if (this.teams[r].crew[w].tile == t) {
+    //                                 wet = 1
+    //                             }
+    //                             if (this.teams[r].crew[w].selected == 1) {
+    //                                 gf = w
+    //                                 guy = this.teams[r].crew[w]
+    //                             }
+    //                         }
+    //                     }
+
+    //                     // let line = new LineOP(this.grid[guy.tile], this.grid[t])
+    //                     // if(line.hypotenuse() < (64*1.5)){
+    //                     if (Math.abs(this.grid[t].x - this.grid[guy.tile].x) <= 128 && Math.abs(this.grid[t].y - this.grid[guy.tile].y) <= 128) {
+    //                         if (wet == 0) {
+    //                             this.cald = 1
+    //                             guy.tile = t
+    //                             guy.selected = 0
+
+
+    //                             let pson = {}
+    //                             pson.id = this.turn
+    //                             pson.guy = gf
+    //                             pson.tile = t
+    //                             ws.send(JSON.stringify(pson))
+    //                             this.turn++
+    //                             this.turn %= 2
+    //                             break
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //     }
+
+    //     calcDamage() {
+    //         for (let k = 0; k < this.teams[0].links.length; k++) {
+    //             for (let t = 0; t < this.teams[1].links.length; t++) {
+    //                 if (this.teams[0].links[k].intersects(this.teams[1].links[t])) {
+    //                     if (this.teams[0].links[k].guy1.queen == 0 && this.teams[1].links[t].guy1.queen == 1) {
+    //                         this.teams[0].links[k].guy2.health -= 10
+    //                         this.teams[0].links[k].guy1.health -= 10
+    //                     } else {
+    //                         if (this.teams[0].links[k].guy1.queen == 1 && this.teams[1].links[t].guy1.queen == 0) {
+    //                             this.teams[1].links[t].guy2.health -= 10
+    //                             this.teams[1].links[t].guy1.health -= 10
+    //                         }
+    //                     }
+    //                     if (this.teams[0].links[k].guy1.queen == 1 && this.teams[1].links[t].guy1.queen == 2) {
+    //                         this.teams[0].links[k].guy2.health -= 10
+    //                         this.teams[0].links[k].guy1.health -= 10
+    //                     } else {
+    //                         if (this.teams[0].links[k].guy1.queen == 2 && this.teams[1].links[t].guy1.queen == 1) {
+    //                             this.teams[1].links[t].guy2.health -= 10
+    //                             this.teams[1].links[t].guy1.health -= 10
+    //                         }
+    //                     }
+    //                     if (this.teams[0].links[k].guy1.queen == 2 && this.teams[1].links[t].guy1.queen == 0) {
+    //                         this.teams[0].links[k].guy2.health -= 10
+    //                         this.teams[0].links[k].guy1.health -= 10
+    //                     } else {
+    //                         if (this.teams[0].links[k].guy1.queen == 0 && this.teams[1].links[t].guy1.queen == 2) {
+    //                             this.teams[1].links[t].guy2.health -= 10
+    //                             this.teams[1].links[t].guy1.health -= 10
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         for (let k = 0; k < this.teams[0].crew.length; k++) {
+
+    //             if (this.teams[0].crew[k].conflict == 1) {
+    //                 this.teams[0].crew[k].health -= 10
+    //             }
+    //         }
+    //         for (let t = 0; t < this.teams[1].crew.length; t++) {
+    //             if (this.teams[1].crew[t].conflict == 1) {
+    //                 this.teams[1].crew[t].health -= 10
+    //             }
+    //         }
+    //     }
+    //     makeTeams() {
+    //         this.teams = []
+    //         for (let t = 0; t < 2; t++) {
+    //             this.teams.push(new Team(t))
+    //         }
+    //     }
+    //     draw() {
+    //         if (this.first == 0) {
+    //             this.first = 1
+    //             this.makeTeams()
+    //         }
+    //         for (let t = 0; t < this.grid.length; t++) {
+    //             this.grid[t].draw()
+    //         }
+    //         for (let t = 0; t < this.teams.length; t++) {
+    //             this.teams[t].draw()
+    //         }
+
+    //         if (this.cald == 1) {
+
+    //             for (let t = 0; t < this.teams.length; t++) {
+    //                 this.teams[t].draw()
+    //             }
+    //             this.calcDamage()
+    //             this.cald = 0
+    //         }
+    //     }
+    // }
+
+
+    let globalRoom = Math.floor(Math.random() * 9999)
+    // let b = new Board()
+    let startgame = 0
+
+    let goRect = new Rectangle(1000, 500, 200, 100, "Red")
+
+    class Numbox {
+        constructor() {
+            this.number = globalRoom
+            this.pressed = 0
+        }
+        draw() {
+            // console.log(keysPressed)
+            if (this.number < 999) {
+                if (keysPressed['1']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `1`, 10)
+                    keysPressed['1'] = false
+                }
+                if (keysPressed['2']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `2`, 10)
+                    keysPressed['2'] = false
+                }
+                if (keysPressed['3']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `3`, 10)
+                    keysPressed['3'] = false
+                }
+                if (keysPressed['4']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `4`, 10)
+                    keysPressed['4'] = false
+                }
+                if (keysPressed['5']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `5`, 10)
+                    keysPressed['5'] = false
+                }
+                if (keysPressed['6']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `6`, 10)
+                    keysPressed['6'] = false
+                }
+                if (keysPressed['7']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `7`, 10)
+                    keysPressed['7'] = false
+                }
+                if (keysPressed['8']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `8`, 10)
+                    keysPressed['8'] = false
+                }
+                if (keysPressed['9']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `9`, 10)
+                    keysPressed['9'] = false
+                }
+                if (keysPressed['0']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                    }
+                    this.number = parseInt(this.number + `0`, 10)
+                    keysPressed['0'] = false
+                }
+            } else {
+                if (keysPressed['1']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `1`, 10)
+                        keysPressed['1'] = false
+                    }
+                }
+                if (keysPressed['2']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `2`, 10)
+                        keysPressed['2'] = false
+                    }
+                }
+                if (keysPressed['3']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `3`, 10)
+                        keysPressed['3'] = false
+                    }
+                }
+                if (keysPressed['4']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `4`, 10)
+                        keysPressed['4'] = false
+                    }
+                }
+                if (keysPressed['5']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `5`, 10)
+                        keysPressed['5'] = false
+                    }
+                }
+                if (keysPressed['6']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `6`, 10)
+                        keysPressed['6'] = false
+                    }
+                }
+                if (keysPressed['7']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `7`, 10)
+                        keysPressed['7'] = false
+                    }
+                }
+                if (keysPressed['8']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `8`, 10)
+                        keysPressed['8'] = false
+                    }
+                }
+                if (keysPressed['9']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `9`, 10)
+                        keysPressed['9'] = false
+                    }
+                }
+                if (keysPressed['0']) {
+                    if (this.pressed == 0) {
+                        this.pressed = 1
+                        this.number = 0
+                        this.number = parseInt(this.number + `0`, 10)
+                        keysPressed['0'] = false
+                    }
+                }
+
+            }
+            if (keysPressed['Backspace']) {
+                this.number = 0
+            }
+            canvas_context.font = "30px arial"
+            canvas_context.fillStyle = "white"
+            canvas_context.fillText("Type in a number and press the button to select a room", 100, 100)
+            canvas_context.fillText("The first player in the room plays as white and goes first", 100, 150)
+            canvas_context.fillText("Room: " + this.number, 100, 200)
+            canvas_context.fillText("Press Backspace to reset room number", 100, 250)
+
+
+            canvas_context.fillText("Active rooms", 100, 400)
+            // console.log(roomslist)
+            for (let t = 0; t < roomslist.length; t++) {
+                canvas_context.font = "20px arial"
+                canvas_context.fillStyle = "white"
+                if (roomslist[t][0] != 0) {
+
+                    canvas_context.fillText("Room: " + roomslist[t][0] + "     " + roomslist[t][1] + '/' + '2', 100, 420 + (t * 22))
+                }
+
+            }
+
+            if (Math.random() < .1) {
+
+                let pson = {}
+                pson.queryTournament = 1
+
+                ws.send(JSON.stringify(pson))
+            }
+
+        }
+    }
+
+
+
+    class Point3D {
+        constructor(x, y, z, r, g, b) {
+            this.x = x
+            this.y = y
+            this.z = z
+            this.color = "00ff00" //color // don't include the # because of the value shift function
+            this.r = r
+            this.g = g
+            this.b = b
+            this.radius = 10
+            this.turned = 0
+            this.value = .5
+            this.marked = 0
+        }
+        valueOf() {
+            return this.value
+        }
+        isPointInside(point) {
+
+            this.sy = (this.y * 120) + 350
+            this.sx = (this.x * 120) + 350
+
+            this.areaY = point.y - this.sy
+            this.areaX = point.x - this.sx
+            if (((this.areaX * this.areaX) + (this.areaY * this.areaY)) <= (this.radius * this.radius)) {
+                return true
+            }
+            return false
+        }
+        valueShift(mag) {
+            mag /= 8
+            let endstring = "#"
+
+            let number = parseInt(this.color, 16)
+
+            let r = (this.r) + mag
+            let b = (this.b) + mag
+            let g = (this.g) + mag
+            let fz = this.index
+            if (fz > flooble.dots.length - 200) {
+                let dif = flooble.dots.length - fz
+                g *= ((200 - dif) / 800) + 1
+                r *= ((200 - dif) / 800) + 1
+                b *= ((200 - dif) / 800) + 1
+            }
+            if (fz > flooble.dots.length - 100) {
+                let dif = flooble.dots.length - fz
+                g *= ((100 - dif) / 800) + 1
+                r *= ((100 - dif) / 800) + 1
+                b *= ((100 - dif) / 800) + 1
+            }
+            if (fz > flooble.dots.length - 50) {
+                let dif = flooble.dots.length - fz
+                g *= ((50 - dif) / 800) + 1
+                r *= ((50 - dif) / 800) + 1
+                b *= ((50 - dif) / 800) + 1
+            }
+            if (fz > flooble.dots.length - 50) {
+                let dif = flooble.dots.length - fz
+                g *= ((50 - dif) / 800) + 1
+                r *= ((50 - dif) / 800) + 1
+                b *= ((50 - dif) / 800) + 1
+            }
+            if (fz > flooble.dots.length - 50) {
+                let dif = flooble.dots.length - fz
+                g *= ((50 - dif) / 800) + 1
+                r *= ((50 - dif) / 800) + 1
+                b *= ((50 - dif) / 800) + 1
+            }
+            if (fz > flooble.dots.length - 50) {
+                let dif = flooble.dots.length - fz
+                g *= ((50 - dif) / 800) + 1
+                r *= ((50 - dif) / 800) + 1
+                b *= ((50 - dif) / 800) + 1
+            }
+            if (r > 255) {
+                r = 255
+            } else if (r < 16) {
+                r = 16
+            }
+            if (b > 255) {
+                b = 255
+            } else if (b < 16) {
+                b = 16
+            }
+            if (g > 255) {
+                g = 255
+            } else if (g < 16) {
+                g = 16
+            }
+
+            return endstring + (g | (b << 8) | (r << 16)).toString(16)
+
+        }
+        draw() {
+            // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
+
+            this.sy = (this.y * 120) + 350
+            this.sx = (this.x * 120) + 350
+
+            if (this.turned == 1) {
+                // //console.log("h")
+                let r = 7 + (Math.max(-5, -this.z * 1))
+                canvas_context.beginPath();
+                canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
+                canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.lineWidth = 4
+                canvas_context.stroke()
+                // if (this.marked == 1) {
+                canvas_context.fill()
+                // }
+            } else if (this.turned == -1) {
+                // //console.log("h")
+                // canvas_context.beginPath();
+                // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.moveTo(this.sx - 10, this.sy - 10);
+                // canvas_context.lineTo(this.sx + 10, this.sy + 10);
+                // canvas_context.lineWidth = 4
+                // canvas_context.stroke()
+                // canvas_context.beginPath();
+                // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.moveTo(this.sx + 10, this.sy - 10);
+                // canvas_context.lineTo(this.sx - 10, this.sy + 10);
+                // canvas_context.lineWidth = 3
+                // canvas_context.stroke()
+                canvas_context.beginPath();
+                let r = 7 + (Math.max(-5, -this.z * 1))
+                canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
+                canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.lineWidth = 4
+                canvas_context.stroke()
+                // if (this.marked == 1) {
+                canvas_context.fill()
+                // }
+
+            } else {
+
+                // //console.log("h")
+                canvas_context.strokeStyle = "white"
+                canvas_context.strokeRect(this.sx - 3, this.sy - 3, 6, 6)
+                canvas_context.beginPath();
+                canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, 10, 0, (Math.PI * 2), true)
+                canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.lineWidth = 2
+                canvas_context.strokeRect(this.sx - 2, this.sy - 2, 4, 4)
+            }
+
+
+
+
+            // circ.draw()
+        }
+    }
+
+
+
+    class Pairs {
+        constructor() {
+            // this.left = new Network(intus, [12, 12, 125])
+            // this.left.turn = -1
+            // this.right = new Network(intus, [12, 12, 125])
+            // this.right.turn = 1
+            this.board = new ThreeDeeObject()
+            this.boardStorage = new ThreeDeeObject()
+            this.strings = []
+
+            this.cald = 1
+        }
+
+        spin1(){
+            
+
+            this.board.spin1()
+        }
+        spin2(){
+            
+            this.board.spin2()
+        }
+        check(point, tile = -1) {
+
+            let box = []
+                    for(let t1 = 0;t1<125;t1++){
+                        box.push(0)
+                    //     for(let k1 = 0;k1<5;k1++){
+                    //         box[t1].push([])
+                    //         for(let e1 = 0;e1<5;e1++){
+                    //             box[t1][k1].push(0)
+
+                    //         }
+                    //     }
+                    }
+            let i = -1
+            let flagger = []
+            for (let k = 0; k < 125; k++) {
+
+                // ///////////console.log(this.board.dots[k])
+                if (this.board.dots[k].isPointInside(point)) {
+
+                    if(tile != -1){
+                        k = tile
+                    }
+                    i = k
+                    //console.log(this.board.dots[k])
+                    if (this.board.dots[k].marked != 1) {
+                        this.board.dots[k].marked = 1
+                        this.board.dots[k].turned = 0
+                        this.board.dots[k].value = .5
+                        if (this.board.turn == 0) {
+                            this.board.dots[k].turned = 1
+                            this.board.dots[k].type = 1
+                            this.board.dots[k].value = 1
+                            this.board.dots[k].r = 255
+                            this.board.dots[k].g = 255
+                            this.board.dots[k].b = 255
+                            flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
+                            if (this.strings.includes(this.export())) {
+                                flagger = []
+                                this.board.dots[k].turned = 0
+                                this.board.dots[k].type = 0
+                                this.board.dots[k].value = .5
+                                this.board.dots[k].r = 128
+                                this.board.dots[k].g = 128
+                                this.board.dots[k].b = 128
+                                // this.board.turn++
+                                // this.board.turn %= 2
+                                console.log(this.board.turn)
+                                this.board.dots[k].marked = 0
+                                console.log(this.board.dots[k], this.board.turn)
+                                i = -1
+                            } else {
+                                this.strings.push(this.export())
+                                this.board.turn++
+                                this.board.turn %= 2
+
+                                console.log(this.board.turn)
+                            }
+                        } else if (this.board.turn == 1) {
+                            this.board.dots[k].turned = -1
+                            this.board.dots[k].type = -1
+                            this.board.dots[k].value = 0
+                            this.board.dots[k].r = 0
+                            this.board.dots[k].g = 0
+                            this.board.dots[k].b = 0
+                            flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
+                            if (this.strings.includes(this.export())) {
+                                flagger = []
+                                this.board.dots[k].turned = 0
+                                this.board.dots[k].type = 0
+                                this.board.dots[k].value = .5
+                                this.board.dots[k].r = 128
+                                this.board.dots[k].g = 128
+                                this.board.dots[k].b = 128
+                                // this.board.turn++
+                                // this.board.turn %= 2
+                                console.log(this.board.turn)
+                                this.board.dots[k].marked = 0
+                                console.log(this.board.dots[k], this.board.turn)
+                                i = -1
+                            } else {
+                                this.strings.push(this.export())
+                                this.board.turn++
+                                this.board.turn %= 2
+
+                                console.log(this.board.turn)
+                            }
+                        }
+                        ///////////console.log("h")
+                        clicked = 1
+                        break
+                    }
+                }
+            }
+            // }else{
+            //     if(restart.isPointInside(TIP_engine)){
+            //         p = new Pairs()
+            //         mod = -1
+            //         clicked = 1
+            //         // start = 0
+            //     }
+            // }
+            /////console.log(this.board)
+
+
+
+
+            let board1 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            let board2 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            let board3 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            let board4 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            let board5 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            let board6 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+
+
+            let flag = 0
+
+            for (let k = 0; k < this.board.dots.length; k++) {
+                let a = this.board.dots[k].t + 2
+                let b = this.board.dots[k].e + 2
+                let c = this.board.dots[k].k + 2
+                board1[a][b][c].value = this.board.dots[k].value
+                board1[a][b][c].t = this.board.dots[k].t
+                board1[a][b][c].k = this.board.dots[k].k
+                board1[a][b][c].e = this.board.dots[k].e
+                board1[a][b][c].turned = this.board.dots[k].turned
+                board1[a][b][c].type = this.board.dots[k].turned
+                board2[b][c][a].value = this.board.dots[k].value
+                board2[b][c][a].t = this.board.dots[k].t
+                board2[b][c][a].k = this.board.dots[k].k
+                board2[b][c][a].e = this.board.dots[k].e
+                board2[b][c][a].turned = this.board.dots[k].turned
+                board2[b][c][a].type = this.board.dots[k].turned
+                board3[c][a][b].value = this.board.dots[k].value
+                board3[c][a][b].t = this.board.dots[k].t
+                board3[c][a][b].k = this.board.dots[k].k
+                board3[c][a][b].e = this.board.dots[k].e
+                board3[c][a][b].turned = this.board.dots[k].turned
+                board3[c][a][b].type = this.board.dots[k].turned
+
+
+                
+                board4[a][c][b].value = this.board.dots[k].value
+                board4[a][c][b].t = this.board.dots[k].t
+                board4[a][c][b].k = this.board.dots[k].k
+                board4[a][c][b].e = this.board.dots[k].e
+                board4[a][c][b].turned = this.board.dots[k].turned
+                board4[a][c][b].type = this.board.dots[k].turned
+                board5[b][a][c].value = this.board.dots[k].value
+                board5[b][a][c].t = this.board.dots[k].t
+                board5[b][a][c].k = this.board.dots[k].k
+                board5[b][a][c].e = this.board.dots[k].e
+                board5[b][a][c].turned = this.board.dots[k].turned
+                board5[b][a][c].type = this.board.dots[k].turned
+                board6[c][b][a].value = this.board.dots[k].value
+                board6[c][b][a].t = this.board.dots[k].t
+                board6[c][b][a].k = this.board.dots[k].k
+                board6[c][b][a].e = this.board.dots[k].e
+                board6[c][b][a].turned = this.board.dots[k].turned
+                board6[c][b][a].type = this.board.dots[k].turned
+            }
+
+            let boo = 0
+
+
+            let f = [board1, board2, board3]
+
+            for (let k = 0; k < f.length; k++) {
+                for (let t = 0; t < f[k].length; t++) {
+                    let goBoard1 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard2 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard3 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard4 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard5 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    goBoard1.turn = this.board.turn
+                    goBoard2.turn = this.board.turn
+                    goBoard3.turn = this.board.turn
+                    goBoard4.turn = this.board.turn
+                    goBoard5.turn = this.board.turn
+                    goBoard1.wholeSort()
+                    goBoard2.wholeSort()
+                    goBoard3.wholeSort()
+                    goBoard4.wholeSort()
+                    goBoard5.wholeSort()
+                  
+
+                    goBoard1.turn = (this.board.turn + 1) % 2
+                    goBoard2.turn = (this.board.turn + 1) % 2
+                    goBoard3.turn = (this.board.turn + 1) % 2
+                    goBoard4.turn = (this.board.turn + 1) % 2
+                    goBoard5.turn = (this.board.turn + 1) % 2
+
+                    goBoard1.wholeSort()
+                    goBoard2.wholeSort()
+                    goBoard3.wholeSort()
+                    goBoard4.wholeSort()
+                    goBoard5.wholeSort()
+                  
+
+                    /////console.log(goBoard1)
+         
+                    let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
+                    for (let r = 0; r < arr.length; r++) {
+                        for (let w = 0; w < arr[r].board.length; w++) {
+                            for (let m = 0; m < arr[r].board[w].length; m++) {
+                                let ot = ((arr[r].board[w][m].k + 2)) * 25
+                                ot += ((arr[r].board[w][m].t + 2)) * 5
+                                ot += ((arr[r].board[w][m].e + 2))
+                                box[ot] += Math.abs(arr[r].board[w][m].type)
+                                // console.log(arr[r].board[w][m].type)
+
+                                // if (this.board.dots[ot].turned != 0 && (arr[r].board[w][m].type) == 0) {
+                                //     // this.board.dots[ot].turned = (arr[r].board[w][m].type)
+                                //     // this.board.dots[ot].marked = 0
+                                //     // this.board.dots[ot].value = .5
+                                //     let flaggerz = [this.board.dots[ot].t, this.board.dots[ot].k, this.board.dots[ot].e]
+                                //     if (flaggerz[0] == flagger[0]) {
+                                //         if (flaggerz[1] == flagger[1]) {
+                                //             if (flaggerz[2] == flagger[2]) {
+                                //                 if (this.board.turn == 0) {
+                                //                     flag = 1
+                                //                 } else {
+                                //                     flag = -1
+                                //                 }
+                                //             }
+                                //         }
+                                //     }
+                                // }
+                            }
+                        }
+                    } 
+                    console.log(box)
+                }
+            }
+
+            for (let k = 0; k < f.length; k++) {
+                for (let t = 0; t < f[k].length; t++) {
+                    let goBoard1 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard2 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard3 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard4 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard5 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    goBoard1.turn = this.board.turn
+                    goBoard2.turn = this.board.turn
+                    goBoard3.turn = this.board.turn
+                    goBoard4.turn = this.board.turn
+                    goBoard5.turn = this.board.turn
+                    goBoard1.wholeSort()
+                    goBoard2.wholeSort()
+                    goBoard3.wholeSort()
+                    goBoard4.wholeSort()
+                    goBoard5.wholeSort()
+                  
+
+                    goBoard1.turn = (this.board.turn + 1) % 2
+                    goBoard2.turn = (this.board.turn + 1) % 2
+                    goBoard3.turn = (this.board.turn + 1) % 2
+                    goBoard4.turn = (this.board.turn + 1) % 2
+                    goBoard5.turn = (this.board.turn + 1) % 2
+
+                    goBoard1.wholeSort()
+                    goBoard2.wholeSort()
+                    goBoard3.wholeSort()
+                    goBoard4.wholeSort()
+                    goBoard5.wholeSort()
+                  
+
+         
+                    let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
+
+                    for (let r = 0; r < arr.length; r++) {
+                        for (let w = 0; w < arr[r].board.length; w++) {
+                            for (let m = 0; m < arr[r].board[w].length; m++) {
+                                let ot = ((arr[r].board[w][m].k + 2)) * 25
+                                ot += ((arr[r].board[w][m].t + 2)) * 5
+                                ot += ((arr[r].board[w][m].e + 2))
+                                
+
+
+                                if (this.board.dots[ot].turned != 0 && box[ot] == 0) {
+                                    // this.board.dots[ot].turned = (arr[r].board[w][m].type)
+                                    // this.board.dots[ot].marked = 0
+                                    // this.board.dots[ot].value = .5
+                                    let flaggerz = [this.board.dots[ot].t, this.board.dots[ot].k, this.board.dots[ot].e]
+                                    if (flaggerz[0] == flagger[0]) {
+                                        if (flaggerz[1] == flagger[1]) {
+                                            if (flaggerz[2] == flagger[2]) {
+                                                if (this.board.turn == 0) {
+                                                    flag = 1
+                                                } else {
+                                                    flag = -1
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                    
+                    
+                    for (let r = 0; r < arr.length; r++) {
+                        for (let w = 0; w < arr[r].board.length; w++) {
+                            for (let m = 0; m < arr[r].board[w].length; m++) {
+                                let ot = ((arr[r].board[w][m].k + 2)) * 25
+                                ot += ((arr[r].board[w][m].t + 2)) * 5
+                                ot += ((arr[r].board[w][m].e + 2))
+                                if (this.board.dots[ot].turned != flag && (arr[r].board[w][m].type) == 0&& box[ot] == 0) {
+                                    // if(flag != 1){
+                                    this.board.dots[ot].turned = (arr[r].board[w][m].type)
+                                    this.board.dots[ot].marked = 0
+                                    this.board.dots[ot].value = .5
+                                    // }
+                                    let flaggerz = [this.board.dots[ot].t, this.board.dots[ot].k, this.board.dots[ot].e]
+                                    // if (flaggerz[0] == flagger[0]) {
+                                    //     if (flaggerz[1] == flagger[1]) {
+                                    //         if (flaggerz[2] == flagger[2]) {
+                                    //             flag = 1
+                                    //         }
+                                    //     }
+                                    // }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            for (let k = 0; k < this.board.dots.length; k++) {
+                let a = this.board.dots[k].t + 2
+                let b = this.board.dots[k].e + 2
+                let c = this.board.dots[k].k + 2
+                board1[a][b][c].value = this.board.dots[k].value
+                board1[a][b][c].t = this.board.dots[k].t
+                board1[a][b][c].k = this.board.dots[k].k
+                board1[a][b][c].e = this.board.dots[k].e
+                board1[a][b][c].turned = this.board.dots[k].turned
+                board1[a][b][c].type = this.board.dots[k].turned
+                board2[b][c][a].value = this.board.dots[k].value
+                board2[b][c][a].t = this.board.dots[k].t
+                board2[b][c][a].k = this.board.dots[k].k
+                board2[b][c][a].e = this.board.dots[k].e
+                board2[b][c][a].turned = this.board.dots[k].turned
+                board2[b][c][a].type = this.board.dots[k].turned
+                board3[c][a][b].value = this.board.dots[k].value
+                board3[c][a][b].t = this.board.dots[k].t
+                board3[c][a][b].k = this.board.dots[k].k
+                board3[c][a][b].e = this.board.dots[k].e
+                board3[c][a][b].turned = this.board.dots[k].turned
+                board3[c][a][b].type = this.board.dots[k].turned
+                board4[a][c][b].value = this.board.dots[k].value
+                board4[a][c][b].t = this.board.dots[k].t
+                board4[a][c][b].k = this.board.dots[k].k
+                board4[a][c][b].e = this.board.dots[k].e
+                board4[a][c][b].turned = this.board.dots[k].turned
+                board4[a][c][b].type = this.board.dots[k].turned
+                board5[b][a][c].value = this.board.dots[k].value
+                board5[b][a][c].t = this.board.dots[k].t
+                board5[b][a][c].k = this.board.dots[k].k
+                board5[b][a][c].e = this.board.dots[k].e
+                board5[b][a][c].turned = this.board.dots[k].turned
+                board5[b][a][c].type = this.board.dots[k].turned
+                board6[c][b][a].value = this.board.dots[k].value
+                board6[c][b][a].t = this.board.dots[k].t
+                board6[c][b][a].k = this.board.dots[k].k
+                board6[c][b][a].e = this.board.dots[k].e
+                board6[c][b][a].turned = this.board.dots[k].turned
+                board6[c][b][a].type = this.board.dots[k].turned
+            }
+
+
+
+            f = [board1, board2, board3]
+
+            for (let k = 0; k < f.length; k++) {
+                for (let t = 0; t < f[k].length; t++) {
+                    let goBoard1 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard2 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard3 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard4 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    let goBoard5 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+                    goBoard1.turn = this.board.turn
+                    goBoard2.turn = this.board.turn
+                    goBoard3.turn = this.board.turn
+                    goBoard4.turn = this.board.turn
+                    goBoard5.turn = this.board.turn
+                    // goBoard1.wholeSort()
+                    // goBoard2.wholeSort()
+                    // goBoard3.wholeSort()
+                    // goBoard4.wholeSort()
+                    // goBoard5.wholeSort()
+                  
+
+                    goBoard1.turn = (this.board.turn + 1) % 2
+                    goBoard2.turn = (this.board.turn + 1) % 2
+                    goBoard3.turn = (this.board.turn + 1) % 2
+                    goBoard4.turn = (this.board.turn + 1) % 2
+                    goBoard5.turn = (this.board.turn + 1) % 2
+
+                    // goBoard1.wholeSort()
+                    // goBoard2.wholeSort()
+                    // goBoard3.wholeSort()
+                    // goBoard4.wholeSort()
+                    // goBoard5.wholeSort()
+                  
+
+                }
+            }
+            if (flag == 1) {
+
+                // this.board.turn++
+                // this.board.turn %= 2
+                console.log(this.board.turn)
+                // this.strings.splice(this.strings.length-1,1)
+            } else {
+
+            }
+
+
+            return i
+
+        }
+        export() {
+            return this.board.export2()
+        }
+        generateMoves() {
+            const nextMoves = [];
+            ///////////console.log(this.board)
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 5; j++) {
+                    for (let k = 0; k < 5; k++) {
+                        let index = i * 25
+                        index += j * 5
+                        index += k
+                        ///////////console.log(index)
+                        if (this.board.dots[index].turned === 0) {
+                            nextMoves.push(index);
+                        }
+                    }
+                }
+            }
+
+            return nextMoves;
+        }
+
+        vicCheck() {
+
+            // let board1 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board2 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board3 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board4 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board5 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board6 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // // let board7 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // // let board8 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // // let board9 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // for (let k = 0; k < this.board.dots.length; k++) {
+            //     let a = this.board.dots[k].t + 1
+            //     let b = this.board.dots[k].e + 1
+            //     let c = this.board.dots[k].k + 1
+
+            //     board1[a][b][c] = this.board.dots[k].turned
+            //     board2[b][c][a] = this.board.dots[k].turned
+            //     board3[c][a][b] = this.board.dots[k].turned
+            //     board4[a][c][b] = this.board.dots[k].turned
+            //     board5[b][a][c] = this.board.dots[k].turned
+            //     board6[c][b][a] = this.board.dots[k].turned
+            //     // board7[t][e][q] = this.board.dots[k].turned
+            //     // board8[t][e][q] = this.board.dots[k].turned
+            //     // board9[t][e][q] = this.board.dots[k].turned
+
+            // }
+            // let f = [board1, board2, board3, board4, board5, board6]
+
+            // for (let k = 0; k < f.length; k++) {
+            //     for (let t = 0; t < f[k].length; t++) {
+            //         let goboard1 = new Go(f[k][t])
+            //         let goboard2 = new Go(f[k][t])
+            //         let goboard3 = new Go(f[k][t])
+            //         let goboard4 = new Go(f[k][t])
+            //         let goboard5 = new Go(f[k][t])
+            //         goboard1.draw()
+            //         goboard2.draw()
+            //         goboard3.draw()
+            //         goboard4.draw()
+            //         goboard5.draw()
+            //         let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
+            //         for (let r = 0; r < arr.length; r++) {
+            //             for (let w = 0; w < arr[r].blocks.length; w++) {
+            //                 for (let m = 0; m < arr[r].blocks[w].length; m++) {
+            //                     this.board.dots[arr[r].blocks[w][m].t][arr[r].blocks[w][m].k][arr[r].blocks[w][m].e]
+
+
+            //                 }
+            //             }
+            //         }
+
+            //     }
+            // }
+
+            // let goboard11 = new Go(board1[0])
+            // let goboard12 = new Go(board1[1])
+            // let goboard13 = new Go(board1[2])
+            // let goboard14 = new Go(board1[3])
+            // let goboard15 = new Go(board1[4])
+
+
+            // let goboard21 = new Go(board2[0])
+            // let goboard22 = new Go(board2[1])
+            // let goboard23 = new Go(board2[2])
+            // let goboard24 = new Go(board2[3])
+            // let goboard25 = new Go(board2[4])
+
+
+
+            let boo = 0
+            return boo
+        }
+        checkWinner() {
+
+            // let board1 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board2 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board3 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board4 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board5 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board6 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // for (let k = 0; k < this.board.dots.length; k++) {
+            //     let a = this.board.dots[k].t + 2
+            //     let b = this.board.dots[k].e + 2
+            //     let c = this.board.dots[k].k + 2
+            //     board1[a][b][c] = this.board.dots[k].turned
+            //     board2[b][c][a] = this.board.dots[k].turned
+            //     board3[c][a][b] = this.board.dots[k].turned
+            //     board4[a][c][b] = this.board.dots[k].turned
+            //     board5[b][a][c] = this.board.dots[k].turned
+            //     board6[c][b][a] = this.board.dots[k].turned
+            // }
+
+            // let boo = 0
+
+
+            // let f = [board1,board2,board3,board4,board5,board6]
+
+            // for(let k = 0;k<f.length;k++){
+            //     for(let t = 0;t<f[k].length;t++){
+            //     let goboard1 = new Go(f[k][t])
+            //     let goboard2 = new Go(f[k][t])
+            //     let goboard3 = new Go(f[k][t])
+            //     let goboard4 = new Go(f[k][t])
+            //     let goboard5 = new Go(f[k][t])
+            //     goboard1.draw()
+            //     goboard2.draw()
+            //     goboard3.draw()
+            //     goboard4.draw()
+            //     goboard5.draw()
+            //     let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
+            //     for(let r = 0;r<arr.length;r++){
+            //         for(let w = 0;w<arr[r].blocks.length;w++){
+            //             for(let m = 0;m<arr[r].blocks[w].length;m++){
+            //                this.board.dots[arr[r].blocks[w][m].t][arr[r].blocks[w][m].k][arr[r].blocks[w][m].e]
+
+
+            //             }
+            //         }
+            //     }
+
+            //     }
+            // }
+
+            let boo = false
+            return boo
+        }
+        evaluate(w) {
+            const winner = this.checkWinner();
+            if (winner === w) {
+                return 10;
+            } else if (winner === w * -1) {
+                return -10;
+            } else {
+                return 0;
+            }
+        }
+        isGameOver() {
+            // /////////console.log(this.checkWinner(), this.generateMoves.length)
+            return (this.checkWinner() != 0 || this.generateMoves().length == 0);
+        }
+        minimax(depth, isMaximizingPlayer) {
+            if (this.isGameOver() || depth === 0) {
+                return [this.evaluate(-1), -1];
+            }
+            if (isMaximizingPlayer) {
+                let bestScore = -Infinity;
+                let bestmove = -1
+                for (let move of this.generateMoves()) {
+                    this.board.dots[move].turned = -1
+                    let score = this.minimax(depth - 1, false)[0];
+                    this.board.dots[move].turned = 0
+                    if (score > bestScore) {
+                        bestmove = move
+                    }
+                    bestScore = Math.max(score, bestScore);
+                }
+                return [bestScore, bestmove];
+            } else {
+                let bestScore = Infinity;
+                let bestmove = -1
+                for (let move of this.generateMoves()) {
+                    this.board.dots[move].turned = 1
+                    let score = this.minimax(depth - 1, true)[0];
+                    this.board.dots[move].turned = 0
+                    if (score < bestScore) {
+                        bestmove = move
+                    }
+                    bestScore = Math.min(score, bestScore);
+                }
+                return [bestScore, bestmove];
+            }
+        }
+        clean() {
+
+            this.board.draw()
+            if (this.left.marked == 1) {
+                this.left.mutate()
+                this.left.marked = 0
+                if (Math.random() < .00032) {
+                    this.left.becomeNetworkFrom(this.right.log())
+                }
+                if (Math.random() < .0001) {
+                    // this.left = new Network(intus, [12, 12, 125])
+                }
+                // ///////////console.log("w")
+            }
+            if (this.right.marked == 1) {
+                this.right.mutate()
+                this.right.marked = 0
+                if (Math.random() < .00031) {
+                    this.right.becomeNetworkFrom(this.left.log())
+                }
+                if (Math.random() < .0032) {
+                    // this.right = new Network(intus, [12, 12, 125])
+                }
+                // ///////////console.log("w")
+            }
+            this.board.clean()
+            this.left.turn = -1
+            this.right.turn = 1
+        }
+        fight() {
+
+
+
+            if (!this.vicCheck()) {
+                let data = this.board.export()
+                data.push(new Data(this.board.turn))
+                this.left.compute(data)
+                this.right.compute(data)
+                if (true) {
+                    let lmin = -99999
+                    let lk = -1
+                    let lmax = 99999
+                    let lt = -1
+                    for (let k = 0; k < this.left.outputs.length; k++) {
+                        if (this.left.outputs[k].valueOf() > lmin) {
+                            if (this.right.inputs[k].valueOf() == .5) {
+                                lmin = this.left.outputs[k].valueOf()
+                                lk = k
+                            }
+                        }
+                        if (this.left.outputs[k].valueOf() < lmax) {
+                            if (this.right.inputs[k].valueOf() == .5) {
+                                lmax = this.left.outputs[k].valueOf()
+                                lt = k
+                            }
+                        }
+                    }
+                    if (lt != -1) {
+                        this.board.dots[lt].marked = 1
+                        this.board.dots[lt].turned = 0
+                        if (this.board.turn == 0) {
+                            this.board.dots[lt].turned = -1
+                        }
+                        if (this.board.turn == 1) {
+                            this.board.dots[lt].turned = 1
+                        }
+                        this.board.dots[lt].r = this.board.colors[this.board.turn][0]
+                        this.board.dots[lt].g = this.board.colors[this.board.turn][1]
+                        this.board.dots[lt].b = this.board.colors[this.board.turn][2]
+                        this.board.turn += 1
+                        this.board.turn %= 2
+                    } else {
+                        this.left.marked = 1
+                    }
+
+                }
+
+            } else {
+                this.left.marked = 1
+                this.clean()
+                this.board.draw()
+                return
+            }
+            if (!this.vicCheck()) {
+
+                let data = this.board.export()
+                data.push(new Data(this.board.turn))
+                this.left.compute(data)
+                this.right.compute(data)
+
+                if (true) {
+                    let lmin = -99999
+                    let lk = -1
+                    let lmax = 99999
+                    let lt = -1
+                    for (let k = 0; k < this.right.outputs.length; k++) {
+                        if (this.right.outputs[k].valueOf() > lmin) {
+                            if (this.right.inputs[k].valueOf() == .5) {
+                                lmin = this.right.outputs[k].valueOf()
+                                lk = k
+                            }
+                        }
+                        if (this.right.outputs[k].valueOf() < lmax) {
+                            if (this.right.inputs[k].valueOf() == .5) {
+                                lmax = this.right.outputs[k].valueOf()
+                                lt = k
+                            }
+                        }
+                    }
+                    if (lt != -1) {
+                        this.board.dots[lt].marked = 1
+                        this.board.dots[lt].turned = 0
+                        if (this.board.turn == 0) {
+                            this.board.dots[lt].turned = -1
+                        }
+                        if (this.board.turn == 1) {
+                            this.board.dots[lt].turned = 1
+                        }
+                        this.board.dots[lt].r = this.board.colors[this.board.turn][0]
+                        this.board.dots[lt].g = this.board.colors[this.board.turn][1]
+                        this.board.dots[lt].b = this.board.colors[this.board.turn][2]
+                        this.board.turn += 1
+                        this.board.turn %= 2
+                    } else {
+                        this.right.marked = 1
+                    }
+
+                }
+            } else {
+                this.right.marked = 1
+                this.clean()
+                this.board.draw()
+                return
+            }
+
+            this.board.draw()
+        }
+    }
+
+    class Go {
+    constructor(inData = [], offset = 0, yoffset) {
+        this.score = [0, 0]
+        ///////console.log(inData)
+        this.countup = 0
+        this.metaScore = [0, 0]
+        this.offset = offset + 920
+        this.yoffset = yoffset
+        this.turn = 0
+        this.board = inData
+        this.strings = []
+        this.strings2 = []
+        this.boards = []
+        // if (this.board.length == 0) {
+        for (let t = 0; t < 5; t++) {
+            // let line = []
+            for (let k = 0; k < 5; k++) {
+                // let dat = new Data(.5)
+                this.board[t][k].x = t
+                this.board[t][k].y = k
+                // line.push(dat)
+            }
+            // this.board.push(line)
+        }
+        // }
+        //console.log(this.board)
+        this.rects = []
+        for (let t = 0; t < this.board.length; t++) {
+            this.rects.push([])
+            for (let k = 0; k < this.board[t].length; k++) {
+                if (this.board[t][k].valueOf() < .333) {
+                    this.board[t][k].type = -1
+                    canvas_context.fillStyle = "blue"
+                } else if (this.board[t][k].valueOf() > .666) {
+                    this.board[t][k].type = 1
+                    canvas_context.fillStyle = "blue"
+                } else {
+                    this.board[t][k].type = 0
+                    canvas_context.fillStyle = "blue"
+                }
+
+                // canvas_context.fillRect(t*50, k*50, (t*50)+50, (k*50)+50)
+                this.rects[t][k] = new Rectangle((t * 10) + this.offset, k * 10 + this.yoffset, (0) + 10, (0) + 10, canvas_context.fillStyle)
+            }
+        }
+
+
+    }
+    neighbors(node) {
+        if (node.type == 0) {
+            return []
+        }
+        //console.log(node.x, node.y)
+        var ret = [];
+        var x = node.x;
+        var y = node.y;
+        var grid = this.board;
+        this.diagonal = false
+        // West)
+        if (grid[x - 1] && grid[x - 1][y]) {
+            if (grid[x - 1][y].type == node.type || grid[x - 1][y].type == 0) {
+                ret.push(grid[x - 1][y]);
+            }
+        }
+        // East
+        if (grid[x + 1] && grid[x + 1][y]) {
+            if (grid[x + 1][y].type == node.type || grid[x + 1][y].type == 0) {
+                ret.push(grid[x + 1][y]);
+            }
+        }
+        // South
+        if (grid[x] && grid[x][y - 1]) {
+            if (grid[x][y - 1].type == node.type || grid[x][y - 1].type == 0) {
+                ret.push(grid[x][y - 1]);
+            }
+        }
+        // North
+        if (grid[x] && grid[x][y + 1]) {
+            if (grid[x][y + 1].type == node.type || grid[x][y + 1].type == 0) {
+                ret.push(grid[x][y + 1]);
+            }
+        }
+        // //console.log(node, grid)
+        return ret;
+    }
+    rawneighbors(node) {
+        if (node.type == 0) {
+            return []
+        }
+        var ret = [];
+        var x = node.x;
+        var y = node.y;
+        var grid = this.board;
+        this.diagonal = false
+        // West)
+        if (grid[x - 1] && grid[x - 1][y]) {
+            // if (grid[x - 1][y].type == node.type || grid[x - 1][y].type == 0) {
+            ret.push(grid[x - 1][y]);
+            // }
+        }
+        // East
+        if (grid[x + 1] && grid[x + 1][y]) {
+            // if (grid[x + 1][y].type == node.type || grid[x + 1][y].type == 0) {
+            ret.push(grid[x + 1][y]);
+            // }
+        }
+        // South
+        if (grid[x] && grid[x][y - 1]) {
+            // if (grid[x][y - 1].type == node.type || grid[x][y - 1].type == 0) {
+            ret.push(grid[x][y - 1]);
+            // }
+        }
+        // North
+        if (grid[x] && grid[x][y + 1]) {
+            // if (grid[x][y + 1].type == node.type || grid[x][y + 1].type == 0) {
+            ret.push(grid[x][y + 1]);
+            // }
+        }
+        return ret;
+    }
+    draw() {
+        // this.wholeSort()
+        // ///////////console.log("draw")
+        for (let t = 0; t < this.board.length; t++) {
+            for (let k = 0; k < this.board[t].length; k++) {
+                if (this.board[t][k].valueOf() < .333) {
+                    this.rects[t][k].draw()
+                    // let circle = new Circle(this.rects[t][k].x + 25, this.rects[t][k].y + 25, 18, "black")
+                    // circle.draw()
+                } else if (this.board[t][k].valueOf() > .666) {
+                    this.rects[t][k].draw()
+                    // let circle = new Circle(this.rects[t][k].x + 25, this.rects[t][k].y + 25, 18, "white")
+                    // circle.draw()
+                } else {
+                    this.rects[t][k].draw()
+                }
+            }
+
+        }
+        for (let t = 0; t < this.board.length; t++) {
+            for (let k = 0; k < this.board[t].length; k++) {
+                if (this.board[t][k].valueOf() < .333) {
+                    // this.rects[t][k].draw()
+                    let circle = new Circle(this.rects[t][k].x + 5, this.rects[t][k].y + 5, 5, "black")
+                    circle.draw()
+                } else if (this.board[t][k].valueOf() > .666) {
+                    // this.rects[t][k].draw()
+                    let circle = new Circle(this.rects[t][k].x + 5, this.rects[t][k].y + 5, 5, "white")
+                    circle.draw()
+                } else {
+                    // this.rects[t][k].draw()
+                }
+            }
+
+        }
+    }
+    export() {
+        let data = []
+        for (let t = 0; t < this.board.length; t++) {
+            for (let k = 0; k < this.board[t].length; k++) {
+                data.push(this.board[t][k].valueOf())
+            }
+        }
+        return data
+    }
+    density() {
+        let d = 0
+        for (let t = 0; t < this.board.length; t++) {
+            for (let k = 0; k < this.board[t].length; k++) {
+                if (this.board[t][k].valueOf() != .5) {
+                    d++
+                }
+            }
+        }
+        return d / 81
+    }
+    neighborsCheck(node) {
+        let boole = false
+        // let gnode = new Data(node.valueOf)
+        // gnode.type = node.type*-1
+        // gnode.t = node.t
+        // gnode.k = node.k
+        let n = this.neighbors(node)
+        n.push(node)
+        let f = [...n]
+        let ind = []
+        for (let k = 0; k < 40; k++) {
+            for (let d = 0; d < n.length; d++) {
+                let r
+                if (ind.includes(d)) {
+                    r = []
+                } else {
+
+                    r = this.neighbors(n[d])
+                    ind.push(d)
+                }
+                for (let e = 0; e < r.length; e++) {
+                    if (f.includes(r[e])) {
+
+                    } else {
+                        f.push(r[e])
+                    }
+                }
+            }
+            n = [...f]
+        }
+        let wet = 0
+        for (let t = 0; t < n.length; t++) {
+            if (n[t].type == 0) {
+                wet = 1
+            }
+        }
+        if (wet == 0) {
+            for (let t = 0; t < n.length; t++) {
+                if (n[t].type == 1 && this.turn == 0 || n[t].type == -1 && this.turn == 1) {
+                    this.countup++
+                    n[t].type = 0
+                    n[t].value = .5
+                    boole = true
+                }
+            }
+        }
+        return boole
+    }
+    dumbNeighborsCheck(node) {
+        let boole = false
+        // let gnode = new Data(node.valueOf)
+        // gnode.type = node.type*-1
+        // gnode.t = node.t
+        // gnode.k = node.k
+        let n = this.rawneighbors(node)
+        n.push(node)
+        let f = [...n]
+        let ind = []
+        for (let k = 0; k < 40; k++) {
+            for (let d = 0; d < n.length; d++) {
+                let r
+                if (ind.includes(d)) {
+                    r = []
+                } else {
+
+                    r = this.neighbors(n[d])
+                    ind.push(d)
+                }
+                for (let e = 0; e < r.length; e++) {
+                    if (f.includes(r[e])) {
+
+                    } else {
+                        f.push(r[e])
+                    }
+                }
+            }
+            n = [...f]
+        }
+        let wet = 0
+        let seeds = []
+        let crumbs = []
+        for (let t = 0; t < n.length; t++) {
+            if (n[t].type == 0) {
+                wet = 1
+            } if (n[t].type == node.type) {
+                crumbs.push(n[t])
+            } else {
+                if (n[t].type != node.type) {
+                    seeds.push(n[t])
+                }
+            }
+        }
+
+        let bread = []
+        let eggs = []
+
+
+        for (let t = 0; t < crumbs.length; t++) {
+            let n = this.neighbors(crumbs[t])
+            n.push(crumbs[t])
+            let f = [...n]
+            let ind = []
+            for (let k = 0; k < 40; k++) {
+                for (let d = 0; d < n.length; d++) {
+                    let r
+                    if (ind.includes(d)) {
+                        r = []
+                    } else {
+
+                        r = this.neighbors(n[d])
+                        ind.push(d)
+                    }
+                    for (let e = 0; e < r.length; e++) {
+                        if (f.includes(r[e])) {
+
+                        } else {
+                            f.push(r[e])
+                        }
+                    }
+                }
+                n = [...f]
+            }
+
+
+            let stomp = 0
+            for (let t = 0; t < n.length; t++) {
+                if (n[t].type == 0) {
+                    stomp = 1
+                } else {
+                }
+            }
+
+
+            bread.push(stomp)
+        }
+
+
+        for (let t = 0; t < seeds.length; t++) {
+            let n = this.neighbors(seeds[t])
+            n.push(seeds[t])
+            let f = [...n]
+            let ind = []
+            for (let k = 0; k < 40; k++) {
+                for (let d = 0; d < n.length; d++) {
+                    let r
+                    if (ind.includes(d)) {
+                        r = []
+                    } else {
+
+                        r = this.neighbors(n[d])
+                        ind.push(d)
+                    }
+                    for (let e = 0; e < r.length; e++) {
+                        if (f.includes(r[e])) {
+
+                        } else {
+                            f.push(r[e])
+                        }
+                    }
+                }
+                n = [...f]
+            }
+
+            let sewt = 0
+            for (let t = 0; t < n.length; t++) {
+                if (n[t].type == 0) {
+                    sewt = 1
+                } else {
+                }
+            }
+
+
+            eggs.push(sewt)
+        }
+        if (bread.includes(0)) {
+            wet = 0
+        }
+        if (eggs.includes(0)) {
+            wet = 1
+        }
+        if (keysPressed['6']) {
+            ///////////console.log(eggs, bread, wet)
+        }
+
+        if (wet == 0) {
+            boole = true
+        }
+        return boole
+    }
+    dumbSort() {
+        let boole = false
+        for (let t = 0; t < this.board.length; t++) {
+            for (let k = 0; k < this.board[t].length; k++) {
+                boole = (this.dumbNeighborsCheck(this.board[t][k], this.turn) || boole)
+            }
+        }
+        return boole
+    }
+    wholeSort() {
+        let boole = false
+        for (let t = 0; t < this.board.length; t++) {
+            for (let k = 0; k < this.board[t].length; k++) {
+                boole = (this.neighborsCheck(this.board[t][k], this.turn) || boole)
+            }
+        }
+
+        return boole
+    }
+    // connect(point) {
+
+
+
+    //     this.countup = 0
+    //     let p = new Circle(point.x, point.y, 10, "red")
+    //     // b.draw()
+    //     // for (let t = 0; t < this.board.length; t++) {
+    //     //     for (let k = 0; k < this.board[t].length; k++) {
+    //     // if (this.rects[t][k].isPointInside(point)) {
+
+    //     this.bound = new Rectangle(this.rects[0][0].x - 1, this.rects[0][0].y - 1, 452, 452, "blue")
+    //     // this.bound.draw()
+    //     let truer = false
+    //     if (this.bound.isPointInside(p)) {
+    //         truer = true
+    //     }
+
+    //     let t = Math.floor((b.x - this.offset) / 50)
+    //     let k = Math.floor((b.y) / 50)
+
+    //     if (truer) {
+    //         if (this.turn == 0) {
+    //             if (this.board[t][k].valueOf() == .5) {
+    //                 // let coip = new Go(this.board)
+    //                 this.board[t][k].value = 0
+    //                 this.board[t][k].type = -1
+    //                 // if (goBoard.strings.includes(this.stringify())) {
+    //                 //     this.board[t][k].value = .5
+    //                 //     this.board[t][k].type = 0
+    //                 //     // ///////////console.log("repeat", t,k)
+    //                 //     return 2
+    //                 // }
+    //                 // this.strings.push(this.stringify())
+    //                 // this.boards.push(new Go(this.board))
+    //                 // this.wholeSort()
+    //                 // if (this.dumbSort()) {
+    //                 //     this.board[t][k].value = .5
+    //                 //     this.board[t][k].type = 0
+    //                 //     // ///////////console.log("clash", t,k)
+    //                 //     return 1
+    //                 // }
+    //                 // this.wholeSort()
+    //                 // this.score[this.turn] += this.countup
+    //                 // this.strings.push(this.stringify())
+    //                 // this.boards.push(new Go(this.board))
+
+    //                 // this.board = coib.board
+    //                 this.turn = 1
+    //                 // ///////////console.log("works", t,k)
+    //                 return 0
+    //             } else {
+    //                 // ///////////console.log("overlap", t,k)
+    //                 return 3
+    //             }
+    //         } else {
+    //             if (this.board[t][k].valueOf() == .5) {
+    //                 // let coip = new Go(this.board)
+    //                 this.board[t][k].value = 1
+    //                 this.board[t][k].type = 1
+    //                 // if (goBoard.strings.includes(this.stringify())) {
+    //                 //     this.board[t][k].value = .5
+    //                 //     this.board[t][k].type = 0
+    //                 //     // ///////////console.log("repeat", t,k)
+    //                 //     return 2
+    //                 // }
+    //                 // this.strings.push(this.stringify())
+    //                 // this.boards.push(new Go(this.board))
+
+
+    //                 // // this.dumbSort()
+    //                 // this.wholeSort()
+    //                 // if (this.dumbSort()) {
+    //                 //     this.board[t][k].value = .5
+    //                 //     this.board[t][k].type = 0
+    //                 //     // ///////////console.log("clash", t,k)
+    //                 //     return 1
+    //                 // }
+    //                 // this.board = coib.board
+
+    //                 // this.strings.push(this.stringify())
+    //                 // this.boards.push(new Go(this.board))
+    //                 // this.wholeSort()
+    //                 // this.score[this.turn] += this.countup
+
+    //                 this.turn = 0
+    //                 // ///////////console.log("works", t,k)
+    //                 return 0
+    //             } else {
+    //                 // ///////////console.log("overlap", t,k)
+    //                 return 3
+    //             }
+    //         }
+    //     }
+    //     //     }
+    //     // }
+    // }
+    check(point) {
+
+        this.countup = 0
+        let p = new Circle(point.x, point.y, 10, "red")
+        // b.draw()
+        // for (let t = 0; t < this.board.length; t++) {
+        //     for (let k = 0; k < this.board[t].length; k++) {
+        // if (this.rects[t][k].isPointInside(point)) {
+
+        this.bound = new Rectangle(this.rects[0][0].x - 1, this.rects[0][0].y - 1, 452, 452, "blue")
+        // this.bound.draw()
+        let truer = false
+        if (this.bound.isPointInside(p)) {
+            truer = true
+        }
+
+        let t = Math.floor((b.x - this.offset) / 10)
+        let k = Math.floor((b.y - this.yoffset) / 10)
+
+        if (truer) {
+            if (this.turn == 0) {
+                if (this.board[t][k].valueOf() == .5) {
+                    let coip = new Go(this.board)
+                    this.board[t][k].value = 0
+                    this.board[t][k].type = -1
+                    if (goBoard.strings.includes(this.stringify())) {
+                        this.board[t][k].value = .5
+                        this.board[t][k].type = 0
+                        // ///////////console.log("repeat", t,k)
+                        return 2
+                    }
+                    this.strings.push(this.stringify())
+                    this.boards.push(new Go(this.board))
+                    this.wholeSort()
+                    if (this.dumbSort()) {
+                        this.board[t][k].value = .5
+                        this.board[t][k].type = 0
+                        // ///////////console.log("clash", t,k)
+                        return 1
+                    }
+                    this.wholeSort()
+                    this.score[this.turn] += this.countup
+                    this.strings.push(this.stringify())
+                    this.boards.push(new Go(this.board))
+
+                    this.board = coip.board
+                    this.turn = 1
+                    // ///////////console.log("works", t,k)
+                    return 0
+                } else {
+                    // ///////////console.log("overlap", t,k)
+                    return 3
+                }
+            } else {
+                if (this.board[t][k].valueOf() == .5) {
+                    let coip = new Go(this.board)
+                    this.board[t][k].value = 1
+                    this.board[t][k].type = 1
+                    if (goBoard.strings.includes(this.stringify())) {
+                        this.board[t][k].value = .5
+                        this.board[t][k].type = 0
+                        // ///////////console.log("repeat", t,k)
+                        return 2
+                    }
+                    this.strings.push(this.stringify())
+                    this.boards.push(new Go(this.board))
+
+
+                    // this.dumbSort()
+                    this.wholeSort()
+                    if (this.dumbSort()) {
+                        this.board[t][k].value = .5
+                        this.board[t][k].type = 0
+                        // ///////////console.log("clash", t,k)
+                        return 1
+                    }
+                    this.board = coip.board
+
+                    this.strings.push(this.stringify())
+                    this.boards.push(new Go(this.board))
+                    this.wholeSort()
+                    this.score[this.turn] += this.countup
+
+                    this.turn = 0
+                    // ///////////console.log("works", t,k)
+                    return 0
+                } else {
+                    // ///////////console.log("overlap", t,k)
+                    return 3
+                }
+            }
+        }
+        //     }
+        // }
+    }
+    stringify() {
+        let str = ""
+        for (let t = 0; t < this.board.length; t++) {
+            for (let k = 0; k < this.board[t].length; k++) {
+                str += this.board[t][k].valueOf()
+            }
+        }
+        return str
+    }
+    subcheck(point) {
+        for (let t = 0; t < this.board.length; t++) {
+            for (let k = 0; k < this.board[t].length; k++) {
+                if (this.rects[t][k].isPointInside(point)) {
+                    let col = this.rects[t][k].color
+                    if (this.turn == 0) {
+                        this.rects[t][k].color = "#333333"
+                    } else {
+
+                        this.rects[t][k].color = "#bbbbbb"
+                    }
+                    this.rects[t][k].draw()
+                    this.rects[t][k].color = col
+                }
+            }
+        }
+    }
+}
+
+    class ThreeDeeObject {
+        constructor() {
+            this.center = new Point3D(0, 0, 0, "00FF00")
+            this.dots = []
+            this.links = []
+            this.turn = 0
+            this.colors = [[99999, 0, 0], [0, 0, 99999]]
+            for (let k = -2; k < 3; k++) {
+                for (let t = -2; t < 3; t++) {
+                    for (let e = -2; e < 3; e++) {
+
+                        let dis = .75 - ((k / 17) * .63)
+                        let a = (t / 40) * 6.28
+                        let r = k * (t / 2)
+                        let g = k * k
+                        let b = t * 5
+                        let point = new Point3D((k) * .75, (t) * .75, (e) * .75, 128 + (e * 5), 128 + (t * 5), 128 + (k * 5))
+                        point.t = t
+                        point.e = e
+                        point.k = k
+                        this.dots.push(point)
+                        this.links.push(new LineOP(this.center, point))
+                        if (k < 12) {
+                            if (t == 14) {
+                                point.r = 90
+                                point.g = 129
+                                point.b = 184
+                            }
+                        } if (k < 9) {
+                            if (t == 13) {
+                                point.r = 64
+                                point.g = 129
+                                point.b = 184
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            // this.rotateZ(-10.5)
+            // this.rotateY(-10.5)
+
+
+        }
+        spin1(){
+            
+
+            this.rotateZ(-Math.PI/16)
+        }
+        spin2(){
+            
+            this.rotateY(-Math.PI/16)
+        }
+        export2() {
+            let out = ''
+
+            for (let t = 0; t < 125; t++) {
+                if (this.dots[t].marked != 0) {
+
+                    out += this.dots[t].turned.valueOf()
+                } else {
+
+                    out += 0
+                }
+            }
+            return out
+        }
+        clean() {
+            for (let t = 0; t < 125; t++) {
+                this.dots[t].turned = 0
+                this.dots[t].marked = 0
+                this.dots[t].r = 128
+                this.dots[t].g = 128
+                this.dots[t].b = 128
+                this.turn = 0
+            }
+
+        }
+        export() {
+            let out = []
+            for (let t = 0; t < 125; t++) {
+                if (this.dots[t].turned == 1) {
+                    out.push(new Data(1))
+                } else if (this.dots[t].turned == -1) {
+                    out.push(new Data(0))
+                } else {
+                    out.push(new Data(.5))
+                }
+            }
+            return out
+        }
+        draw() {
+
+            let pairs = []
+            for (let t = 0; t < this.dots.length; t++) {
+                this.dots[t].line = this.links[t]
+                pairs.push([this.dots[t], this.links[t]])
+            }
+            // pairs.sort((a, b) => a[0].z > b[0].z ? -1 : 1)
+
+            this.links = []
+            for (let t = 0; t < pairs.length; t++) {
+                this.dots[t] = pairs[t][0]
+                this.dots[t].index = t
+                this.links.push(this.dots[t].line)
+            }
+
+            // this.rotateZ(-.0015)
+            if (keysPressed['a']) {
+                this.rotateZ(.05)
+            }
+            if (keysPressed['d']) {
+                // if(true){
+                this.rotateZ(-.05)
+            }
+
+            // this.rotateY(-.00163)
+            if (keysPressed['w']) {
+                // if(true){
+                this.rotateY(.053)
+            }
+            if (keysPressed['s']) {
+                this.rotateY(-.051)
+            }
+            for (let t = 0; t < this.dots.length; t++) {
+                // if(t < this.dots.length - (this.dots.length *.3 )){
+
+                this.dots[t].draw()
+                // }
+            }
+
+            // for (let t = 0; t < this.dots.length; t++) {
+            //     for (let k = 0; k < this.dots.length; k++) {
+            //         if(t!=k){
+            //             if(this.dots[t].t == this.dots[k].t){
+            //                 if(this.dots[t].k == this.dots[k].k){
+            //                     let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+            //                     let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+            //                     let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
+            //                     let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+            //                     link2.draw()
+            //                     link.draw()
+
+            //                 }
+            //                 if(this.dots[t].e == this.dots[k].e){
+            //                     let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+            //                     let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+            //                     let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
+            //                     let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+            //                     link2.draw()
+            //                     link.draw()
+            //                 }
+            //             }   
+
+            //             if(this.dots[t].k == this.dots[k].k){
+            //                 if(this.dots[t].t == this.dots[k].t){
+            //                     let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+            //                     let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+            //                     let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
+            //                     let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+            //                     link2.draw()
+            //                     link.draw()
+
+            //                 }
+            //                 if(this.dots[t].e == this.dots[k].e){
+            //                     let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+            //                     let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+            //                     let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
+            //                     let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+            //                     link2.draw()
+            //                     link.draw()
+            //                 }
+            //             }   
+
+            //             if(this.dots[t].e == this.dots[k].e){
+            //                 if(this.dots[t].k == this.dots[k].k){
+            //                     let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+            //                     let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+            //                     let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
+            //                     let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+            //                     link2.draw()
+            //                     link.draw()
+
+            //                 }
+            //                 if(this.dots[t].t == this.dots[k].t){
+            //                     let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+            //                     let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+            //                     let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .1)
+            //                     let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+            //                     link2.draw()
+            //                     link.draw()
+            //                 }
+            //             }   
+            //         }
+            //     }
+
+            // }
+
+
+            for (let t = 0; t < this.dots.length; t++) {
+                this.dots[t].draw()
+            }
+        }
+        rotateZ(angle) {
+            for (let t = 0; t < this.dots.length; t++) {
+                let ang = this.links[t].angleZ()
+                let length = this.links[t].hypotenuseZ()
+                this.dots[t].x = (-Math.cos(ang - angle)) * length
+                this.dots[t].z = (-Math.sin(ang - angle)) * length
+            }
+        }
+        rotateY(angle) {
+            for (let t = 0; t < this.dots.length; t++) {
+                let ang = this.links[t].angle()
+                let length = this.links[t].hypotenuse()
+                this.dots[t].x = (-Math.cos(ang - angle)) * length
+                this.dots[t].y = (-Math.sin(ang - angle)) * length
+            }
+        }
+    }
+
+
+    let roombox = new Numbox()
+    function setUp(canvas_pass, style = "#660066") {
+        canvas = canvas_pass
+        canvas_context = canvas.getContext('2d');
+        canvas.style.background = style
+        window.setInterval(function () {
+            if (startgame == 2) {
+
+                let pson = {}
+                pson.room = globalRoom
+                ws.send(JSON.stringify(pson))
+                startgame = 1
+            } else {
+                if (startgame == 0) {
+
+                    canvas_context.clearRect(-10000, -10000, canvas.width * 1000, canvas.height * 1000)
+                    roombox.draw()
+                    goRect.draw()
+
+                } else {
+                    main()
+                    if (Math.random() < .1) {
+
+                        let pson = {}
+                        pson.pinging = 1
+                        // pson.queryTournament = 1
+
+                        ws.send(JSON.stringify(pson))
+                    }
+                    if (Math.random() < .1) {
+
+                        let pson = {}
+                        // pson.pinging = 1
+                        pson.queryTournament = 1
+
+                        ws.send(JSON.stringify(pson))
+                    }
+
+                    canvas_context.font = "30px arial"
+                    canvas_context.fillStyle = "white"
+                    canvas_context.fillText("<-- Online light, if it stops flashing you have no opponent.", 60, 30)
+                    if(b.cald == 1){
+                        canvas_context.fillText("Your turn!", 60, 60)
+                    }
+                }
+            }
+            if(scale == 1){
+                canvas_context2.clearRect(0,0,canvas.width*.25, canvas.height)
+            canvas_context2.drawImage(canvas,0,0,canvas.width, canvas.height, 0,0, canvas.width*.33,  canvas.height*.33 )
+            canvas_context.clearRect(0,0,canvas.width, canvas.height)
+            canvas_context.drawImage(canvas2,0,0,canvas.width, canvas.height, 0,0, canvas.width,  canvas.height )
+            }
+        }, 25)
+
+
+        window.addEventListener('pointerdown', e => {
+            e.preventDefault()
+            canvas.focus();
+            FLEX_engine = canvas.getBoundingClientRect();
+            XS_engine = e.clientX - FLEX_engine.left;
+            YS_engine = e.clientY - FLEX_engine.top;
+            if(scale == 1){
+                TIP_engine.x = XS_engine*3
+                TIP_engine.y = YS_engine*3
+            }else{
+                TIP_engine.x = XS_engine
+                TIP_engine.y = YS_engine
+            }
+            TIP_engine.body = TIP_engine
+            if(spin1.isPointInside(TIP_engine)){
+                b.spin1()
+            }
+            if(spin2.isPointInside(TIP_engine)){
+                b.spin2()
+            }
+            if(scaler.isPointInside(TIP_engine)){
+                scale*=-1
+            }
+            if(playerID == b.board.turn || playerID == -1){
+                let i = b.check(TIP_engine)
+                console.log(i)
+                if(playerID == -1 && i != -1){
+                    playerID = Math.abs(b.board.turn-1) //b.board.turn
+                }
+
+                if(i != -1){
+                    b.cald = 0
+            let pson = {}
+            pson.tile = i
+            pson.id = Math.abs(playerID-1)
+            pson.guy = 1
+            ws.send(JSON.stringify(pson))
+                }
+            }
+
+            if (goRect.isPointInside(TIP_engine)) {
+                globalRoom = roombox.number
+                startgame = 2
+            }
+            window.addEventListener('pointermove', continued_stimuli);
+            window.focus();
+        });
+        window.addEventListener('pointerup', e => {
+            window.removeEventListener("pointermove", continued_stimuli);
+        })
+        function continued_stimuli(e) {
+            FLEX_engine = canvas.getBoundingClientRect();
+            XS_engine = e.clientX - FLEX_engine.left;
+            YS_engine = e.clientY - FLEX_engine.top;
+            TIP_engine.x = XS_engine
+            TIP_engine.y = YS_engine
+            TIP_engine.body = TIP_engine
+        }
+    }
+
+    let lock = 1
+
+
+    let flooble = new ThreeDeeObject()
+
+    let clicked = 1
+    let start = 0
+    let b = new Pairs()
+    let mod = 1
+    let restart = new Rectangle(700, 400, 200, 50, "white")
+    let spin1 = new Rectangle(50, 700, 200, 50, "green")
+    let spin2  = new Rectangle(250, 700, 200, 50, "yellow")
+    let scaler  = new Rectangle(500, 700, 200, 50, "white")
+    let scale = -1
+    function main() {
+        // if(keysPressed['l']){
+
+        canvas_context.clearRect(0, 0, canvas.height, canvas.height)  // refreshes the image
+        scaler.draw()
+        spin1.draw()
+        spin2.draw()
+                canvas_context.fillStyle = "black"
+                canvas_context.font = "30px comic sans ms"
+                canvas_context.fillText("spin", spin1.x + 20, spin1.y + 30)
+                canvas_context.fillStyle = "black"
+                canvas_context.font = "30px comic sans ms"
+                canvas_context.fillText("twirl", spin2.x + 20, spin2.y + 30)
+                canvas_context.fillStyle = "black"
+                canvas_context.font = "30px comic sans ms"
+                canvas_context.fillText("scale", scaler.x + 20, scaler.y + 30)
+        // gamepadAPI.update() //checks for button presses/stick movement on the connected controller)lovlock
+        // game code goes here
+        // let dats = data[ind]
+
+        // flooble.draw()
+        // if (clicked == 1) {
+
+
+        //     if (!p.isGameOver()) {
+
+        //         let pair = p.minimax(2, false)
+
+        //         // if(start == 0){
+        //         //     start  = 1
+        //         //     pair[1] = 13
+        //         // }
+        //         ///////console.log(pair[0])
+        //         // let pair = p.minimax(3, p.right)
+
+        //         if (pair[1] != -1) {
+        //             b.board.dots[pair[1]].turned = p.right.turn;
+        //             b.board.dots[pair[1]].marked = 1;
+        //             if (b.board.turn == 0) {
+        //                 b.board.dots[pair[1]].r = 255;
+        //                 b.board.dots[pair[1]].g = 0;
+        //                 b.board.dots[pair[1]].b = 0;
+        //                 b.board.dots[pair[1]].turned = 1
+        //             } else {
+        //                 b.board.dots[pair[1]].r = 0;
+        //                 b.board.dots[pair[1]].g = 255;
+        //                 b.board.dots[pair[1]].b = 0;
+        //                 b.board.dots[pair[1]].turned = -1
+        //             }
+        //             b.board.turn++
+        //             b.board.turn %= 2
+        //         }
+        //     }
+        //     clicked = 0
+        // }
+
+
+        b.board.draw()
+
+
+        if (b.isGameOver()) {
+            if (b.checkWinner() == 1) {
+                canvas_context.fillStyle = "Red"
+                canvas_context.font = "30px comic sans ms"
+                canvas_context.fillText("The Cube Wins...", 700, 200)
+                restart.draw()
+                canvas_context.fillStyle = "black"
+                canvas_context.fillText("restart", restart.x + 20, restart.y + 30)
+                // clicked = 1
+
+            } else if (b.checkWinner() == -1) {
+                canvas_context.fillStyle = "#00ff00"
+                canvas_context.font = "30px comic sans ms"
+                canvas_context.fillText("You Won!", 700, 200)
+                restart.draw()
+                canvas_context.fillStyle = "black"
+                canvas_context.fillText("restart", restart.x + 20, restart.y + 30)
+                // clicked = 1
+            }
+        }
+        // if(keysPressed['l']){
+        //     let v = new Viewer(b.left)
+        //     v.draw()
+        // }
+        // if(keysPressed['r']){
+        //     let v = new Viewer(b.right)
+        //     v.draw()
+        // }
+
+
+
+        // goBoard.draw()
+        // net.compute(intus)
+        // globlin.compute(dats[0])
+        // hot.draw()
+
+        // globlin.calculateDeltasSigmoid(dats[1])
+
+        // globlin.adjustWeights()
+
+
+        // ind++
+        // ind%=data.length
+        // if(keysPressed[' ']){
+        //     ///////////console.log(globlin.outputs, ind)
+
+        // }
+        // globlin.log()
+    }
+
+
+
+
+
+
+    function findIntersection(line1, line2) {
+        const slope1 = (line1.target.y - line1.object.y) / (line1.target.x - line1.object.x);
+        const yIntercept1 = line1.object.y - slope1 * line1.object.x;
+
+        const slope2 = (line2.target.y - line2.object.y) / (line2.target.x - line2.object.x);
+        const yIntercept2 = line2.object.y - slope2 * line2.object.x;
+
+        let x = (yIntercept2 - yIntercept1) / (slope1 - slope2);
+        let y = slope1 * x + yIntercept1;
+
+        if (isNaN(x)) {
+            x = (line1.target.x + line1.object.x) / 2
+        }
+        if (isNaN(y)) {
+            y = (line1.target.y + line1.object.y) / 2
+        }
+        console.log({ x, y })
+        return { x, y };
+    }
+
+
+
+
+    Socketize(ws)
+
+    //   let pson = {}
+    //                                 pson.room = globalRoom
+    //                                 ws.send(JSON.stringify(pson))
+    //                                 startgame = 1
+
+
+
+    let newboard = 0
+    function Socketize(ws) {
+
+        // console.log("0hit")
+
+        // console.log("hit")
+        ws.addEventListener("message", ({
+            data
+        }) => {
+
+            // console.log(data)
+            if (JSON.parse(data).faction) {
+                // playerID = Math.abs(JSON.parse(data).faction)
+                // console.log(playerID)
+            } else if ( JSON.parse(data).tile > -1) {
+                //   b.teams[JSON.parse(data).id].crew[JSON.parse(data).guy].tile = JSON.parse(data).tile
+                let tile = JSON.parse(data).tile
+                console.log(tile)
+                let t = new Point(b.board.dots[tile].sx, b.board.dots[tile].sy)
+            
+                b.check(t, tile)
+                if(playerID == -1){
+                    playerID = Math.abs(b.board.turn)
+                }
+                // b.board.turn++
+                // b.board.turn %= 2
+                b.cald = 1
+
+            } else {
+                // console.log(JSON.parse(data))
+                if (JSON.parse(data).roomlist) {
+                    roomslist = JSON.parse(data).roomlist
+                } else {
+
+                    let rect = new Rectangle(10, 10, 20, 20, "#00FF00")
+                    rect.draw()
+                }
+            }
+        })
+
+    }
+</script>
+
+<div id="dog-image-container">
+
+</div id="go">
+
+</html>
