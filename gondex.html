@@ -1007,6 +1007,12 @@
             return endstring + (g | (b << 8) | (r << 16)).toString(16)
 
         }
+        subdraw(){
+            // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
+
+            this.sy = (this.y * 120) + 350
+            this.sx = (this.x * 120) + 350
+        }
         draw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
 
@@ -2864,18 +2870,20 @@
             if (keysPressed['s']) {
                 this.rotateY(-.051)
             }
-            for (let t = 0; t < this.dots.length; t++) {
-                // if(t < this.dots.length - (this.dots.length *.3 )){
+            // for (let t = 0; t < this.dots.length; t++) {
+            //     // if(t < this.dots.length - (this.dots.length *.3 )){
 
-                this.dots[t].draw()
-                // }
-            }
+            //     // this.dots[t].draw()
+            //     // }
+            // }
         this.turns = [0,0]
         for (let t = 0; t < this.dots.length; t++) {
-            this.dots[t].draw()
+
+            this.dots[t].subdraw()
         }
 
         for (let t = 0; t < this.dots.length; t++) {
+            this.dots[t].draw()
             for (let k = 0; k < this.dots.length; k++) {
                 if(t!=k){
                     if(this.dots[t].turned == this.dots[k].turned && this.dots[t].turned != 0){
