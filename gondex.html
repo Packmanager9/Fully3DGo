@@ -9,14 +9,14 @@
 <canvas hidden id="canvas2" width="1280" height="850"></canvas>
 <script>
 
-        window.addEventListener('keydown', (event) => {
-            //console.log(event.key)
-            keysPressed[event.key] = true;
-        });
-        window.addEventListener('keyup', (event) => {
-            //console.log(event.key)
-            delete keysPressed[event.key];
-        });
+    window.addEventListener('keydown', (event) => {
+        //console.log(event.key)
+        keysPressed[event.key] = true;
+    });
+    window.addEventListener('keyup', (event) => {
+        //console.log(event.key)
+        delete keysPressed[event.key];
+    });
 
 
 
@@ -50,22 +50,22 @@
     setUp(setup_canvas)
 
     class Data {
-    constructor(input = -100) {
-        this.delta = 0
-        this.outputConnections = []
-        if (input == -100) {
-            this.value = this.weight()
-        } else {
-            this.value = input
+        constructor(input = -100) {
+            this.delta = 0
+            this.outputConnections = []
+            if (input == -100) {
+                this.value = this.weight()
+            } else {
+                this.value = input
+            }
+        }
+        valueOf() {
+            return this.value
+        }
+        weight() {
+            return Math.random() - .5
         }
     }
-    valueOf() {
-        return this.value
-    }
-    weight() {
-        return Math.random() - .5
-    }
-}
 
     class LineOP {
         constructor(object, target, color, width) {
@@ -137,28 +137,28 @@
         angle() {
             return Math.atan2(this.object.y - this.target.y, this.object.x - this.target.x)
         }
-    
-    squareDistance() {
-        let xdif = this.object.x - this.target.x
-        let ydif = this.object.y - this.target.y
-        let squareDistance = (xdif * xdif) + (ydif * ydif)
-        return squareDistance
-    }
-    hypotenuse() {
-        let xdif = this.object.x - this.target.x
-        let ydif = this.object.y - this.target.y
-        let hypotenuse = (xdif * xdif) + (ydif * ydif)
-        return Math.sqrt(hypotenuse)
-    }
-    hypotenuseZ() {
-        let xdif = this.object.x - this.target.x
-        let ydif = this.object.z - this.target.z
-        let hypotenuse = (xdif * xdif) + (ydif * ydif)
-        return Math.sqrt(hypotenuse)
-    }
-    angleZ() {
-        return Math.atan2(this.object.z - this.target.z, this.object.x - this.target.x)
-    }
+
+        squareDistance() {
+            let xdif = this.object.x - this.target.x
+            let ydif = this.object.y - this.target.y
+            let squareDistance = (xdif * xdif) + (ydif * ydif)
+            return squareDistance
+        }
+        hypotenuse() {
+            let xdif = this.object.x - this.target.x
+            let ydif = this.object.y - this.target.y
+            let hypotenuse = (xdif * xdif) + (ydif * ydif)
+            return Math.sqrt(hypotenuse)
+        }
+        hypotenuseZ() {
+            let xdif = this.object.x - this.target.x
+            let ydif = this.object.z - this.target.z
+            let hypotenuse = (xdif * xdif) + (ydif * ydif)
+            return Math.sqrt(hypotenuse)
+        }
+        angleZ() {
+            return Math.atan2(this.object.z - this.target.z, this.object.x - this.target.x)
+        }
 
         draw() {
             let linewidthstorage = canvas_context.lineWidth
@@ -1007,7 +1007,7 @@
             return endstring + (g | (b << 8) | (r << 16)).toString(16)
 
         }
-        subdraw(){
+        subdraw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
 
             this.sy = (this.y * 120) + 350
@@ -1053,7 +1053,7 @@
                 canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
                 canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
-                canvas_context.fillStyle =`rgb(${this.r},${this.g},${this.b})`
+                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.lineWidth = 4
                 canvas_context.stroke()
                 // if (this.marked == 1) {
@@ -1064,7 +1064,7 @@
 
                 // ////console.log("h")
                 canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
-                canvas_context.strokeStyle = `rgb(${this.r+35},${this.g+35},${this.b+35})`
+                canvas_context.strokeStyle = `rgb(${this.r + 35},${this.g + 35},${this.b + 35})`
                 canvas_context.strokeRect(this.sx - 3, this.sy - 3, 6, 6)
                 canvas_context.beginPath();
                 canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, 10, 0, (Math.PI * 2), true)
@@ -1097,202 +1097,202 @@
             this.cald = 1
         }
 
-        spin1(){
-            
+        spin1() {
+
 
             this.board.spin1()
         }
-        spin2(){
-            
+        spin2() {
+
             this.board.spin2()
         }
-        check(point, tile = -1, top= -1, kop= -1, eep = -1) {
+        check(point, tile = -1, top = -1, kop = -1, eep = -1) {
 
             let box = []
-                    for(let t1 = 0;t1<(6*6*6);t1++){
-                        box.push(0)
-                    //     for(let k1 = 0;k1<5;k1++){
-                    //         box[t1].push([])
-                    //         for(let e1 = 0;e1<5;e1++){
-                    //             box[t1][k1].push(0)
+            for (let t1 = 0; t1 < (6 * 6 * 6); t1++) {
+                box.push(0)
+                //     for(let k1 = 0;k1<5;k1++){
+                //         box[t1].push([])
+                //         for(let e1 = 0;e1<5;e1++){
+                //             box[t1][k1].push(0)
 
-                    //         }
-                    //     }
-                    }
+                //         }
+                //     }
+            }
             let i = -10
             let t = -10
             let ke = -10
             let e = -10
             let flagger = []
-            for (let k = 0; k < (6*6*6); k++) {
+            for (let k = 0; k < (6 * 6 * 6); k++) {
 
                 // /////////////console.log(this.board.dots[k])
-                if(top != -1){
+                if (top != -1) {
                     if (this.board.supa[kop][top][eep].isPointInside(point)) {
-                    if (this.board.supa[kop][top][eep].marked != 1) {
-                        this.board.supa[kop][top][eep].marked = 1
-                        this.board.supa[kop][top][eep].turned = 0
-                        this.board.supa[kop][top][eep].value = .5
-                        if (this.board.turn == 0) {
-                            this.board.supa[kop][top][eep].turned = 1
-                            this.board.supa[kop][top][eep].type = 1
-                            this.board.supa[kop][top][eep].value = 1
-                            this.board.supa[kop][top][eep].r = 255
-                            this.board.supa[kop][top][eep].g = 255
-                            this.board.supa[kop][top][eep].b = 255
-                            flagger = [this.board.supa[kop][top][eep].t, this.board.supa[kop][top][eep].k, this.board.supa[kop][top][eep].e]
-                            if (this.strings.includes(this.export())) {
-                                flagger = []
-                                this.board.supa[kop][top][eep].turned = 0
-                                this.board.supa[kop][top][eep].type = 0
-                                this.board.supa[kop][top][eep].value = .5
-                                this.board.supa[kop][top][eep].r = 128
-                                this.board.supa[kop][top][eep].g = 128
-                                this.board.supa[kop][top][eep].b = 128
-                                // this.board.turn++
-                                // this.board.turn %= 2
-                                //console.log(this.board.turn)
-                                this.board.supa[kop][top][eep].marked = 0
-                                //console.log(this.board.supa[kop][top][eep], this.board.turn)
-                                i = -1
-                            } else {
-                                this.strings.push(this.export())
-                                this.board.turn++
-                                this.board.turn %= 2
+                        if (this.board.supa[kop][top][eep].marked != 1) {
+                            this.board.supa[kop][top][eep].marked = 1
+                            this.board.supa[kop][top][eep].turned = 0
+                            this.board.supa[kop][top][eep].value = .5
+                            if (this.board.turn == 0) {
+                                this.board.supa[kop][top][eep].turned = 1
+                                this.board.supa[kop][top][eep].type = 1
+                                this.board.supa[kop][top][eep].value = 1
+                                this.board.supa[kop][top][eep].r = 255
+                                this.board.supa[kop][top][eep].g = 255
+                                this.board.supa[kop][top][eep].b = 255
+                                flagger = [this.board.supa[kop][top][eep].t, this.board.supa[kop][top][eep].k, this.board.supa[kop][top][eep].e]
+                                if (this.strings.includes(this.export())) {
+                                    flagger = []
+                                    this.board.supa[kop][top][eep].turned = 0
+                                    this.board.supa[kop][top][eep].type = 0
+                                    this.board.supa[kop][top][eep].value = .5
+                                    this.board.supa[kop][top][eep].r = 128
+                                    this.board.supa[kop][top][eep].g = 128
+                                    this.board.supa[kop][top][eep].b = 128
+                                    // this.board.turn++
+                                    // this.board.turn %= 2
+                                    //console.log(this.board.turn)
+                                    this.board.supa[kop][top][eep].marked = 0
+                                    //console.log(this.board.supa[kop][top][eep], this.board.turn)
+                                    i = -1
+                                } else {
+                                    this.strings.push(this.export())
+                                    this.board.turn++
+                                    this.board.turn %= 2
 
-                                //console.log(this.board.turn)
-                            }
-                        } else if (this.board.turn == 1) {
-                            this.board.supa[kop][top][eep].turned = -1
-                            this.board.supa[kop][top][eep].type = -1
-                            this.board.supa[kop][top][eep].value = 0
-                            this.board.supa[kop][top][eep].r = 0
-                            this.board.supa[kop][top][eep].g = 0
-                            this.board.supa[kop][top][eep].b = 0
-                            flagger = [this.board.supa[kop][top][eep].t, this.board.supa[kop][top][eep].k, this.board.supa[kop][top][eep].e]
-                            if (this.strings.includes(this.export())) {
-                                flagger = []
-                                this.board.supa[kop][top][eep].turned = 0
-                                this.board.supa[kop][top][eep].type = 0
-                                this.board.supa[kop][top][eep].value = .5
-                                this.board.supa[kop][top][eep].r = 128
-                                this.board.supa[kop][top][eep].g = 128
-                                this.board.supa[kop][top][eep].b = 128
-                                // this.board.turn++
-                                // this.board.turn %= 2
-                                //console.log(this.board.turn)
-                                this.board.supa[kop][top][eep].marked = 0
-                                //console.log(this.board.supa[kop][top][eep], this.board.turn)
-                                i = -1
-                            } else {
-                                this.strings.push(this.export())
-                                this.board.turn++
-                                this.board.turn %= 2
+                                    //console.log(this.board.turn)
+                                }
+                            } else if (this.board.turn == 1) {
+                                this.board.supa[kop][top][eep].turned = -1
+                                this.board.supa[kop][top][eep].type = -1
+                                this.board.supa[kop][top][eep].value = 0
+                                this.board.supa[kop][top][eep].r = 0
+                                this.board.supa[kop][top][eep].g = 0
+                                this.board.supa[kop][top][eep].b = 0
+                                flagger = [this.board.supa[kop][top][eep].t, this.board.supa[kop][top][eep].k, this.board.supa[kop][top][eep].e]
+                                if (this.strings.includes(this.export())) {
+                                    flagger = []
+                                    this.board.supa[kop][top][eep].turned = 0
+                                    this.board.supa[kop][top][eep].type = 0
+                                    this.board.supa[kop][top][eep].value = .5
+                                    this.board.supa[kop][top][eep].r = 128
+                                    this.board.supa[kop][top][eep].g = 128
+                                    this.board.supa[kop][top][eep].b = 128
+                                    // this.board.turn++
+                                    // this.board.turn %= 2
+                                    //console.log(this.board.turn)
+                                    this.board.supa[kop][top][eep].marked = 0
+                                    //console.log(this.board.supa[kop][top][eep], this.board.turn)
+                                    i = -1
+                                } else {
+                                    this.strings.push(this.export())
+                                    this.board.turn++
+                                    this.board.turn %= 2
 
-                                //console.log(this.board.turn)
+                                    //console.log(this.board.turn)
+                                }
                             }
+                            /////////////console.log("h")
+                            clicked = 1
+                            this.board.wholeSort()
+                            // this.board.badwholeSort()
+
+                            i = k
+                            t = this.board.supa[kop][top][eep].t
+                            ke = this.board.supa[kop][top][eep].k
+                            e = this.board.supa[kop][top][eep].e
+                            break
                         }
-                        /////////////console.log("h")
-                        clicked = 1
-                        this.board.wholeSort()
-                        // this.board.badwholeSort()
 
-                        i = k
-                        t = this.board.supa[kop][top][eep].t
-                        ke = this.board.supa[kop][top][eep].k
-                        e = this.board.supa[kop][top][eep].e
-                        break
                     }
-
-                }
-                }else{
+                } else {
                     if (this.board.dots[k].isPointInside(point)) {
-                    if (this.board.dots[k].marked != 1) {
-                        this.board.dots[k].marked = 1
-                        this.board.dots[k].turned = 0
-                        this.board.dots[k].value = .5
-                        if (this.board.turn == 0) {
-                            this.board.dots[k].turned = 1
-                            this.board.dots[k].type = 1
-                            this.board.dots[k].value = 1
-                            this.board.dots[k].r = 255
-                            this.board.dots[k].g = 255
-                            this.board.dots[k].b = 255
-                            flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
-                            if (this.strings.includes(this.export())) {
-                                flagger = []
-                                this.board.dots[k].turned = 0
-                                this.board.dots[k].type = 0
-                                this.board.dots[k].value = .5
-                                this.board.dots[k].r = 128
-                                this.board.dots[k].g = 128
-                                this.board.dots[k].b = 128
-                                // this.board.turn++
-                                // this.board.turn %= 2
-                                //console.log(this.board.turn)
-                                this.board.dots[k].marked = 0
-                                //console.log(this.board.dots[k], this.board.turn)
-                                i = -1
-                            } else {
-                                this.strings.push(this.export())
-                                this.board.turn++
-                                this.board.turn %= 2
+                        if (this.board.dots[k].marked != 1) {
+                            this.board.dots[k].marked = 1
+                            this.board.dots[k].turned = 0
+                            this.board.dots[k].value = .5
+                            if (this.board.turn == 0) {
+                                this.board.dots[k].turned = 1
+                                this.board.dots[k].type = 1
+                                this.board.dots[k].value = 1
+                                this.board.dots[k].r = 255
+                                this.board.dots[k].g = 255
+                                this.board.dots[k].b = 255
+                                flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
+                                if (this.strings.includes(this.export())) {
+                                    flagger = []
+                                    this.board.dots[k].turned = 0
+                                    this.board.dots[k].type = 0
+                                    this.board.dots[k].value = .5
+                                    this.board.dots[k].r = 128
+                                    this.board.dots[k].g = 128
+                                    this.board.dots[k].b = 128
+                                    // this.board.turn++
+                                    // this.board.turn %= 2
+                                    //console.log(this.board.turn)
+                                    this.board.dots[k].marked = 0
+                                    //console.log(this.board.dots[k], this.board.turn)
+                                    i = -1
+                                } else {
+                                    this.strings.push(this.export())
+                                    this.board.turn++
+                                    this.board.turn %= 2
 
-                                //console.log(this.board.turn)
-                            }
-                        } else if (this.board.turn == 1) {
-                            this.board.dots[k].turned = -1
-                            this.board.dots[k].type = -1
-                            this.board.dots[k].value = 0
-                            this.board.dots[k].r = 0
-                            this.board.dots[k].g = 0
-                            this.board.dots[k].b = 0
-                            flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
-                            if (this.strings.includes(this.export())) {
-                                flagger = []
-                                this.board.dots[k].turned = 0
-                                this.board.dots[k].type = 0
-                                this.board.dots[k].value = .5
-                                this.board.dots[k].r = 128
-                                this.board.dots[k].g = 128
-                                this.board.dots[k].b = 128
-                                // this.board.turn++
-                                // this.board.turn %= 2
-                                //console.log(this.board.turn)
-                                this.board.dots[k].marked = 0
-                                //console.log(this.board.dots[k], this.board.turn)
-                                i = -1
-                            } else {
-                                this.strings.push(this.export())
-                                this.board.turn++
-                                this.board.turn %= 2
+                                    //console.log(this.board.turn)
+                                }
+                            } else if (this.board.turn == 1) {
+                                this.board.dots[k].turned = -1
+                                this.board.dots[k].type = -1
+                                this.board.dots[k].value = 0
+                                this.board.dots[k].r = 0
+                                this.board.dots[k].g = 0
+                                this.board.dots[k].b = 0
+                                flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
+                                if (this.strings.includes(this.export())) {
+                                    flagger = []
+                                    this.board.dots[k].turned = 0
+                                    this.board.dots[k].type = 0
+                                    this.board.dots[k].value = .5
+                                    this.board.dots[k].r = 128
+                                    this.board.dots[k].g = 128
+                                    this.board.dots[k].b = 128
+                                    // this.board.turn++
+                                    // this.board.turn %= 2
+                                    //console.log(this.board.turn)
+                                    this.board.dots[k].marked = 0
+                                    //console.log(this.board.dots[k], this.board.turn)
+                                    i = -1
+                                } else {
+                                    this.strings.push(this.export())
+                                    this.board.turn++
+                                    this.board.turn %= 2
 
-                                //console.log(this.board.turn)
+                                    //console.log(this.board.turn)
+                                }
                             }
+                            /////////////console.log("h")
+                            clicked = 1
+                            this.board.wholeSort()
+                            // this.board.badwholeSort()
+                            i = k
+                            t = this.board.dots[k].t
+                            ke = this.board.dots[k].k
+                            e = this.board.dots[k].e
+                            break
                         }
-                        /////////////console.log("h")
-                        clicked = 1
-                        this.board.wholeSort()
-                        // this.board.badwholeSort()
-                        i = k
-                        t = this.board.dots[k].t
-                        ke = this.board.dots[k].k
-                        e = this.board.dots[k].e
-                        break
-                    }
 
+                    }
                 }
-                }
-                
+
 
             }
 
             this.board.badwholeSort()
-            return [t,ke,e, i]
+            return [t, ke, e, i]
             // for (let k = 0; k < 0; k++) {
 
             // for (let k = 0; k < 0; k++) {
-                
+
 
             //         if(tile != -1){
             //             k = tile
@@ -1415,7 +1415,7 @@
             //     board3[c][a][b].type = this.board.dots[k].turned
 
 
-                
+
             //     board4[a][c][b].value = this.board.dots[k].value
             //     board4[a][c][b].t = this.board.dots[k].t
             //     board4[a][c][b].k = this.board.dots[k].k
@@ -1458,7 +1458,7 @@
             //         goBoard3.wholeSort()
             //         goBoard4.wholeSort()
             //         goBoard5.wholeSort()
-                  
+
 
             //         goBoard1.turn = (this.board.turn + 1) % 2
             //         goBoard2.turn = (this.board.turn + 1) % 2
@@ -1471,10 +1471,10 @@
             //         goBoard3.wholeSort()
             //         goBoard4.wholeSort()
             //         goBoard5.wholeSort()
-                  
+
 
             //         ///////console.log(goBoard1)
-         
+
             //         let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
             //         for (let r = 0; r < arr.length; r++) {
             //             for (let w = 0; w < arr[r].board.length; w++) {
@@ -1526,7 +1526,7 @@
             //         goBoard3.wholeSort()
             //         goBoard4.wholeSort()
             //         goBoard5.wholeSort()
-                  
+
 
             //         goBoard1.turn = (this.board.turn + 1) % 2
             //         goBoard2.turn = (this.board.turn + 1) % 2
@@ -1539,9 +1539,9 @@
             //         goBoard3.wholeSort()
             //         goBoard4.wholeSort()
             //         goBoard5.wholeSort()
-                  
 
-         
+
+
             //         let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
 
             //         for (let r = 0; r < arr.length; r++) {
@@ -1550,7 +1550,7 @@
             //                     let ot = ((arr[r].board[w][m].k + 2)) * 25
             //                     ot += ((arr[r].board[w][m].t + 2)) * 5
             //                     ot += ((arr[r].board[w][m].e + 2))
-                                
+
 
 
             //                     if (this.board.dots[ot].turned != 0 && box[ot] == 0) {
@@ -1573,8 +1573,8 @@
             //                 }
             //             }
             //         } 
-                    
-                    
+
+
             //         for (let r = 0; r < arr.length; r++) {
             //             for (let w = 0; w < arr[r].board.length; w++) {
             //                 for (let m = 0; m < arr[r].board[w].length; m++) {
@@ -1666,7 +1666,7 @@
             //         // goBoard3.wholeSort()
             //         // goBoard4.wholeSort()
             //         // goBoard5.wholeSort()
-                  
+
 
             //         goBoard1.turn = (this.board.turn + 1) % 2
             //         goBoard2.turn = (this.board.turn + 1) % 2
@@ -1679,7 +1679,7 @@
             //         // goBoard3.wholeSort()
             //         // goBoard4.wholeSort()
             //         // goBoard5.wholeSort()
-                  
+
 
             //     }
             // }
@@ -1703,20 +1703,97 @@
         generateMoves() {
             const nextMoves = [];
             /////////////console.log(this.board)
-            for (let i = 0; i < 5; i++) {
-                for (let j = 0; j < 5; j++) {
-                    for (let k = 0; k < 5; k++) {
-                        let index = i * 25
-                        index += j * 5
+
+            let c1 = .5
+            let c2 = 0
+            let f1 = 0
+            let f2 = 0
+            let f3 = 0
+            for (let t = 0; t < b.board.dots.length; t++) {
+                if (b.board.dots[t].mark == 1 || b.board.dots[t].turned == 1) {
+                    c1++
+                }
+                if (b.board.dots[t].mark == -1 || b.board.dots[t].turned == -1) {
+                    c2++
+                }
+                if (b.board.dots[t].turned == -1) {
+                    f1 = 1
+                }
+                if (b.board.dots[t].turned == -1) {
+                    f2++
+                }
+                if (b.board.dots[t].turned == 1) {
+                    f3++
+                }
+            }
+
+
+            for (let i = 2; i < 4; i++) {
+                for (let j = 2; j < 4; j++) {
+                    for (let k = 2; k < 4; k++) {
+                        let index = i * 36
+                        index += j * 6
                         index += k
                         /////////////console.log(index)
-                        if (this.board.dots[index].turned === 0) {
-                            nextMoves.push(index);
+                        if ((this.board.dots[index].turned === 0 && (this.board.dots[index].mark === 0 || (f3 < 2 && f2 < 2)))) {
+                            if(Math.random()< .5){
+
+                                nextMoves.push(index);
+                            }else{
+
+                                 nextMoves.unshift(index);
+                            }
                         }
                     }
                 }
             }
+            if(nextMoves.length > 0){
+                return nextMoves;
+            }
+            for (let i = 1; i < 5; i++) {
+                for (let j = 1; j < 5; j++) {
+                    for (let k = 1; k < 5; k++) {
+                        let index = i * 36
+                        index += j * 6
+                        index += k
+                        /////////////console.log(index)
+                        if ((this.board.dots[index].turned === 0 && (this.board.dots[index].mark === 0 || (f3 < 2 && f2 < 2)))) {
+                            if(Math.random()< .5){
 
+                                nextMoves.push(index);
+                            }else{
+
+                                 nextMoves.unshift(index);
+                            }
+                        }
+                    }
+                }
+            }
+            if(nextMoves.length > 0){
+                return nextMoves;
+            }
+
+
+            for (let i = 0; i < 6; i++) {
+                for (let j = 0; j < 6; j++) {
+                    for (let k = 0; k < 6; k++) {
+                        let index = i * 36
+                        index += j * 6
+                        index += k
+                        /////////////console.log(index)
+                        if ((this.board.dots[index].turned === 0 && (this.board.dots[index].mark === 0 || (f3 < 2 && f2 < 2)))) {
+                            if(Math.random()< .5){
+
+                                nextMoves.push(index);
+                            }else{
+
+                                 nextMoves.unshift(index);
+                            }
+                        }
+                    }
+                }
+            }
+            
             return nextMoves;
         }
 
@@ -1845,34 +1922,83 @@
             // }
 
             let boo = false
+
+            let c1 = .5
+            let c2 = 0
+            let f1 = 0
+            let f2 = 0
+            for (let t = 0; t < b.board.dots.length; t++) {
+                if (b.board.dots[t].mark == 1 || b.board.dots[t].turned == 1) {
+                    c1++
+                }
+                if (b.board.dots[t].mark == -1 || b.board.dots[t].turned == -1) {
+                    c2++
+                }
+                if (b.board.dots[t].turned == -1) {
+                    f1 = 1
+                }
+                if (b.board.dots[t].turned == -1) {
+                    f2++
+                }
+            }
+            if (c2 >= 200 && f2 == 1) { c2 = 1 }
+            if (c2 > c1) {
+                return -1
+            }
+            if (c2 < c1) {
+                return 1
+            }
+            return 0
+
             return boo
         }
-        evaluate(w) {
+        evaluate(w, player) {
             const winner = this.checkWinner();
-            if (winner === w) {
-                return 10;
-            } else if (winner === w * -1) {
-                return -10;
-            } else {
-                return 0;
+
+            this.board.badwholeSort()
+            let c1 = .5
+            let c2 = 0
+            let f1 = 0
+            let f2 = 0
+            for (let t = 0; t < b.board.dots.length; t++) {
+                if (b.board.dots[t].mark == 1 || b.board.dots[t].turned == 1) {
+                    c1++
+                }
+                if (b.board.dots[t].mark == -1 || b.board.dots[t].turned == -1) {
+                    c2++
+                }
+                if (b.board.dots[t].turned == -1) {
+                    f1 = 1
+                }
+                if (b.board.dots[t].turned == -1) {
+                    f2++
+                }
+            }
+            if (c2 >= 200 && f2 == 1) { c2 = 1 }
+
+            if (player == 1) {
+                return c1
+            }
+            if (player == -1) {
+                return c2
             }
         }
         isGameOver() {
             // ///////////console.log(this.checkWinner(), this.generateMoves.length)
-            return (this.checkWinner() != 0 || this.generateMoves().length == 0);
+            return (this.generateMoves().length == 0);
         }
-        minimax(depth, isMaximizingPlayer) {
+        minimax(depth, isMaximizingPlayer, player) {
             if (this.isGameOver() || depth === 0) {
-                return [this.evaluate(-1), -1];
+                return [this.evaluate(-1, player), -1];
             }
             if (isMaximizingPlayer) {
                 let bestScore = -Infinity;
                 let bestmove = -1
                 for (let move of this.generateMoves()) {
-                    this.board.dots[move].turned = -1
-                    let score = this.minimax(depth - 1, false)[0];
+                    this.board.dots[move].turned = player
+                    let score = this.minimax(depth - 1, false, player)[0];
                     this.board.dots[move].turned = 0
-                    if (score > bestScore) {
+                    if ((score > bestScore) || (score == bestScore && Math.random() < .05)) {
                         bestmove = move
                     }
                     bestScore = Math.max(score, bestScore);
@@ -1882,10 +2008,10 @@
                 let bestScore = Infinity;
                 let bestmove = -1
                 for (let move of this.generateMoves()) {
-                    this.board.dots[move].turned = 1
-                    let score = this.minimax(depth - 1, true)[0];
+                    this.board.dots[move].turned = player*-1
+                    let score = this.minimax(depth - 1, true, player*-1 )[0];
                     this.board.dots[move].turned = 0
-                    if (score < bestScore) {
+                    if ((score < bestScore) || (score == bestScore && Math.random() < .05)) {
                         bestmove = move
                     }
                     bestScore = Math.min(score, bestScore);
@@ -2033,374 +2159,231 @@
     }
 
     class Go {
-    constructor(inData = [], offset = 0, yoffset) {
-        this.score = [0, 0]
-        /////////console.log(inData)
-        this.countup = 0
-        this.metaScore = [0, 0]
-        this.offset = offset + 920
-        this.yoffset = yoffset
-        this.turn = 0
-        this.board = inData
-        this.strings = []
-        this.strings2 = []
-        this.boards = []
-        // if (this.board.length == 0) {
-        for (let t = 0; t < 5; t++) {
-            // let line = []
-            for (let k = 0; k < 5; k++) {
-                // let dat = new Data(.5)
-                this.board[t][k].x = t
-                this.board[t][k].y = k
-                // line.push(dat)
-            }
-            // this.board.push(line)
-        }
-        // }
-        ////console.log(this.board)
-        this.rects = []
-        for (let t = 0; t < this.board.length; t++) {
-            this.rects.push([])
-            for (let k = 0; k < this.board[t].length; k++) {
-                if (this.board[t][k].valueOf() < .333) {
-                    this.board[t][k].type = -1
-                    canvas_context.fillStyle = "blue"
-                } else if (this.board[t][k].valueOf() > .66) {
-                    this.board[t][k].type = 1
-                    canvas_context.fillStyle = "blue"
-                } else {
-                    this.board[t][k].type = 0
-                    canvas_context.fillStyle = "blue"
+        constructor(inData = [], offset = 0, yoffset) {
+            this.score = [0, 0]
+            /////////console.log(inData)
+            this.countup = 0
+            this.metaScore = [0, 0]
+            this.offset = offset + 920
+            this.yoffset = yoffset
+            this.turn = 0
+            this.board = inData
+            this.strings = []
+            this.strings2 = []
+            this.boards = []
+            // if (this.board.length == 0) {
+            for (let t = 0; t < 5; t++) {
+                // let line = []
+                for (let k = 0; k < 5; k++) {
+                    // let dat = new Data(.5)
+                    this.board[t][k].x = t
+                    this.board[t][k].y = k
+                    // line.push(dat)
                 }
-
-                // canvas_context.fillRect(t*50, k*50, (t*50)+50, (k*50)+50)
-                this.rects[t][k] = new Rectangle((t * 10) + this.offset, k * 10 + this.yoffset, (0) + 10, (0) + 10, canvas_context.fillStyle)
+                // this.board.push(line)
             }
+            // }
+            ////console.log(this.board)
+            this.rects = []
+            for (let t = 0; t < this.board.length; t++) {
+                this.rects.push([])
+                for (let k = 0; k < this.board[t].length; k++) {
+                    if (this.board[t][k].valueOf() < .333) {
+                        this.board[t][k].type = -1
+                        canvas_context.fillStyle = "blue"
+                    } else if (this.board[t][k].valueOf() > .66) {
+                        this.board[t][k].type = 1
+                        canvas_context.fillStyle = "blue"
+                    } else {
+                        this.board[t][k].type = 0
+                        canvas_context.fillStyle = "blue"
+                    }
+
+                    // canvas_context.fillRect(t*50, k*50, (t*50)+50, (k*50)+50)
+                    this.rects[t][k] = new Rectangle((t * 10) + this.offset, k * 10 + this.yoffset, (0) + 10, (0) + 10, canvas_context.fillStyle)
+                }
+            }
+
+
         }
 
-
-    }
-
-    badneighbors(node) {
-        if (node.type != 0) {
-            return []
+        badneighbors(node) {
+            if (node.type != 0) {
+                return []
+            }
+            ////console.log(node.x, node.y)
+            var ret = [];
+            var x = node.x;
+            var y = node.y;
+            var grid = this.board;
+            this.diagonal = false
+            // West)
+            if (grid[x - 1] && grid[x - 1][y]) {
+                if (grid[x - 1][y].type !== node.type || grid[x - 1][y].type == 0) {
+                    ret.push(grid[x - 1][y]);
+                }
+            }
+            // East
+            if (grid[x + 1] && grid[x + 1][y]) {
+                if (grid[x + 1][y].type !== node.type || grid[x + 1][y].type == 0) {
+                    ret.push(grid[x + 1][y]);
+                }
+            }
+            // South
+            if (grid[x] && grid[x][y - 1]) {
+                if (grid[x][y - 1].type !== node.type || grid[x][y - 1].type == 0) {
+                    ret.push(grid[x][y - 1]);
+                }
+            }
+            // North
+            if (grid[x] && grid[x][y + 1]) {
+                if (grid[x][y + 1].type !== node.type || grid[x][y + 1].type == 0) {
+                    ret.push(grid[x][y + 1]);
+                }
+            }
+            // ////console.log(node, grid)
+            return ret;
         }
-        ////console.log(node.x, node.y)
-        var ret = [];
-        var x = node.x;
-        var y = node.y;
-        var grid = this.board;
-        this.diagonal = false
-        // West)
-        if (grid[x - 1] && grid[x - 1][y]) {
-            if (grid[x - 1][y].type !== node.type || grid[x - 1][y].type == 0) {
+
+        neighbors(node) {
+            if (node.type == 0) {
+                return []
+            }
+            ////console.log(node.x, node.y)
+            var ret = [];
+            var x = node.x;
+            var y = node.y;
+            var grid = this.board;
+            this.diagonal = false
+            // West)
+            if (grid[x - 1] && grid[x - 1][y]) {
+                if (grid[x - 1][y].type == node.type || grid[x - 1][y].type == 0) {
+                    ret.push(grid[x - 1][y]);
+                }
+            }
+            // East
+            if (grid[x + 1] && grid[x + 1][y]) {
+                if (grid[x + 1][y].type == node.type || grid[x + 1][y].type == 0) {
+                    ret.push(grid[x + 1][y]);
+                }
+            }
+            // South
+            if (grid[x] && grid[x][y - 1]) {
+                if (grid[x][y - 1].type == node.type || grid[x][y - 1].type == 0) {
+                    ret.push(grid[x][y - 1]);
+                }
+            }
+            // North
+            if (grid[x] && grid[x][y + 1]) {
+                if (grid[x][y + 1].type == node.type || grid[x][y + 1].type == 0) {
+                    ret.push(grid[x][y + 1]);
+                }
+            }
+            // ////console.log(node, grid)
+            return ret;
+        }
+        rawneighbors(node) {
+            if (node.type == 0) {
+                return []
+            }
+            var ret = [];
+            var x = node.x;
+            var y = node.y;
+            var grid = this.board;
+            this.diagonal = false
+            // West)
+            if (grid[x - 1] && grid[x - 1][y]) {
+                // if (grid[x - 1][y].type == node.type || grid[x - 1][y].type == 0) {
                 ret.push(grid[x - 1][y]);
+                // }
             }
-        }
-        // East
-        if (grid[x + 1] && grid[x + 1][y]) {
-            if (grid[x + 1][y].type !== node.type || grid[x + 1][y].type == 0) {
+            // East
+            if (grid[x + 1] && grid[x + 1][y]) {
+                // if (grid[x + 1][y].type == node.type || grid[x + 1][y].type == 0) {
                 ret.push(grid[x + 1][y]);
+                // }
             }
-        }
-        // South
-        if (grid[x] && grid[x][y - 1]) {
-            if (grid[x][y - 1].type !== node.type || grid[x][y - 1].type == 0) {
+            // South
+            if (grid[x] && grid[x][y - 1]) {
+                // if (grid[x][y - 1].type == node.type || grid[x][y - 1].type == 0) {
                 ret.push(grid[x][y - 1]);
+                // }
             }
-        }
-        // North
-        if (grid[x] && grid[x][y + 1]) {
-            if (grid[x][y + 1].type !== node.type || grid[x][y + 1].type == 0) {
+            // North
+            if (grid[x] && grid[x][y + 1]) {
+                // if (grid[x][y + 1].type == node.type || grid[x][y + 1].type == 0) {
                 ret.push(grid[x][y + 1]);
+                // }
             }
+            return ret;
         }
-        // ////console.log(node, grid)
-        return ret;
-    }
-
-    neighbors(node) {
-        if (node.type == 0) {
-            return []
-        }
-        ////console.log(node.x, node.y)
-        var ret = [];
-        var x = node.x;
-        var y = node.y;
-        var grid = this.board;
-        this.diagonal = false
-        // West)
-        if (grid[x - 1] && grid[x - 1][y]) {
-            if (grid[x - 1][y].type == node.type || grid[x - 1][y].type == 0) {
-                ret.push(grid[x - 1][y]);
-            }
-        }
-        // East
-        if (grid[x + 1] && grid[x + 1][y]) {
-            if (grid[x + 1][y].type == node.type || grid[x + 1][y].type == 0) {
-                ret.push(grid[x + 1][y]);
-            }
-        }
-        // South
-        if (grid[x] && grid[x][y - 1]) {
-            if (grid[x][y - 1].type == node.type || grid[x][y - 1].type == 0) {
-                ret.push(grid[x][y - 1]);
-            }
-        }
-        // North
-        if (grid[x] && grid[x][y + 1]) {
-            if (grid[x][y + 1].type == node.type || grid[x][y + 1].type == 0) {
-                ret.push(grid[x][y + 1]);
-            }
-        }
-        // ////console.log(node, grid)
-        return ret;
-    }
-    rawneighbors(node) {
-        if (node.type == 0) {
-            return []
-        }
-        var ret = [];
-        var x = node.x;
-        var y = node.y;
-        var grid = this.board;
-        this.diagonal = false
-        // West)
-        if (grid[x - 1] && grid[x - 1][y]) {
-            // if (grid[x - 1][y].type == node.type || grid[x - 1][y].type == 0) {
-            ret.push(grid[x - 1][y]);
-            // }
-        }
-        // East
-        if (grid[x + 1] && grid[x + 1][y]) {
-            // if (grid[x + 1][y].type == node.type || grid[x + 1][y].type == 0) {
-            ret.push(grid[x + 1][y]);
-            // }
-        }
-        // South
-        if (grid[x] && grid[x][y - 1]) {
-            // if (grid[x][y - 1].type == node.type || grid[x][y - 1].type == 0) {
-            ret.push(grid[x][y - 1]);
-            // }
-        }
-        // North
-        if (grid[x] && grid[x][y + 1]) {
-            // if (grid[x][y + 1].type == node.type || grid[x][y + 1].type == 0) {
-            ret.push(grid[x][y + 1]);
-            // }
-        }
-        return ret;
-    }
-    draw() {
-        // this.wholeSort()
-        // /////////////console.log("draw")
-        for (let t = 0; t < this.board.length; t++) {
-            for (let k = 0; k < this.board[t].length; k++) {
-                if (this.board[t][k].valueOf() < .333) {
-                    this.rects[t][k].draw()
-                    // let circle = new Circle(this.rects[t][k].x + 25, this.rects[t][k].y + 25, 18, "black")
-                    // circle.draw()
-                } else if (this.board[t][k].valueOf() > .66) {
-                    this.rects[t][k].draw()
-                    // let circle = new Circle(this.rects[t][k].x + 25, this.rects[t][k].y + 25, 18, "white")
-                    // circle.draw()
-                } else {
-                    this.rects[t][k].draw()
-                }
-            }
-
-        }
-        for (let t = 0; t < this.board.length; t++) {
-            for (let k = 0; k < this.board[t].length; k++) {
-                if (this.board[t][k].valueOf() < .333) {
-                    // this.rects[t][k].draw()
-                    let circle = new Circle(this.rects[t][k].x + 5, this.rects[t][k].y + 5, 5, "black")
-                    circle.draw()
-                } else if (this.board[t][k].valueOf() > .66) {
-                    // this.rects[t][k].draw()
-                    let circle = new Circle(this.rects[t][k].x + 5, this.rects[t][k].y + 5, 5, "white")
-                    circle.draw()
-                } else {
-                    // this.rects[t][k].draw()
-                }
-            }
-
-        }
-    }
-    export() {
-        let data = []
-        for (let t = 0; t < this.board.length; t++) {
-            for (let k = 0; k < this.board[t].length; k++) {
-                data.push(this.board[t][k].valueOf())
-            }
-        }
-        return data
-    }
-    density() {
-        let d = 0
-        for (let t = 0; t < this.board.length; t++) {
-            for (let k = 0; k < this.board[t].length; k++) {
-                if (this.board[t][k].valueOf() != .5) {
-                    d++
-                }
-            }
-        }
-        return d / 81
-    }
-
-
-
-    neighborsCheck(node) {
-        let boole = false
-        // let gnode = new Data(node.valueOf)
-        // gnode.type = node.type*-1
-        // gnode.t = node.t
-        // gnode.k = node.k
-        let n = this.neighbors(node)
-        n.push(node)
-        let f = [...n]
-        let ind = []
-        for (let k = 0; k < 40; k++) {
-            for (let d = 0; d < n.length; d++) {
-                let r
-                if (ind.includes(d)) {
-                    r = []
-                } else {
-
-                    r = this.neighbors(n[d])
-                    ind.push(d)
-                }
-                for (let e = 0; e < r.length; e++) {
-                    if (f.includes(r[e])) {
-
+        draw() {
+            // this.wholeSort()
+            // /////////////console.log("draw")
+            for (let t = 0; t < this.board.length; t++) {
+                for (let k = 0; k < this.board[t].length; k++) {
+                    if (this.board[t][k].valueOf() < .333) {
+                        this.rects[t][k].draw()
+                        // let circle = new Circle(this.rects[t][k].x + 25, this.rects[t][k].y + 25, 18, "black")
+                        // circle.draw()
+                    } else if (this.board[t][k].valueOf() > .66) {
+                        this.rects[t][k].draw()
+                        // let circle = new Circle(this.rects[t][k].x + 25, this.rects[t][k].y + 25, 18, "white")
+                        // circle.draw()
                     } else {
-                        f.push(r[e])
+                        this.rects[t][k].draw()
+                    }
+                }
+
+            }
+            for (let t = 0; t < this.board.length; t++) {
+                for (let k = 0; k < this.board[t].length; k++) {
+                    if (this.board[t][k].valueOf() < .333) {
+                        // this.rects[t][k].draw()
+                        let circle = new Circle(this.rects[t][k].x + 5, this.rects[t][k].y + 5, 5, "black")
+                        circle.draw()
+                    } else if (this.board[t][k].valueOf() > .66) {
+                        // this.rects[t][k].draw()
+                        let circle = new Circle(this.rects[t][k].x + 5, this.rects[t][k].y + 5, 5, "white")
+                        circle.draw()
+                    } else {
+                        // this.rects[t][k].draw()
+                    }
+                }
+
+            }
+        }
+        export() {
+            let data = []
+            for (let t = 0; t < this.board.length; t++) {
+                for (let k = 0; k < this.board[t].length; k++) {
+                    data.push(this.board[t][k].valueOf())
+                }
+            }
+            return data
+        }
+        density() {
+            let d = 0
+            for (let t = 0; t < this.board.length; t++) {
+                for (let k = 0; k < this.board[t].length; k++) {
+                    if (this.board[t][k].valueOf() != .5) {
+                        d++
                     }
                 }
             }
-            n = [...f]
-        }
-        let wet = 0
-        for (let t = 0; t < n.length; t++) {
-            if (n[t].type == 0) {
-                wet = 1
-            }
-        }
-        if (wet == 0) {
-            for (let t = 0; t < n.length; t++) {
-                if (n[t].type == 1 && this.turn == 0 || n[t].type == -1 && this.turn == 1) {
-                    this.countup++
-                    n[t].type = 0
-                    n[t].value = .5
-                    boole = true
-                }
-            }
-        }
-        return boole
-    }
-
-
-    
-    neighborsCheck(node) {
-        let boole = false
-        // let gnode = new Data(node.valueOf)
-        // gnode.type = node.type*-1
-        // gnode.t = node.t
-        // gnode.k = node.k
-        let n = this.neighbors(node)
-        n.push(node)
-        let f = [...n]
-        let ind = []
-        for (let k = 0; k < 40; k++) {
-            for (let d = 0; d < n.length; d++) {
-                let r
-                if (ind.includes(d)) {
-                    r = []
-                } else {
-
-                    r = this.neighbors(n[d])
-                    ind.push(d)
-                }
-                for (let e = 0; e < r.length; e++) {
-                    if (f.includes(r[e])) {
-
-                    } else {
-                        f.push(r[e])
-                    }
-                }
-            }
-            n = [...f]
-        }
-        let wet = 0
-        for (let t = 0; t < n.length; t++) {
-            if (n[t].type == 0) {
-                wet = 1
-            }
-        }
-        if (wet == 0) {
-            for (let t = 0; t < n.length; t++) {
-                if (n[t].type == 1 && this.turn == 0 || n[t].type == -1 && this.turn == 1) {
-                    this.countup++
-                    n[t].type = 0
-                    n[t].value = .5
-                    boole = true
-                }
-            }
-        }
-        return boole
-    }
-    dumbNeighborsCheck(node) {
-        let boole = false
-        // let gnode = new Data(node.valueOf)
-        // gnode.type = node.type*-1
-        // gnode.t = node.t
-        // gnode.k = node.k
-        let n = this.rawneighbors(node)
-        n.push(node)
-        let f = [...n]
-        let ind = []
-        for (let k = 0; k < 40; k++) {
-            for (let d = 0; d < n.length; d++) {
-                let r
-                if (ind.includes(d)) {
-                    r = []
-                } else {
-
-                    r = this.neighbors(n[d])
-                    ind.push(d)
-                }
-                for (let e = 0; e < r.length; e++) {
-                    if (f.includes(r[e])) {
-
-                    } else {
-                        f.push(r[e])
-                    }
-                }
-            }
-            n = [...f]
-        }
-        let wet = 0
-        let seeds = []
-        let crumbs = []
-        for (let t = 0; t < n.length; t++) {
-            if (n[t].type == 0) {
-                wet = 1
-            } if (n[t].type == node.type) {
-                crumbs.push(n[t])
-            } else {
-                if (n[t].type != node.type) {
-                    seeds.push(n[t])
-                }
-            }
+            return d / 81
         }
 
-        let bread = []
-        let eggs = []
 
 
-        for (let t = 0; t < crumbs.length; t++) {
-            let n = this.neighbors(crumbs[t])
-            n.push(crumbs[t])
+        neighborsCheck(node) {
+            let boole = false
+            // let gnode = new Data(node.valueOf)
+            // gnode.type = node.type*-1
+            // gnode.t = node.t
+            // gnode.k = node.k
+            let n = this.neighbors(node)
+            n.push(node)
             let f = [...n]
             let ind = []
             for (let k = 0; k < 40; k++) {
@@ -2423,24 +2406,35 @@
                 }
                 n = [...f]
             }
-
-
-            let stomp = 0
+            let wet = 0
             for (let t = 0; t < n.length; t++) {
                 if (n[t].type == 0) {
-                    stomp = 1
-                } else {
+                    wet = 1
                 }
             }
-
-
-            bread.push(stomp)
+            if (wet == 0) {
+                for (let t = 0; t < n.length; t++) {
+                    if (n[t].type == 1 && this.turn == 0 || n[t].type == -1 && this.turn == 1) {
+                        this.countup++
+                        n[t].type = 0
+                        n[t].value = .5
+                        boole = true
+                    }
+                }
+            }
+            return boole
         }
 
 
-        for (let t = 0; t < seeds.length; t++) {
-            let n = this.neighbors(seeds[t])
-            n.push(seeds[t])
+
+        neighborsCheck(node) {
+            let boole = false
+            // let gnode = new Data(node.valueOf)
+            // gnode.type = node.type*-1
+            // gnode.t = node.t
+            // gnode.k = node.k
+            let n = this.neighbors(node)
+            n.push(node)
             let f = [...n]
             let ind = []
             for (let k = 0; k < 40; k++) {
@@ -2463,282 +2457,414 @@
                 }
                 n = [...f]
             }
-
-            let sewt = 0
+            let wet = 0
             for (let t = 0; t < n.length; t++) {
                 if (n[t].type == 0) {
-                    sewt = 1
+                    wet = 1
+                }
+            }
+            if (wet == 0) {
+                for (let t = 0; t < n.length; t++) {
+                    if (n[t].type == 1 && this.turn == 0 || n[t].type == -1 && this.turn == 1) {
+                        this.countup++
+                        n[t].type = 0
+                        n[t].value = .5
+                        boole = true
+                    }
+                }
+            }
+            return boole
+        }
+        dumbNeighborsCheck(node) {
+            let boole = false
+            // let gnode = new Data(node.valueOf)
+            // gnode.type = node.type*-1
+            // gnode.t = node.t
+            // gnode.k = node.k
+            let n = this.rawneighbors(node)
+            n.push(node)
+            let f = [...n]
+            let ind = []
+            for (let k = 0; k < 40; k++) {
+                for (let d = 0; d < n.length; d++) {
+                    let r
+                    if (ind.includes(d)) {
+                        r = []
+                    } else {
+
+                        r = this.neighbors(n[d])
+                        ind.push(d)
+                    }
+                    for (let e = 0; e < r.length; e++) {
+                        if (f.includes(r[e])) {
+
+                        } else {
+                            f.push(r[e])
+                        }
+                    }
+                }
+                n = [...f]
+            }
+            let wet = 0
+            let seeds = []
+            let crumbs = []
+            for (let t = 0; t < n.length; t++) {
+                if (n[t].type == 0) {
+                    wet = 1
+                } if (n[t].type == node.type) {
+                    crumbs.push(n[t])
                 } else {
+                    if (n[t].type != node.type) {
+                        seeds.push(n[t])
+                    }
                 }
             }
 
-
-            eggs.push(sewt)
-        }
-        if (bread.includes(0)) {
-            wet = 0
-        }
-        if (eggs.includes(0)) {
-            wet = 1
-        }
-        if (keysPressed['6']) {
-            /////////////console.log(eggs, bread, wet)
-        }
-
-        if (wet == 0) {
-            boole = true
-        }
-        return boole
-    }
-    dumbSort() {
-        let boole = false
-        for (let t = 0; t < this.board.length; t++) {
-            for (let k = 0; k < this.board[t].length; k++) {
-                boole = (this.dumbNeighborsCheck(this.board[t][k], this.turn) || boole)
-            }
-        }
-        return boole
-    }
-    badwholeSort() {
-        let boole = false
-        for (let t = 0; t < this.board.length; t++) {
-            for (let k = 0; k < this.board[t].length; k++) {
-                boole = (this.badneighborsCheck(this.board[t][k], this.turn) || boole)
-            }
-        }
-
-        return boole
-    }
-
-    wholeSort() {
-        let boole = false
-        for (let t = 0; t < this.board.length; t++) {
-            for (let k = 0; k < this.board[t].length; k++) {
-                boole = (this.neighborsCheck(this.board[t][k], this.turn) || boole)
-            }
-        }
-
-        return boole
-    }
-    // connect(point) {
+            let bread = []
+            let eggs = []
 
 
+            for (let t = 0; t < crumbs.length; t++) {
+                let n = this.neighbors(crumbs[t])
+                n.push(crumbs[t])
+                let f = [...n]
+                let ind = []
+                for (let k = 0; k < 40; k++) {
+                    for (let d = 0; d < n.length; d++) {
+                        let r
+                        if (ind.includes(d)) {
+                            r = []
+                        } else {
 
-    //     this.countup = 0
-    //     let p = new Circle(point.x, point.y, 10, "red")
-    //     // b.draw()
-    //     // for (let t = 0; t < this.board.length; t++) {
-    //     //     for (let k = 0; k < this.board[t].length; k++) {
-    //     // if (this.rects[t][k].isPointInside(point)) {
+                            r = this.neighbors(n[d])
+                            ind.push(d)
+                        }
+                        for (let e = 0; e < r.length; e++) {
+                            if (f.includes(r[e])) {
 
-    //     this.bound = new Rectangle(this.rects[0][0].x - 1, this.rects[0][0].y - 1, 452, 452, "blue")
-    //     // this.bound.draw()
-    //     let truer = false
-    //     if (this.bound.isPointInside(p)) {
-    //         truer = true
-    //     }
-
-    //     let t = Math.floor((b.x - this.offset) / 50)
-    //     let k = Math.floor((b.y) / 50)
-
-    //     if (truer) {
-    //         if (this.turn == 0) {
-    //             if (this.board[t][k].valueOf() == .5) {
-    //                 // let coip = new Go(this.board)
-    //                 this.board[t][k].value = 0
-    //                 this.board[t][k].type = -1
-    //                 // if (goBoard.strings.includes(this.stringify())) {
-    //                 //     this.board[t][k].value = .5
-    //                 //     this.board[t][k].type = 0
-    //                 //     // /////////////console.log("repeat", t,k)
-    //                 //     return 2
-    //                 // }
-    //                 // this.strings.push(this.stringify())
-    //                 // this.boards.push(new Go(this.board))
-    //                 // this.wholeSort()
-    //                 // if (this.dumbSort()) {
-    //                 //     this.board[t][k].value = .5
-    //                 //     this.board[t][k].type = 0
-    //                 //     // /////////////console.log("clash", t,k)
-    //                 //     return 1
-    //                 // }
-    //                 // this.wholeSort()
-    //                 // this.score[this.turn] += this.countup
-    //                 // this.strings.push(this.stringify())
-    //                 // this.boards.push(new Go(this.board))
-
-    //                 // this.board = coib.board
-    //                 this.turn = 1
-    //                 // /////////////console.log("works", t,k)
-    //                 return 0
-    //             } else {
-    //                 // /////////////console.log("overlap", t,k)
-    //                 return 3
-    //             }
-    //         } else {
-    //             if (this.board[t][k].valueOf() == .5) {
-    //                 // let coip = new Go(this.board)
-    //                 this.board[t][k].value = 1
-    //                 this.board[t][k].type = 1
-    //                 // if (goBoard.strings.includes(this.stringify())) {
-    //                 //     this.board[t][k].value = .5
-    //                 //     this.board[t][k].type = 0
-    //                 //     // /////////////console.log("repeat", t,k)
-    //                 //     return 2
-    //                 // }
-    //                 // this.strings.push(this.stringify())
-    //                 // this.boards.push(new Go(this.board))
-
-
-    //                 // // this.dumbSort()
-    //                 // this.wholeSort()
-    //                 // if (this.dumbSort()) {
-    //                 //     this.board[t][k].value = .5
-    //                 //     this.board[t][k].type = 0
-    //                 //     // /////////////console.log("clash", t,k)
-    //                 //     return 1
-    //                 // }
-    //                 // this.board = coib.board
-
-    //                 // this.strings.push(this.stringify())
-    //                 // this.boards.push(new Go(this.board))
-    //                 // this.wholeSort()
-    //                 // this.score[this.turn] += this.countup
-
-    //                 this.turn = 0
-    //                 // /////////////console.log("works", t,k)
-    //                 return 0
-    //             } else {
-    //                 // /////////////console.log("overlap", t,k)
-    //                 return 3
-    //             }
-    //         }
-    //     }
-    //     //     }
-    //     // }
-    // }
-    check(point) {
-
-        this.countup = 0
-        let p = new Circle(point.x, point.y, 10, "red")
-        // b.draw()
-        // for (let t = 0; t < this.board.length; t++) {
-        //     for (let k = 0; k < this.board[t].length; k++) {
-        // if (this.rects[t][k].isPointInside(point)) {
-
-        this.bound = new Rectangle(this.rects[0][0].x - 1, this.rects[0][0].y - 1, 452, 452, "blue")
-        // this.bound.draw()
-        let truer = false
-        if (this.bound.isPointInside(p)) {
-            truer = true
-        }
-
-        let t = Math.floor((b.x - this.offset) / 10)
-        let k = Math.floor((b.y - this.yoffset) / 10)
-
-        if (truer) {
-            if (this.turn == 0) {
-                if (this.board[t][k].valueOf() == .5) {
-                    let coip = new Go(this.board)
-                    this.board[t][k].value = 0
-                    this.board[t][k].type = -1
-                    if (goBoard.strings.includes(this.stringify())) {
-                        this.board[t][k].value = .5
-                        this.board[t][k].type = 0
-                        // /////////////console.log("repeat", t,k)
-                        return 2
+                            } else {
+                                f.push(r[e])
+                            }
+                        }
                     }
-                    this.strings.push(this.stringify())
-                    this.boards.push(new Go(this.board))
-                    this.wholeSort()
-                    if (this.dumbSort()) {
-                        this.board[t][k].value = .5
-                        this.board[t][k].type = 0
-                        // /////////////console.log("clash", t,k)
-                        return 1
-                    }
-                    this.wholeSort()
-                    this.score[this.turn] += this.countup
-                    this.strings.push(this.stringify())
-                    this.boards.push(new Go(this.board))
-
-                    this.board = coip.board
-                    this.turn = 1
-                    // /////////////console.log("works", t,k)
-                    return 0
-                } else {
-                    // /////////////console.log("overlap", t,k)
-                    return 3
+                    n = [...f]
                 }
-            } else {
-                if (this.board[t][k].valueOf() == .5) {
-                    let coip = new Go(this.board)
-                    this.board[t][k].value = 1
-                    this.board[t][k].type = 1
-                    if (goBoard.strings.includes(this.stringify())) {
-                        this.board[t][k].value = .5
-                        this.board[t][k].type = 0
-                        // /////////////console.log("repeat", t,k)
-                        return 2
+
+
+                let stomp = 0
+                for (let t = 0; t < n.length; t++) {
+                    if (n[t].type == 0) {
+                        stomp = 1
+                    } else {
                     }
-                    this.strings.push(this.stringify())
-                    this.boards.push(new Go(this.board))
+                }
 
 
-                    // this.dumbSort()
-                    this.wholeSort()
-                    if (this.dumbSort()) {
-                        this.board[t][k].value = .5
-                        this.board[t][k].type = 0
-                        // /////////////console.log("clash", t,k)
-                        return 1
+                bread.push(stomp)
+            }
+
+
+            for (let t = 0; t < seeds.length; t++) {
+                let n = this.neighbors(seeds[t])
+                n.push(seeds[t])
+                let f = [...n]
+                let ind = []
+                for (let k = 0; k < 40; k++) {
+                    for (let d = 0; d < n.length; d++) {
+                        let r
+                        if (ind.includes(d)) {
+                            r = []
+                        } else {
+
+                            r = this.neighbors(n[d])
+                            ind.push(d)
+                        }
+                        for (let e = 0; e < r.length; e++) {
+                            if (f.includes(r[e])) {
+
+                            } else {
+                                f.push(r[e])
+                            }
+                        }
                     }
-                    this.board = coip.board
+                    n = [...f]
+                }
 
-                    this.strings.push(this.stringify())
-                    this.boards.push(new Go(this.board))
-                    this.wholeSort()
-                    this.score[this.turn] += this.countup
+                let sewt = 0
+                for (let t = 0; t < n.length; t++) {
+                    if (n[t].type == 0) {
+                        sewt = 1
+                    } else {
+                    }
+                }
 
-                    this.turn = 0
-                    // /////////////console.log("works", t,k)
-                    return 0
-                } else {
-                    // /////////////console.log("overlap", t,k)
-                    return 3
+
+                eggs.push(sewt)
+            }
+            if (bread.includes(0)) {
+                wet = 0
+            }
+            if (eggs.includes(0)) {
+                wet = 1
+            }
+            if (keysPressed['6']) {
+                /////////////console.log(eggs, bread, wet)
+            }
+
+            if (wet == 0) {
+                boole = true
+            }
+            return boole
+        }
+        dumbSort() {
+            let boole = false
+            for (let t = 0; t < this.board.length; t++) {
+                for (let k = 0; k < this.board[t].length; k++) {
+                    boole = (this.dumbNeighborsCheck(this.board[t][k], this.turn) || boole)
                 }
             }
+            return boole
         }
+        badwholeSort() {
+            let boole = false
+            for (let t = 0; t < this.board.length; t++) {
+                for (let k = 0; k < this.board[t].length; k++) {
+                    boole = (this.badneighborsCheck(this.board[t][k], this.turn) || boole)
+                }
+            }
+
+            return boole
+        }
+
+        wholeSort() {
+            let boole = false
+            for (let t = 0; t < this.board.length; t++) {
+                for (let k = 0; k < this.board[t].length; k++) {
+                    boole = (this.neighborsCheck(this.board[t][k], this.turn) || boole)
+                }
+            }
+
+            return boole
+        }
+        // connect(point) {
+
+
+
+        //     this.countup = 0
+        //     let p = new Circle(point.x, point.y, 10, "red")
+        //     // b.draw()
+        //     // for (let t = 0; t < this.board.length; t++) {
+        //     //     for (let k = 0; k < this.board[t].length; k++) {
+        //     // if (this.rects[t][k].isPointInside(point)) {
+
+        //     this.bound = new Rectangle(this.rects[0][0].x - 1, this.rects[0][0].y - 1, 452, 452, "blue")
+        //     // this.bound.draw()
+        //     let truer = false
+        //     if (this.bound.isPointInside(p)) {
+        //         truer = true
         //     }
-        // }
-    }
-    stringify() {
-        let str = ""
-        for (let t = 0; t < this.board.length; t++) {
-            for (let k = 0; k < this.board[t].length; k++) {
-                str += this.board[t][k].valueOf()
-            }
-        }
-        return str
-    }
-    subcheck(point) {
-        for (let t = 0; t < this.board.length; t++) {
-            for (let k = 0; k < this.board[t].length; k++) {
-                if (this.rects[t][k].isPointInside(point)) {
-                    let col = this.rects[t][k].color
-                    if (this.turn == 0) {
-                        this.rects[t][k].color = "#333333"
-                    } else {
 
-                        this.rects[t][k].color = "#bbbbbb"
+        //     let t = Math.floor((b.x - this.offset) / 50)
+        //     let k = Math.floor((b.y) / 50)
+
+        //     if (truer) {
+        //         if (this.turn == 0) {
+        //             if (this.board[t][k].valueOf() == .5) {
+        //                 // let coip = new Go(this.board)
+        //                 this.board[t][k].value = 0
+        //                 this.board[t][k].type = -1
+        //                 // if (goBoard.strings.includes(this.stringify())) {
+        //                 //     this.board[t][k].value = .5
+        //                 //     this.board[t][k].type = 0
+        //                 //     // /////////////console.log("repeat", t,k)
+        //                 //     return 2
+        //                 // }
+        //                 // this.strings.push(this.stringify())
+        //                 // this.boards.push(new Go(this.board))
+        //                 // this.wholeSort()
+        //                 // if (this.dumbSort()) {
+        //                 //     this.board[t][k].value = .5
+        //                 //     this.board[t][k].type = 0
+        //                 //     // /////////////console.log("clash", t,k)
+        //                 //     return 1
+        //                 // }
+        //                 // this.wholeSort()
+        //                 // this.score[this.turn] += this.countup
+        //                 // this.strings.push(this.stringify())
+        //                 // this.boards.push(new Go(this.board))
+
+        //                 // this.board = coib.board
+        //                 this.turn = 1
+        //                 // /////////////console.log("works", t,k)
+        //                 return 0
+        //             } else {
+        //                 // /////////////console.log("overlap", t,k)
+        //                 return 3
+        //             }
+        //         } else {
+        //             if (this.board[t][k].valueOf() == .5) {
+        //                 // let coip = new Go(this.board)
+        //                 this.board[t][k].value = 1
+        //                 this.board[t][k].type = 1
+        //                 // if (goBoard.strings.includes(this.stringify())) {
+        //                 //     this.board[t][k].value = .5
+        //                 //     this.board[t][k].type = 0
+        //                 //     // /////////////console.log("repeat", t,k)
+        //                 //     return 2
+        //                 // }
+        //                 // this.strings.push(this.stringify())
+        //                 // this.boards.push(new Go(this.board))
+
+
+        //                 // // this.dumbSort()
+        //                 // this.wholeSort()
+        //                 // if (this.dumbSort()) {
+        //                 //     this.board[t][k].value = .5
+        //                 //     this.board[t][k].type = 0
+        //                 //     // /////////////console.log("clash", t,k)
+        //                 //     return 1
+        //                 // }
+        //                 // this.board = coib.board
+
+        //                 // this.strings.push(this.stringify())
+        //                 // this.boards.push(new Go(this.board))
+        //                 // this.wholeSort()
+        //                 // this.score[this.turn] += this.countup
+
+        //                 this.turn = 0
+        //                 // /////////////console.log("works", t,k)
+        //                 return 0
+        //             } else {
+        //                 // /////////////console.log("overlap", t,k)
+        //                 return 3
+        //             }
+        //         }
+        //     }
+        //     //     }
+        //     // }
+        // }
+        check(point) {
+
+            this.countup = 0
+            let p = new Circle(point.x, point.y, 10, "red")
+            // b.draw()
+            // for (let t = 0; t < this.board.length; t++) {
+            //     for (let k = 0; k < this.board[t].length; k++) {
+            // if (this.rects[t][k].isPointInside(point)) {
+
+            this.bound = new Rectangle(this.rects[0][0].x - 1, this.rects[0][0].y - 1, 452, 452, "blue")
+            // this.bound.draw()
+            let truer = false
+            if (this.bound.isPointInside(p)) {
+                truer = true
+            }
+
+            let t = Math.floor((b.x - this.offset) / 10)
+            let k = Math.floor((b.y - this.yoffset) / 10)
+
+            if (truer) {
+                if (this.turn == 0) {
+                    if (this.board[t][k].valueOf() == .5) {
+                        let coip = new Go(this.board)
+                        this.board[t][k].value = 0
+                        this.board[t][k].type = -1
+                        if (goBoard.strings.includes(this.stringify())) {
+                            this.board[t][k].value = .5
+                            this.board[t][k].type = 0
+                            // /////////////console.log("repeat", t,k)
+                            return 2
+                        }
+                        this.strings.push(this.stringify())
+                        this.boards.push(new Go(this.board))
+                        this.wholeSort()
+                        if (this.dumbSort()) {
+                            this.board[t][k].value = .5
+                            this.board[t][k].type = 0
+                            // /////////////console.log("clash", t,k)
+                            return 1
+                        }
+                        this.wholeSort()
+                        this.score[this.turn] += this.countup
+                        this.strings.push(this.stringify())
+                        this.boards.push(new Go(this.board))
+
+                        this.board = coip.board
+                        this.turn = 1
+                        // /////////////console.log("works", t,k)
+                        return 0
+                    } else {
+                        // /////////////console.log("overlap", t,k)
+                        return 3
                     }
-                    this.rects[t][k].draw()
-                    this.rects[t][k].color = col
+                } else {
+                    if (this.board[t][k].valueOf() == .5) {
+                        let coip = new Go(this.board)
+                        this.board[t][k].value = 1
+                        this.board[t][k].type = 1
+                        if (goBoard.strings.includes(this.stringify())) {
+                            this.board[t][k].value = .5
+                            this.board[t][k].type = 0
+                            // /////////////console.log("repeat", t,k)
+                            return 2
+                        }
+                        this.strings.push(this.stringify())
+                        this.boards.push(new Go(this.board))
+
+
+                        // this.dumbSort()
+                        this.wholeSort()
+                        if (this.dumbSort()) {
+                            this.board[t][k].value = .5
+                            this.board[t][k].type = 0
+                            // /////////////console.log("clash", t,k)
+                            return 1
+                        }
+                        this.board = coip.board
+
+                        this.strings.push(this.stringify())
+                        this.boards.push(new Go(this.board))
+                        this.wholeSort()
+                        this.score[this.turn] += this.countup
+
+                        this.turn = 0
+                        // /////////////console.log("works", t,k)
+                        return 0
+                    } else {
+                        // /////////////console.log("overlap", t,k)
+                        return 3
+                    }
+                }
+            }
+            //     }
+            // }
+        }
+        stringify() {
+            let str = ""
+            for (let t = 0; t < this.board.length; t++) {
+                for (let k = 0; k < this.board[t].length; k++) {
+                    str += this.board[t][k].valueOf()
+                }
+            }
+            return str
+        }
+        subcheck(point) {
+            for (let t = 0; t < this.board.length; t++) {
+                for (let k = 0; k < this.board[t].length; k++) {
+                    if (this.rects[t][k].isPointInside(point)) {
+                        let col = this.rects[t][k].color
+                        if (this.turn == 0) {
+                            this.rects[t][k].color = "#333333"
+                        } else {
+
+                            this.rects[t][k].color = "#bbbbbb"
+                        }
+                        this.rects[t][k].draw()
+                        this.rects[t][k].color = col
+                    }
                 }
             }
         }
     }
-}
 
     class ThreeDeeObject {
         constructor() {
@@ -2751,7 +2877,7 @@
             for (let k = -3; k < 3; k++) {
                 this.supa.push([])
                 for (let t = -3; t < 3; t++) {
-                this.supa[k+3].push([])
+                    this.supa[k + 3].push([])
                     for (let e = -3; e < 3; e++) {
 
                         let dis = .75 - ((k / 17) * .63)
@@ -2759,12 +2885,12 @@
                         let r = k * (t / 2)
                         let g = k * k
                         let b = t * 5
-                        let point = new Point3D((k+.5) * .6, (t+.5) * .6, (e+.5) * .6, 128 + (e * 35), 128 + (t * 35), 128 + (k * 35))
+                        let point = new Point3D((k + .5) * .6, (t + .5) * .6, (e + .5) * .6, 128 + (e * 35), 128 + (t * 35), 128 + (k * 35))
                         point.t = t
                         point.e = e
                         point.k = k
                         this.dots.push(point)
-                        this.supa[k+3][t+3].push(point)
+                        this.supa[k + 3][t + 3].push(point)
                         this.links.push(new LineOP(this.center, point))
                         if (k < 12) {
                             if (t == 14) {
@@ -2790,263 +2916,272 @@
 
         }
 
-    badwholeSort() {
-        let boole = false
+        badwholeSort() {
+            let boole = false
+            for (let t = 0; t < this.supa.length; t++) {
+                for (let k = 0; k < this.supa[t].length; k++) {
+                    for (let e = 0; e < this.supa[t][k].length; e++) {
+                        this.supa[t][k][e].mark = -2
+                    }
+                }
+            }
 
-        for (let t = 0; t < this.supa.length; t++) {
-            for (let k = 0; k < this.supa[t].length; k++) {
-            for (let e = 0; e < this.supa[t][k].length; e++) {
-                boole = (this.badneighborsCheck(this.supa[t][k][e], this.turn) || boole)
+            for (let t = 0; t < this.supa.length; t++) {
+                for (let k = 0; k < this.supa[t].length; k++) {
+                    for (let e = 0; e < this.supa[t][k].length; e++) {
+                        if (this.supa[t][k][e].turned == 0 && this.supa[t][k][e].mark == -2) {
+                            boole = (this.badneighborsCheck(this.supa[t][k][e], this.turn) || boole)
+                        }
+                    }
+                }
             }
-            }
+
+            return boole
         }
 
-        return boole
-    }
-    
         wholeSort() {
-        let boole = false
-        for (let t = 0; t < this.supa.length; t++) {
-            for (let k = 0; k < this.supa[t].length; k++) {
-            for (let e = 0; e < this.supa[t][k].length; e++) {
-                boole = (this.neighborsCheck(this.supa[t][k][e], this.turn) || boole)
-            }
-            }
-        }
-
-        return boole
-    }
-    neighborsCheck(node) {
-        let boole = false
-        // let gnode = new Data(node.valueOf)
-        // gnode.type = node.type*-1
-        // gnode.t = node.t
-        // gnode.k = node.k
-        let n = this.neighbors(node)
-        n.push(node)
-        let f = [...n]
-        let ind = []
-        for (let k = 0; k < 62; k++) {
-            for (let d = 0; d < n.length; d++) {
-                let r
-                if (ind.includes(d)) {
-                    r = []
-                } else {
-
-                    r = this.neighbors(n[d])
-                    ind.push(d)
+            let boole = false
+            for (let t = 0; t < this.supa.length; t++) {
+                for (let k = 0; k < this.supa[t].length; k++) {
+                    for (let e = 0; e < this.supa[t][k].length; e++) {
+                        boole = (this.neighborsCheck(this.supa[t][k][e], this.turn) || boole)
+                    }
                 }
-                for (let e = 0; e < r.length; e++) {
-                    if (f.includes(r[e])) {
+            }
 
+            return boole
+        }
+        neighborsCheck(node) {
+            let boole = false
+            // let gnode = new Data(node.valueOf)
+            // gnode.type = node.type*-1
+            // gnode.t = node.t
+            // gnode.k = node.k
+            let n = this.neighbors(node)
+            n.push(node)
+            let f = [...n]
+            let ind = []
+            for (let k = 0; k < 62; k++) {
+                for (let d = 0; d < n.length; d++) {
+                    let r
+                    if (ind.includes(d)) {
+                        r = []
                     } else {
-                        f.push(r[e])
+
+                        r = this.neighbors(n[d])
+                        ind.push(d)
+                    }
+                    for (let e = 0; e < r.length; e++) {
+                        if (f.includes(r[e])) {
+
+                        } else {
+                            f.push(r[e])
+                        }
+                    }
+                }
+                n = [...f]
+            }
+            let wet = 0
+            for (let t = 0; t < n.length; t++) {
+                if (n[t].turned == 0) {
+                    wet = 1
+                }
+            }
+            //console.log(n)
+            if (wet == 0) {
+                for (let t = 0; t < n.length; t++) {
+                    if (n[t].turned == 1 && this.turn == 0 || n[t].turned == -1 && this.turn == 1) {
+                        this.countup++
+                        n[t].turned = 0
+                        n[t].marked = 0
+                        n[t].value = .5
+                        boole = true
                     }
                 }
             }
-            n = [...f]
+            return boole
         }
-        let wet = 0
-        for (let t = 0; t < n.length; t++) {
-            if (n[t].turned == 0) {
-                wet = 1
-            }
-        }
-        //console.log(n)
-        if (wet == 0) {
-            for (let t = 0; t < n.length; t++) {
-                if (n[t].turned == 1 && this.turn == 0 || n[t].turned == -1 && this.turn == 1) {
-                    this.countup++
-                    n[t].turned = 0
-                    n[t].marked = 0
-                    n[t].value = .5
-                    boole = true
-                }
-            }
-        }
-        return boole
-    }
 
-    badneighborsCheck(node) {
-        let boole = false
-        // let gnode = new Data(node.valueOf)
-        // gnode.type = node.type*-1
-        // gnode.t = node.t
-        // gnode.k = node.k
-        let n = this.badneighbors(node)
-        n.push(node)
-        let f = [...n]
-        let ind = []
-        for (let k = 0; k < 62; k++) {
-            for (let d = 0; d < n.length; d++) {
-                let r
-                if (ind.includes(d)) {
-                    r = []
-                } else {
-
-                    r = this.badneighbors(n[d])
-                    ind.push(d)
-                }
-                for (let e = 0; e < r.length; e++) {
-                    if (f.includes(r[e])) {
-
+        badneighborsCheck(node) {
+            let boole = false
+            // let gnode = new Data(node.valueOf)
+            // gnode.type = node.type*-1
+            // gnode.t = node.t
+            // gnode.k = node.k
+            let n = this.badneighbors(node)
+            n.push(node)
+            let f = [...n]
+            let ind = []
+            for (let k = 0; k < 7; k++) {
+                for (let d = 0; d < n.length; d++) {
+                    let r
+                    if (ind.includes(d)) {
+                        r = []
                     } else {
-                        f.push(r[e])
+
+                        r = this.badneighbors(n[d])
+                        ind.push(d)
+                    }
+                    for (let e = 0; e < r.length; e++) {
+                        if (f.includes(r[e])) {
+
+                        } else {
+                            f.push(r[e])
+                        }
                     }
                 }
+                n = [...f]
             }
-            n = [...f]
-        }
-        let wet = 0
-        let f1 = 0
-        let f2 = 0
-        for (let t = 0; t < n.length; t++) {
-            n[t].mark = 0
-            if (n[t].turned == 1) {
-                f1=1
-                wet = 0
-            }
-            if (n[t].turned == -1) {
-                f2=1
-                wet = 0
-            }
-        }
-        //console.log(n)
-        if (wet == 0) {
+            let wet = 0
+            let f1 = 0
+            let f2 = 0
             for (let t = 0; t < n.length; t++) {
-                if(f1 == 1 && f2 == 0){
-                    if(n[t].turned == 0){
-                    n[t].mark = 1
-                    boole = true
-                    }
+                n[t].mark = 0
+                if (n[t].turned == 1) {
+                    f1 = 1
+                    wet = 0
                 }
-                if(f2 == 1 && f1 == 0){
-                    if(n[t].turned == 0){
-
-                        n[t].mark = -1
-                    boole = true
-                    }
+                if (n[t].turned == -1) {
+                    f2 = 1
+                    wet = 0
                 }
             }
+            //console.log(n)
+            if (wet == 0) {
+                for (let t = 0; t < n.length; t++) {
+                    if (f1 == 1 && f2 == 0) {
+                        if (n[t].turned == 0) {
+                            n[t].mark = 1
+                            boole = true
+                        }
+                    }
+                    if (f2 == 1 && f1 == 0) {
+                        if (n[t].turned == 0) {
+
+                            n[t].mark = -1
+                            boole = true
+                        }
+                    }
+                }
+            }
+            return boole
         }
-        return boole
-    }
 
 
-    neighbors(node) {
-        if (node.turned == 0) {
-            return []
-        }
-        ////console.log(node.x, node.y)
-        var ret = [];
-        var x = node.k+3;
-        var y = node.t+3;
-        var z = node.e+3;
-        var grid = this.supa;
-        
-        this.diagonal = false
-        // West)
-        if (grid[x - 1] && grid[x - 1][y] &&  grid[x - 1][y][z]) {
-            if (grid[x - 1][y][z].turned == node.turned || grid[x - 1][y][z].turned == 0) {
-                ret.push(grid[x - 1][y][z]);
+        neighbors(node) {
+            if (node.turned == 0) {
+                return []
             }
+            ////console.log(node.x, node.y)
+            var ret = [];
+            var x = node.k + 3;
+            var y = node.t + 3;
+            var z = node.e + 3;
+            var grid = this.supa;
+
+            this.diagonal = false
+            // West)
+            if (grid[x - 1] && grid[x - 1][y] && grid[x - 1][y][z]) {
+                if (grid[x - 1][y][z].turned == node.turned || grid[x - 1][y][z].turned == 0) {
+                    ret.push(grid[x - 1][y][z]);
+                }
+            }
+
+            if (grid[x + 1] && grid[x + 1][y] && grid[x + 1][y][z]) {
+                if (grid[x + 1][y][z].turned == node.turned || grid[x + 1][y][z].turned == 0) {
+                    ret.push(grid[x + 1][y][z]);
+                }
+            }
+            if (grid[x] && grid[x][y - 1] && grid[x][y - 1][z]) {
+                if (grid[x][y - 1][z].turned == node.turned || grid[x][y - 1][z].turned == 0) {
+                    ret.push(grid[x][y - 1][z]);
+                }
+            }
+            if (grid[x] && grid[x][y + 1] && grid[x][y + 1][z]) {
+                if (grid[x][y + 1][z].turned == node.turned || grid[x][y + 1][z].turned == 0) {
+                    ret.push(grid[x][y + 1][z]);
+                }
+            }
+            if (grid[x] && grid[x][y] && grid[x][y][z - 1]) {
+                if (grid[x][y][z - 1].turned == node.turned || grid[x][y][z - 1].turned == 0) {
+                    ret.push(grid[x][y][z - 1]);
+                }
+            }
+            if (grid[x] && grid[x][y] && grid[x][y][z + 1]) {
+                if (grid[x][y][z + 1].turned == node.turned || grid[x][y][z + 1].turned == 0) {
+                    ret.push(grid[x][y][z + 1]);
+                }
+            }
+            // ////console.log(node, grid)
+            return ret;
         }
 
-        if (grid[x+1] && grid[x+1][y] &&  grid[x+1][y][z]) {
-            if (grid[x+1][y][z].turned == node.turned || grid[x+1][y][z].turned == 0) {
-                ret.push(grid[x+1][y][z]);
+
+
+        badneighbors(node) {
+            if (node.turned != 0) {
+                return []
             }
-        }
-        if (grid[x] && grid[x][y-1] &&  grid[x][y-1][z]) {
-            if (grid[x][y-1][z].turned == node.turned || grid[x][y-1][z].turned == 0) {
-                ret.push(grid[x][y-1][z]);
+            ////console.log(node.x, node.y)
+            var ret = [];
+            var x = node.k + 3;
+            var y = node.t + 3;
+            var z = node.e + 3;
+            var grid = this.supa;
+
+            this.diagonal = false
+            // West)
+            if (grid[x - 1] && grid[x - 1][y] && grid[x - 1][y][z]) {
+                if (grid[x - 1][y][z].turned != node.turned || grid[x - 1][y][z].turned == 0) {
+                    ret.push(grid[x - 1][y][z]);
+                }
             }
-        }
-        if (grid[x] && grid[x][y+1] &&  grid[x][y+1][z]) {
-            if (grid[x][y+1][z].turned == node.turned || grid[x][y+1][z].turned == 0) {
-                ret.push(grid[x][y+1][z]);
+
+            if (grid[x + 1] && grid[x + 1][y] && grid[x + 1][y][z]) {
+                if (grid[x + 1][y][z].turned != node.turned || grid[x + 1][y][z].turned == 0) {
+                    ret.push(grid[x + 1][y][z]);
+                }
             }
-        }
-        if (grid[x] && grid[x][y] &&  grid[x][y][z-1]) {
-            if (grid[x][y][z-1].turned == node.turned || grid[x][y][z-1].turned == 0) {
-                ret.push(grid[x][y][z-1]);
+            if (grid[x] && grid[x][y - 1] && grid[x][y - 1][z]) {
+                if (grid[x][y - 1][z].turned != node.turned || grid[x][y - 1][z].turned == 0) {
+                    ret.push(grid[x][y - 1][z]);
+                }
             }
-        }
-        if (grid[x] && grid[x][y] &&  grid[x][y][z+1]) {
-            if (grid[x][y][z+1].turned == node.turned || grid[x][y][z+1].turned == 0) {
-                ret.push(grid[x][y][z+1]);
+            if (grid[x] && grid[x][y + 1] && grid[x][y + 1][z]) {
+                if (grid[x][y + 1][z].turned != node.turned || grid[x][y + 1][z].turned == 0) {
+                    ret.push(grid[x][y + 1][z]);
+                }
             }
-        }
-        // ////console.log(node, grid)
-        return ret;
-    }
-     
-    
-    
-    badneighbors(node) {
-        if (node.turned != 0) {
-            return []
-        }
-        ////console.log(node.x, node.y)
-        var ret = [];
-        var x = node.k+3;
-        var y = node.t+3;
-        var z = node.e+3;
-        var grid = this.supa;
-        
-        this.diagonal = false
-        // West)
-        if (grid[x - 1] && grid[x - 1][y] &&  grid[x - 1][y][z]) {
-            if (grid[x - 1][y][z].turned != node.turned || grid[x - 1][y][z].turned == 0) {
-                ret.push(grid[x - 1][y][z]);
+            if (grid[x] && grid[x][y] && grid[x][y][z - 1]) {
+                if (grid[x][y][z - 1].turned != node.turned || grid[x][y][z - 1].turned == 0) {
+                    ret.push(grid[x][y][z - 1]);
+                }
             }
+            if (grid[x] && grid[x][y] && grid[x][y][z + 1]) {
+                if (grid[x][y][z + 1].turned != node.turned || grid[x][y][z + 1].turned == 0) {
+                    ret.push(grid[x][y][z + 1]);
+                }
+            }
+            // ////console.log(node, grid)
+            return ret;
         }
 
-        if (grid[x+1] && grid[x+1][y] &&  grid[x+1][y][z]) {
-            if (grid[x+1][y][z].turned != node.turned || grid[x+1][y][z].turned == 0) {
-                ret.push(grid[x+1][y][z]);
-            }
-        }
-        if (grid[x] && grid[x][y-1] &&  grid[x][y-1][z]) {
-            if (grid[x][y-1][z].turned != node.turned || grid[x][y-1][z].turned == 0) {
-                ret.push(grid[x][y-1][z]);
-            }
-        }
-        if (grid[x] && grid[x][y+1] &&  grid[x][y+1][z]) {
-            if (grid[x][y+1][z].turned != node.turned || grid[x][y+1][z].turned == 0) {
-                ret.push(grid[x][y+1][z]);
-            }
-        }
-        if (grid[x] && grid[x][y] &&  grid[x][y][z-1]) {
-            if (grid[x][y][z-1].turned != node.turned || grid[x][y][z-1].turned == 0) {
-                ret.push(grid[x][y][z-1]);
-            }
-        }
-        if (grid[x] && grid[x][y] &&  grid[x][y][z+1]) {
-            if (grid[x][y][z+1].turned != node.turned || grid[x][y][z+1].turned == 0) {
-                ret.push(grid[x][y][z+1]);
-            }
-        }
-        // ////console.log(node, grid)
-        return ret;
-    }
-    
-    
-    
-    
-    spin1(){
-            
 
-            this.rotateZ(-Math.PI/16)
+
+
+        spin1() {
+
+
+            this.rotateZ(-Math.PI / 16)
         }
-        spin2(){
-            
-            this.rotateY(-Math.PI/16)
+        spin2() {
+
+            this.rotateY(-Math.PI / 16)
         }
         export2() {
             let out = ''
 
-            for (let t = 0; t < (6*6*6); t++) {
+            for (let t = 0; t < (6 * 6 * 6); t++) {
                 if (this.dots[t].marked != 0) {
 
                     out += this.dots[t].turned.valueOf()
@@ -3058,7 +3193,7 @@
             return out
         }
         clean() {
-            for (let t = 0; t < (6*6*6); t++) {
+            for (let t = 0; t < (6 * 6 * 6); t++) {
                 this.dots[t].turned = 0
                 this.dots[t].marked = 0
                 this.dots[t].r = 128
@@ -3070,7 +3205,7 @@
         }
         export() {
             let out = []
-            for (let t = 0; t < (6*6*6); t++) {
+            for (let t = 0; t < (6 * 6 * 6); t++) {
                 if (this.dots[t].turned == 1) {
                     out.push(new Data(1))
                 } else if (this.dots[t].turned == -1) {
@@ -3120,96 +3255,96 @@
             //     // this.dots[t].draw()
             //     // }
             // }
-        this.turns = [0,0]
-        for (let t = 0; t < this.dots.length; t++) {
+            this.turns = [0, 0]
+            for (let t = 0; t < this.dots.length; t++) {
 
-            this.dots[t].subdraw()
-        }
-
-        for (let t = 0; t < this.dots.length; t++) {
-            this.dots[t].draw()
-            for (let k = 0; k < this.dots.length; k++) {
-                if(t!=k){
-                    if(this.dots[t].turned == this.dots[k].turned && this.dots[t].turned != 0){
-
-                        if(this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k){
-                        if(this.dots[t].t == this.dots[k].t+1 || this.dots[t].t == this.dots[k].t-1 || this.dots[t].t == this.dots[k].t){
-                                if(this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e){
-                                    let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
-                                    let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
-                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+1.8)
-                                    // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
-                                    // link2.draw()
-                                    link.draw()
-                                    // this.turns[(this.dots[t].turned*.5)+.5]+=.5
-                                }
-    
-                            }
-                        }   
-    
-                        if(this.dots[t].k == this.dots[k].k+1 || this.dots[t].k == this.dots[k].k-1 || this.dots[t].k == this.dots[k].k){
-                        if(this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t){
-                                if(this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e){
-                                    let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
-                                    let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
-                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+1.8)
-                                    // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
-                                    // link2.draw()
-                                    link.draw()
-                                    // this.turns[(this.dots[t].turned*.5)+.5]+=.5
-                                }
-    
-                            }
-                        }   
-
-                        
-                        if(this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k){
-                        if(this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t){
-                                if(this.dots[t].e == this.dots[k].e+1 || this.dots[t].e == this.dots[k].e-1 || this.dots[t].e == this.dots[k].e){
-                                    let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
-                                    let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
-                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+1.8)
-                                    // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
-                                    // link2.draw()
-                                    link.draw()
-                                    // this.turns[(this.dots[t].turned*.5)+.5]+=.5
-                                }
-    
-                            }
-                        }   
-                        // if(this.dots[t].k == this.dots[k].k){
-                        //     if(this.dots[t].e == this.dots[k].e+1 || this.dots[t].e == this.dots[k].e-1 || this.dots[t].e == this.dots[k].e){
-
-                        //         if(this.dots[t].t == this.dots[k].t+1 || this.dots[t].t == this.dots[k].t-1 || this.dots[t].t == this.dots[k].t){
-                        //             let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
-                        //             let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
-                        //             let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
-                        //             let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
-                        //             link2.draw()
-                        //             link.draw()
-        
-                        //         }
-                        //     }
-                        // }   
-    
-                        //     if(this.dots[t].t == this.dots[k].t){
-                        //         if(this.dots[t].e == this.dots[k].e+1 || this.dots[t].e == this.dots[k].e-1 || this.dots[t].e == this.dots[k].e){
-                        //         if(this.dots[t].k == this.dots[k].k+1 || this.dots[t].k == this.dots[k].k-1 || this.dots[t].k == this.dots[k].k){
-                        //             let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
-                        //             let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
-                        //             let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
-                        //             let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
-                        //             link2.draw()
-                        //             link.draw()
-        
-                        //         }
-                        //     }
-                        // }   
-                    }
-                    }
+                this.dots[t].subdraw()
             }
 
-        }
+            for (let t = 0; t < this.dots.length; t++) {
+                this.dots[t].draw()
+                for (let k = 0; k < this.dots.length; k++) {
+                    if (t != k) {
+                        if (this.dots[t].turned == this.dots[k].turned && this.dots[t].turned != 0) {
+
+                            if (this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k) {
+                                if (this.dots[t].t == this.dots[k].t + 1 || this.dots[t].t == this.dots[k].t - 1 || this.dots[t].t == this.dots[k].t) {
+                                    if (this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e) {
+                                        let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
+                                        let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
+                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z / 2) + 1.8)
+                                        // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+                                        // link2.draw()
+                                        link.draw()
+                                        // this.turns[(this.dots[t].turned*.5)+.5]+=.5
+                                    }
+
+                                }
+                            }
+
+                            if (this.dots[t].k == this.dots[k].k + 1 || this.dots[t].k == this.dots[k].k - 1 || this.dots[t].k == this.dots[k].k) {
+                                if (this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t) {
+                                    if (this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e) {
+                                        let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
+                                        let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
+                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z / 2) + 1.8)
+                                        // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+                                        // link2.draw()
+                                        link.draw()
+                                        // this.turns[(this.dots[t].turned*.5)+.5]+=.5
+                                    }
+
+                                }
+                            }
+
+
+                            if (this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k) {
+                                if (this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t) {
+                                    if (this.dots[t].e == this.dots[k].e + 1 || this.dots[t].e == this.dots[k].e - 1 || this.dots[t].e == this.dots[k].e) {
+                                        let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
+                                        let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
+                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z / 2) + 1.8)
+                                        // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+                                        // link2.draw()
+                                        link.draw()
+                                        // this.turns[(this.dots[t].turned*.5)+.5]+=.5
+                                    }
+
+                                }
+                            }
+                            // if(this.dots[t].k == this.dots[k].k){
+                            //     if(this.dots[t].e == this.dots[k].e+1 || this.dots[t].e == this.dots[k].e-1 || this.dots[t].e == this.dots[k].e){
+
+                            //         if(this.dots[t].t == this.dots[k].t+1 || this.dots[t].t == this.dots[k].t-1 || this.dots[t].t == this.dots[k].t){
+                            //             let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+                            //             let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+                            //             let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
+                            //             let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+                            //             link2.draw()
+                            //             link.draw()
+
+                            //         }
+                            //     }
+                            // }   
+
+                            //     if(this.dots[t].t == this.dots[k].t){
+                            //         if(this.dots[t].e == this.dots[k].e+1 || this.dots[t].e == this.dots[k].e-1 || this.dots[t].e == this.dots[k].e){
+                            //         if(this.dots[t].k == this.dots[k].k+1 || this.dots[t].k == this.dots[k].k-1 || this.dots[t].k == this.dots[k].k){
+                            //             let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+                            //             let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+                            //             let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
+                            //             let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+                            //             link2.draw()
+                            //             link.draw()
+
+                            //         }
+                            //     }
+                            // }   
+                        }
+                    }
+                }
+
+            }
 
             // for (let t = 0; t < this.dots.length; t++) {
             //     for (let k = 0; k < this.dots.length; k++) {
@@ -3345,31 +3480,31 @@
                     canvas_context.fillText("<-- Online light, if it stops flashing you have no opponent.", 60, 30)
                     let c1 = .5
                     let c2 = 0
-                    let f1 =0
-                    let f2 =0
-                    for(let t =0;t<b.board.dots.length;t++){
-                        if(b.board.dots[t].mark == 1 ||b.board.dots[t].turned == 1){
+                    let f1 = 0
+                    let f2 = 0
+                    for (let t = 0; t < b.board.dots.length; t++) {
+                        if (b.board.dots[t].mark == 1 || b.board.dots[t].turned == 1) {
                             c1++
                         }
-                        if(b.board.dots[t].mark == -1||b.board.dots[t].turned == -1){
+                        if (b.board.dots[t].mark == -1 || b.board.dots[t].turned == -1) {
                             c2++
                         }
-                        if(b.board.dots[t].turned == -1){
-                            f1= 1
+                        if (b.board.dots[t].turned == -1) {
+                            f1 = 1
                         }
-                        if(b.board.dots[t].turned == -1){
+                        if (b.board.dots[t].turned == -1) {
                             f2++
                         }
                     }
-                    if(c2==216 && f2==1){c2=1}
+                    if (c2 >= 200 && f2 == 1) { c2 = 1 }
                     canvas_context.fillText(c1, 800, 200)
                     canvas_context.fillStyle = "black"
                     canvas_context.fillText(c2, 800, 250)
-                    if(b.cald == 1){
-                        if(playerID== -1 || playerID == b.board.turn){
-                            if(b.board.turn == 1){
+                    if (b.cald == 1) {
+                        if (playerID == -1 || playerID == b.board.turn) {
+                            if (b.board.turn == 1) {
                                 canvas_context.fillStyle = "black"
-                            }else{
+                            } else {
                                 canvas_context.fillStyle = "white"
                             }
                             canvas_context.fillText("Your turn!", 60, 60)
@@ -3377,55 +3512,60 @@
                     }
                 }
             }
-            if(scale == 1){
-                canvas_context2.clearRect(0,0,canvas.width*.25, canvas.height)
-            canvas_context2.drawImage(canvas,0,0,canvas.width, canvas.height, 0,0, canvas.width*.33,  canvas.height*.33 )
-            canvas_context.clearRect(0,0,canvas.width, canvas.height)
-            canvas_context.drawImage(canvas2,0,0,canvas.width, canvas.height, 0,0, canvas.width,  canvas.height )
+            if (scale == 1) {
+                canvas_context2.clearRect(0, 0, canvas.width * .25, canvas.height)
+                canvas_context2.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width * .33, canvas.height * .33)
+                canvas_context.clearRect(0, 0, canvas.width, canvas.height)
+                canvas_context.drawImage(canvas2, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height)
             }
         }, 25)
 
 
         window.addEventListener('pointerdown', e => {
+        // b.board.rotateZ(1.2)
+        // b.board.rotateY(.751)
             e.preventDefault()
             canvas.focus();
             FLEX_engine = canvas.getBoundingClientRect();
             XS_engine = e.clientX - FLEX_engine.left;
             YS_engine = e.clientY - FLEX_engine.top;
-            if(scale == 1){
-                TIP_engine.x = XS_engine*3
-                TIP_engine.y = YS_engine*3
-            }else{
+            if (scale == 1) {
+                TIP_engine.x = XS_engine * 3
+                TIP_engine.y = YS_engine * 3
+            } else {
                 TIP_engine.x = XS_engine
                 TIP_engine.y = YS_engine
             }
             TIP_engine.body = TIP_engine
-            if(spin1.isPointInside(TIP_engine)){
+            if (spin1.isPointInside(TIP_engine)) {
                 b.spin1()
             }
-            if(spin2.isPointInside(TIP_engine)){
+            if (aiButton.isPointInside(TIP_engine)) {
+                AI *=-1
+            }
+            if (spin2.isPointInside(TIP_engine)) {
                 b.spin2()
             }
-            if(scaler.isPointInside(TIP_engine)){
-                scale*=-1
+            if (scaler.isPointInside(TIP_engine)) {
+                scale *= -1
             }
-            if(playerID == b.board.turn || playerID == -1){
+            if (playerID == b.board.turn || playerID == -1) {
                 let i = b.check(TIP_engine)
                 //console.log(i)
-                if(playerID == -1 && i[0] != -10){
-                    playerID = Math.abs(b.board.turn-1) //b.board.turn
+                if (playerID == -1 && i[0] != -10) {
+                    playerID = Math.abs(b.board.turn - 1) //b.board.turn
                 }
                 //console.log(i)
-                if(i[0] != -10){
+                if (i[0] != -10) {
                     b.cald = 0
-            let pson = {}
-            pson.te = i[0]+3
-            pson.ke = i[1]+3
-            pson.ee = i[2]+3
-            pson.tile = i[3]
-            pson.id = Math.abs(playerID-1)
-            pson.guy = 1
-            ws.send(JSON.stringify(pson))
+                    let pson = {}
+                    pson.te = i[0] + 3
+                    pson.ke = i[1] + 3
+                    pson.ee = i[2] + 3
+                    pson.tile = i[3]
+                    pson.id = Math.abs(playerID - 1)
+                    pson.guy = 1
+                    ws.send(JSON.stringify(pson))
                 }
             }
 
@@ -3460,89 +3600,124 @@
     let mod = 1
     let restart = new Rectangle(700, 400, 200, 50, "white")
     let spin1 = new Rectangle(50, 700, 200, 50, "green")
-    let spin2  = new Rectangle(250, 700, 200, 50, "yellow")
-    let scaler  = new Rectangle(500, 700, 200, 50, "white")
+    let spin2 = new Rectangle(250, 700, 200, 50, "yellow")
+    let scaler = new Rectangle(500, 700, 200, 50, "white")
     let scale = -1
+    let AI = -1
+    let aiButton = new Rectangle(750, 700, 200, 50, "pink")
     function main() {
         // if(keysPressed['l']){
 
-        canvas_context.clearRect(0, 0, canvas.height+100, canvas.height)  // refreshes the image
+        canvas_context.clearRect(0, 0, canvas.height + 100, canvas.height)  // refreshes the image
         scaler.draw()
         spin1.draw()
         spin2.draw()
-                canvas_context.fillStyle = "black"
-                canvas_context.font = "30px comic sans ms"
-                canvas_context.fillText("spin", spin1.x + 20, spin1.y + 30)
-                canvas_context.fillStyle = "black"
-                canvas_context.font = "30px comic sans ms"
-                canvas_context.fillText("twirl", spin2.x + 20, spin2.y + 30)
-                canvas_context.fillStyle = "black"
-                canvas_context.font = "30px comic sans ms"
-                canvas_context.fillText("scale", scaler.x + 20, scaler.y + 30)
+        aiButton.draw()
+        canvas_context.fillStyle = "black"
+        canvas_context.font = "30px comic sans ms"
+        canvas_context.fillText("spin", spin1.x + 20, spin1.y + 30)
+        canvas_context.fillStyle = "black"
+        canvas_context.font = "30px comic sans ms"
+        canvas_context.fillText("twirl", spin2.x + 20, spin2.y + 30)
+        canvas_context.fillStyle = "black"
+        canvas_context.font = "30px comic sans ms"
+        canvas_context.fillText("scale", scaler.x + 20, scaler.y + 30)
+        canvas_context.fillStyle = "black"
+        canvas_context.font = "30px comic sans ms"
+        canvas_context.fillText("playAI", aiButton.x + 20, aiButton.y + 30)
         // gamepadAPI.update() //checks for button presses/stick movement on the connected controller)lovlock
         // game code goes here
         // let dats = data[ind]
 
         // flooble.draw()
-        // if (clicked == 1) {
+
+       let fr=  b.generateMoves
 
 
-        //     if (!p.isGameOver()) {
+        if(AI==1){
 
-        //         let pair = p.minimax(2, false)
-
-        //         // if(start == 0){
-        //         //     start  = 1
-        //         //     pair[1] = 13
-        //         // }
-        //         /////////console.log(pair[0])
-        //         // let pair = p.minimax(3, p.right)
-
-        //         if (pair[1] != -1) {
-        //             b.board.dots[pair[1]].turned = p.right.turn;
-        //             b.board.dots[pair[1]].marked = 1;
-        //             if (b.board.turn == 0) {
-        //                 b.board.dots[pair[1]].r = 255;
-        //                 b.board.dots[pair[1]].g = 0;
-        //                 b.board.dots[pair[1]].b = 0;
-        //                 b.board.dots[pair[1]].turned = 1
-        //             } else {
-        //                 b.board.dots[pair[1]].r = 0;
-        //                 b.board.dots[pair[1]].g = 255;
-        //                 b.board.dots[pair[1]].b = 0;
-        //                 b.board.dots[pair[1]].turned = -1
-        //             }
-        //             b.board.turn++
-        //             b.board.turn %= 2
-        //         }
-        //     }
-        //     clicked = 0
-        // }
+            if (clicked == 1) {
 
 
+if (!b.isGameOver()) {
+
+    let depth = 3
+    if(fr.length < 180){
+        depth++
+    }
+    if(fr.length < 100){
+        depth++
+    }
+    if(fr.length < 50){
+        depth++
+    }
+    let pair = b.minimax(2, true, (b.board.turn - .5) * 2)
+
+    // if(start == 0){
+    //     start  = 1
+    //     pair[1] = 13
+    // }
+    console.log(pair)
+    // let pair = p.minimax(3, p.right)
+
+
+    if (pair[1] != -1) {
+        b.board.dots[pair[1]].turned = ((b.board.turn * .5) * 2);
+        b.board.dots[pair[1]].marked = 1;
+        if (b.board.turn == 0) {
+            b.board.dots[pair[1]].r = 255;
+            b.board.dots[pair[1]].g = 255;
+            b.board.dots[pair[1]].b = 255;
+            b.board.dots[pair[1]].turned = 1
+        } else {
+            b.board.dots[pair[1]].r = 0;
+            b.board.dots[pair[1]].g = 0;
+            b.board.dots[pair[1]].b = 0;
+            b.board.dots[pair[1]].turned = -1
+        }
+        b.board.turn++
+        b.board.turn %= 2
+    }
+}
+
+b.board.wholeSort()
+b.board.badwholeSort()
+        b.board.turn++
+        b.board.turn %= 2
+b.board.wholeSort()
+b.board.badwholeSort()
+        b.board.turn++
+        b.board.turn %= 2
+        b.board.rotateZ(.01)
+        b.board.rotateY(.0051)
+clicked = 0
+}
+
+
+        }
         b.board.draw()
 
 
-        if (b.isGameOver()) {
-            if (b.checkWinner() == 1) {
-                canvas_context.fillStyle = "Red"
-                canvas_context.font = "30px comic sans ms"
-                canvas_context.fillText("The Cube Wins...", 700, 200)
-                restart.draw()
-                canvas_context.fillStyle = "black"
-                canvas_context.fillText("restart", restart.x + 20, restart.y + 30)
-                // clicked = 1
+        // if (b.isGameOver()) {
+        //     if (b.checkWinner() == 1) {
+        //         canvas_context.fillStyle = "Red"
+        //         canvas_context.font = "30px comic sans ms"
+        //         canvas_context.fillText("The Cube Wins...", 700, 200)
+        //         restart.draw()
+        //         canvas_context.fillStyle = "black"
+        //         canvas_context.fillText("restart", restart.x + 20, restart.y + 30)
+        //         // clicked = 1
 
-            } else if (b.checkWinner() == -1) {
-                canvas_context.fillStyle = "#00ff00"
-                canvas_context.font = "30px comic sans ms"
-                canvas_context.fillText("You Won!", 700, 200)
-                restart.draw()
-                canvas_context.fillStyle = "black"
-                canvas_context.fillText("restart", restart.x + 20, restart.y + 30)
-                // clicked = 1
-            }
-        }
+        //     } else if (b.checkWinner() == -1) {
+        //         canvas_context.fillStyle = "#00ff00"
+        //         canvas_context.font = "30px comic sans ms"
+        //         canvas_context.fillText("You Won!", 700, 200)
+        //         restart.draw()
+        //         canvas_context.fillStyle = "black"
+        //         canvas_context.fillText("restart", restart.x + 20, restart.y + 30)
+        //         // clicked = 1
+        //     }
+        // }
         // if(keysPressed['l']){
         //     let v = new Viewer(b.left)
         //     v.draw()
@@ -3624,7 +3799,7 @@
             if (JSON.parse(data).faction) {
                 // playerID = Math.abs(JSON.parse(data).faction)
                 // //console.log(playerID)
-            } else if ( JSON.parse(data).tile > -1) {
+            } else if (JSON.parse(data).tile > -1) {
                 //   b.teams[JSON.parse(data).id].crew[JSON.parse(data).guy].tile = JSON.parse(data).tile
                 let tile = JSON.parse(data).tile
                 let te = JSON.parse(data).te
@@ -3632,9 +3807,9 @@
                 let ee = JSON.parse(data).ee
                 //console.log(tile)
                 let t = new Point(b.board.supa[ke][te][ee].sx, b.board.supa[ke][te][ee].sy)
-            
+
                 b.check(t, tile, te, ke, ee)
-                if(playerID == -1){
+                if (playerID == -1) {
                     playerID = Math.abs(b.board.turn)
                 }
                 // b.board.turn++
