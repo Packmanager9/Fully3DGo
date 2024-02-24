@@ -1025,8 +1025,8 @@
                 canvas_context.beginPath();
                 canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
                 canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
-                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
-                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 canvas_context.lineWidth = 4
                 canvas_context.stroke()
                 // if (this.marked == 1) {
@@ -1035,15 +1035,15 @@
             } else if (this.turned == -1) {
                 // //console.log("h")
                 // canvas_context.beginPath();
-                // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
-                // canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                // canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 // canvas_context.moveTo(this.sx - 10, this.sy - 10);
                 // canvas_context.lineTo(this.sx + 10, this.sy + 10);
                 // canvas_context.lineWidth = 4
                 // canvas_context.stroke()
                 // canvas_context.beginPath();
-                // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
-                // canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                // canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 // canvas_context.moveTo(this.sx + 10, this.sy - 10);
                 // canvas_context.lineTo(this.sx - 10, this.sy + 10);
                 // canvas_context.lineWidth = 3
@@ -1052,8 +1052,8 @@
                 let r = 7 + (Math.max(-5, -this.z * 1))
                 canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
                 canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
-                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
-                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 canvas_context.lineWidth = 4
                 canvas_context.stroke()
                 // if (this.marked == 1) {
@@ -1071,7 +1071,7 @@
                 canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 canvas_context.lineWidth = 2
-                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 canvas_context.strokeRect(this.sx - 2, this.sy - 2, 4, 4)
             }
 
