@@ -883,7 +883,7 @@
             canvas_context.font = "30px arial"
             canvas_context.fillStyle = "white"
             canvas_context.fillText("Type in a number and press the button to select a room", 100, 100)
-            canvas_context.fillText("The first player in the room plays as white and goes first", 100, 150)
+            canvas_context.fillText("The first player in the room plays as black and goes first", 100, 150)
             canvas_context.fillText("Room: " + this.number, 100, 200)
             canvas_context.fillText("Press Backspace to reset room number", 100, 250)
 
@@ -2745,7 +2745,7 @@
             this.center = new Point3D(0, 0, 0, "00FF00")
             this.dots = []
             this.links = []
-            this.turn = 0
+            this.turn = 1
             this.colors = [[99999, 0, 0], [0, 0, 99999]]
             this.supa = []
             for (let k = -3; k < 3; k++) {
@@ -3343,7 +3343,7 @@
                     canvas_context.font = "30px arial"
                     canvas_context.fillStyle = "white"
                     canvas_context.fillText("<-- Online light, if it stops flashing you have no opponent.", 60, 30)
-                    let c1 = 0
+                    let c1 = .5
                     let c2 = 0
                     let f1 =0
                     let f2 =0
@@ -3357,11 +3357,11 @@
                         if(b.board.dots[t].turned == -1){
                             f1= 1
                         }
-                        if(b.board.dots[t].turned == 1){
+                        if(b.board.dots[t].turned == -1){
                             f2++
                         }
                     }
-                    if(c1==216 && f2==1){c1=1}
+                    if(c2==216 && f2==1){c2=1}
                     canvas_context.fillText(c1, 800, 200)
                     canvas_context.fillStyle = "black"
                     canvas_context.fillText(c2, 800, 250)
