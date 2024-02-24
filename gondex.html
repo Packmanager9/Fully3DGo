@@ -10,11 +10,11 @@
 <script>
 
         window.addEventListener('keydown', (event) => {
-            console.log(event.key)
+            //console.log(event.key)
             keysPressed[event.key] = true;
         });
         window.addEventListener('keyup', (event) => {
-            console.log(event.key)
+            //console.log(event.key)
             delete keysPressed[event.key];
         });
 
@@ -712,7 +712,7 @@
             this.pressed = 0
         }
         draw() {
-            // console.log(keysPressed)
+            // //console.log(keysPressed)
             if (this.number < 999) {
                 if (keysPressed['1']) {
                     if (this.pressed == 0) {
@@ -889,7 +889,7 @@
 
 
             canvas_context.fillText("Active rooms", 100, 400)
-            // console.log(roomslist)
+            // //console.log(roomslist)
             for (let t = 0; t < roomslist.length; t++) {
                 canvas_context.font = "20px arial"
                 canvas_context.fillStyle = "white"
@@ -922,7 +922,7 @@
             this.r = r
             this.g = g
             this.b = b
-            this.radius = 10
+            this.radius = 7
             this.turned = 0
             this.value = .5
             this.marked = 0
@@ -1020,7 +1020,7 @@
             this.sx = (this.x * 120) + 350
 
             if (this.turned == 1) {
-                // //console.log("h")
+                // ////console.log("h")
                 let r = 7 + (Math.max(-5, -this.z * 1))
                 canvas_context.beginPath();
                 canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
@@ -1033,7 +1033,7 @@
                 canvas_context.fill()
                 // }
             } else if (this.turned == -1) {
-                // //console.log("h")
+                // ////console.log("h")
                 // canvas_context.beginPath();
                 // canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 // canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
@@ -1062,7 +1062,7 @@
 
             } else {
 
-                // //console.log("h")
+                // ////console.log("h")
                 canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 canvas_context.strokeStyle = `rgb(${this.r+35},${this.g+35},${this.b+35})`
                 canvas_context.strokeRect(this.sx - 3, this.sy - 3, 6, 6)
@@ -1086,9 +1086,9 @@
 
     class Pairs {
         constructor() {
-            // this.left = new Network(intus, [12, 12, 125])
+            // this.left = new Network(intus, [12, 12, (6*6*6)])
             // this.left.turn = -1
-            // this.right = new Network(intus, [12, 12, 125])
+            // this.right = new Network(intus, [12, 12, (6*6*6)])
             // this.right.turn = 1
             this.board = new ThreeDeeObject()
             this.boardStorage = new ThreeDeeObject()
@@ -1109,7 +1109,7 @@
         check(point, tile = -1, top= -1, kop= -1, eep = -1) {
 
             let box = []
-                    for(let t1 = 0;t1<125;t1++){
+                    for(let t1 = 0;t1<(6*6*6);t1++){
                         box.push(0)
                     //     for(let k1 = 0;k1<5;k1++){
                     //         box[t1].push([])
@@ -1119,14 +1119,14 @@
                     //         }
                     //     }
                     }
-            let i = -3
-            let t = -3
-            let ke = -3
-            let e = -3
+            let i = -10
+            let t = -10
+            let ke = -10
+            let e = -10
             let flagger = []
-            for (let k = 0; k < 125; k++) {
+            for (let k = 0; k < (6*6*6); k++) {
 
-                // ///////////console.log(this.board.dots[k])
+                // /////////////console.log(this.board.dots[k])
                 if(top != -1){
                     if (this.board.supa[kop][top][eep].isPointInside(point)) {
                     if (this.board.supa[kop][top][eep].marked != 1) {
@@ -1151,16 +1151,16 @@
                                 this.board.supa[kop][top][eep].b = 128
                                 // this.board.turn++
                                 // this.board.turn %= 2
-                                console.log(this.board.turn)
+                                //console.log(this.board.turn)
                                 this.board.supa[kop][top][eep].marked = 0
-                                console.log(this.board.supa[kop][top][eep], this.board.turn)
+                                //console.log(this.board.supa[kop][top][eep], this.board.turn)
                                 i = -1
                             } else {
                                 this.strings.push(this.export())
                                 this.board.turn++
                                 this.board.turn %= 2
 
-                                console.log(this.board.turn)
+                                //console.log(this.board.turn)
                             }
                         } else if (this.board.turn == 1) {
                             this.board.supa[kop][top][eep].turned = -1
@@ -1180,21 +1180,23 @@
                                 this.board.supa[kop][top][eep].b = 128
                                 // this.board.turn++
                                 // this.board.turn %= 2
-                                console.log(this.board.turn)
+                                //console.log(this.board.turn)
                                 this.board.supa[kop][top][eep].marked = 0
-                                console.log(this.board.supa[kop][top][eep], this.board.turn)
+                                //console.log(this.board.supa[kop][top][eep], this.board.turn)
                                 i = -1
                             } else {
                                 this.strings.push(this.export())
                                 this.board.turn++
                                 this.board.turn %= 2
 
-                                console.log(this.board.turn)
+                                //console.log(this.board.turn)
                             }
                         }
-                        ///////////console.log("h")
+                        /////////////console.log("h")
                         clicked = 1
                         this.board.wholeSort()
+                        // this.board.badwholeSort()
+
                         i = k
                         t = this.board.supa[kop][top][eep].t
                         ke = this.board.supa[kop][top][eep].k
@@ -1227,16 +1229,16 @@
                                 this.board.dots[k].b = 128
                                 // this.board.turn++
                                 // this.board.turn %= 2
-                                console.log(this.board.turn)
+                                //console.log(this.board.turn)
                                 this.board.dots[k].marked = 0
-                                console.log(this.board.dots[k], this.board.turn)
+                                //console.log(this.board.dots[k], this.board.turn)
                                 i = -1
                             } else {
                                 this.strings.push(this.export())
                                 this.board.turn++
                                 this.board.turn %= 2
 
-                                console.log(this.board.turn)
+                                //console.log(this.board.turn)
                             }
                         } else if (this.board.turn == 1) {
                             this.board.dots[k].turned = -1
@@ -1256,21 +1258,22 @@
                                 this.board.dots[k].b = 128
                                 // this.board.turn++
                                 // this.board.turn %= 2
-                                console.log(this.board.turn)
+                                //console.log(this.board.turn)
                                 this.board.dots[k].marked = 0
-                                console.log(this.board.dots[k], this.board.turn)
+                                //console.log(this.board.dots[k], this.board.turn)
                                 i = -1
                             } else {
                                 this.strings.push(this.export())
                                 this.board.turn++
                                 this.board.turn %= 2
 
-                                console.log(this.board.turn)
+                                //console.log(this.board.turn)
                             }
                         }
-                        ///////////console.log("h")
+                        /////////////console.log("h")
                         clicked = 1
                         this.board.wholeSort()
+                        // this.board.badwholeSort()
                         i = k
                         t = this.board.dots[k].t
                         ke = this.board.dots[k].k
@@ -1284,6 +1287,7 @@
 
             }
 
+            this.board.badwholeSort()
             return [t,ke,e, i]
             // for (let k = 0; k < 0; k++) {
 
@@ -1294,7 +1298,7 @@
             //             k = tile
             //         }
             //         i = k
-            //         //console.log(this.board.dots[k])
+            //         ////console.log(this.board.dots[k])
             //         if (this.board.dots[k].marked != 1) {
             //             this.board.dots[k].marked = 1
             //             this.board.dots[k].turned = 0
@@ -1317,16 +1321,16 @@
             //                     this.board.dots[k].b = 128
             //                     // this.board.turn++
             //                     // this.board.turn %= 2
-            //                     console.log(this.board.turn)
+            //                     //console.log(this.board.turn)
             //                     this.board.dots[k].marked = 0
-            //                     console.log(this.board.dots[k], this.board.turn)
+            //                     //console.log(this.board.dots[k], this.board.turn)
             //                     i = -1
             //                 } else {
             //                     this.strings.push(this.export())
             //                     this.board.turn++
             //                     this.board.turn %= 2
 
-            //                     console.log(this.board.turn)
+            //                     //console.log(this.board.turn)
             //                 }
             //             } else if (this.board.turn == 1) {
             //                 this.board.dots[k].turned = -1
@@ -1346,19 +1350,19 @@
             //                     this.board.dots[k].b = 128
             //                     // this.board.turn++
             //                     // this.board.turn %= 2
-            //                     console.log(this.board.turn)
+            //                     //console.log(this.board.turn)
             //                     this.board.dots[k].marked = 0
-            //                     console.log(this.board.dots[k], this.board.turn)
+            //                     //console.log(this.board.dots[k], this.board.turn)
             //                     i = -1
             //                 } else {
             //                     this.strings.push(this.export())
             //                     this.board.turn++
             //                     this.board.turn %= 2
 
-            //                     console.log(this.board.turn)
+            //                     //console.log(this.board.turn)
             //                 }
             //             }
-            //             ///////////console.log("h")
+            //             /////////////console.log("h")
             //             clicked = 1
             //             break
             //         }
@@ -1372,7 +1376,7 @@
             // //         // start = 0
             // //     }
             // // }
-            // /////console.log(this.board)
+            // ///////console.log(this.board)
 
 
 
@@ -1469,7 +1473,7 @@
             //         goBoard5.wholeSort()
                   
 
-            //         /////console.log(goBoard1)
+            //         ///////console.log(goBoard1)
          
             //         let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
             //         for (let r = 0; r < arr.length; r++) {
@@ -1479,7 +1483,7 @@
             //                     ot += ((arr[r].board[w][m].t + 2)) * 5
             //                     ot += ((arr[r].board[w][m].e + 2))
             //                     box[ot] += Math.abs(arr[r].board[w][m].type)
-            //                     // console.log(arr[r].board[w][m].type)
+            //                     // //console.log(arr[r].board[w][m].type)
 
             //                     // if (this.board.dots[ot].turned != 0 && (arr[r].board[w][m].type) == 0) {
             //                     //     // this.board.dots[ot].turned = (arr[r].board[w][m].type)
@@ -1501,7 +1505,7 @@
             //                 }
             //             }
             //         } 
-            //         console.log(box)
+            //         //console.log(box)
             //     }
             // }
 
@@ -1683,7 +1687,7 @@
 
             //     // this.board.turn++
             //     // this.board.turn %= 2
-            //     console.log(this.board.turn)
+            //     //console.log(this.board.turn)
             //     // this.strings.splice(this.strings.length-1,1)
             // } else {
 
@@ -1698,14 +1702,14 @@
         }
         generateMoves() {
             const nextMoves = [];
-            ///////////console.log(this.board)
+            /////////////console.log(this.board)
             for (let i = 0; i < 5; i++) {
                 for (let j = 0; j < 5; j++) {
                     for (let k = 0; k < 5; k++) {
                         let index = i * 25
                         index += j * 5
                         index += k
-                        ///////////console.log(index)
+                        /////////////console.log(index)
                         if (this.board.dots[index].turned === 0) {
                             nextMoves.push(index);
                         }
@@ -1854,7 +1858,7 @@
             }
         }
         isGameOver() {
-            // /////////console.log(this.checkWinner(), this.generateMoves.length)
+            // ///////////console.log(this.checkWinner(), this.generateMoves.length)
             return (this.checkWinner() != 0 || this.generateMoves().length == 0);
         }
         minimax(depth, isMaximizingPlayer) {
@@ -1899,9 +1903,9 @@
                     this.left.becomeNetworkFrom(this.right.log())
                 }
                 if (Math.random() < .0001) {
-                    // this.left = new Network(intus, [12, 12, 125])
+                    // this.left = new Network(intus, [12, 12, (6*6*6)])
                 }
-                // ///////////console.log("w")
+                // /////////////console.log("w")
             }
             if (this.right.marked == 1) {
                 this.right.mutate()
@@ -1910,9 +1914,9 @@
                     this.right.becomeNetworkFrom(this.left.log())
                 }
                 if (Math.random() < .0032) {
-                    // this.right = new Network(intus, [12, 12, 125])
+                    // this.right = new Network(intus, [12, 12, (6*6*6)])
                 }
-                // ///////////console.log("w")
+                // /////////////console.log("w")
             }
             this.board.clean()
             this.left.turn = -1
@@ -2031,7 +2035,7 @@
     class Go {
     constructor(inData = [], offset = 0, yoffset) {
         this.score = [0, 0]
-        ///////console.log(inData)
+        /////////console.log(inData)
         this.countup = 0
         this.metaScore = [0, 0]
         this.offset = offset + 920
@@ -2053,7 +2057,7 @@
             // this.board.push(line)
         }
         // }
-        //console.log(this.board)
+        ////console.log(this.board)
         this.rects = []
         for (let t = 0; t < this.board.length; t++) {
             this.rects.push([])
@@ -2061,7 +2065,7 @@
                 if (this.board[t][k].valueOf() < .333) {
                     this.board[t][k].type = -1
                     canvas_context.fillStyle = "blue"
-                } else if (this.board[t][k].valueOf() > .666) {
+                } else if (this.board[t][k].valueOf() > .66) {
                     this.board[t][k].type = 1
                     canvas_context.fillStyle = "blue"
                 } else {
@@ -2076,11 +2080,50 @@
 
 
     }
+
+    badneighbors(node) {
+        if (node.type != 0) {
+            return []
+        }
+        ////console.log(node.x, node.y)
+        var ret = [];
+        var x = node.x;
+        var y = node.y;
+        var grid = this.board;
+        this.diagonal = false
+        // West)
+        if (grid[x - 1] && grid[x - 1][y]) {
+            if (grid[x - 1][y].type !== node.type || grid[x - 1][y].type == 0) {
+                ret.push(grid[x - 1][y]);
+            }
+        }
+        // East
+        if (grid[x + 1] && grid[x + 1][y]) {
+            if (grid[x + 1][y].type !== node.type || grid[x + 1][y].type == 0) {
+                ret.push(grid[x + 1][y]);
+            }
+        }
+        // South
+        if (grid[x] && grid[x][y - 1]) {
+            if (grid[x][y - 1].type !== node.type || grid[x][y - 1].type == 0) {
+                ret.push(grid[x][y - 1]);
+            }
+        }
+        // North
+        if (grid[x] && grid[x][y + 1]) {
+            if (grid[x][y + 1].type !== node.type || grid[x][y + 1].type == 0) {
+                ret.push(grid[x][y + 1]);
+            }
+        }
+        // ////console.log(node, grid)
+        return ret;
+    }
+
     neighbors(node) {
         if (node.type == 0) {
             return []
         }
-        //console.log(node.x, node.y)
+        ////console.log(node.x, node.y)
         var ret = [];
         var x = node.x;
         var y = node.y;
@@ -2110,7 +2153,7 @@
                 ret.push(grid[x][y + 1]);
             }
         }
-        // //console.log(node, grid)
+        // ////console.log(node, grid)
         return ret;
     }
     rawneighbors(node) {
@@ -2150,14 +2193,14 @@
     }
     draw() {
         // this.wholeSort()
-        // ///////////console.log("draw")
+        // /////////////console.log("draw")
         for (let t = 0; t < this.board.length; t++) {
             for (let k = 0; k < this.board[t].length; k++) {
                 if (this.board[t][k].valueOf() < .333) {
                     this.rects[t][k].draw()
                     // let circle = new Circle(this.rects[t][k].x + 25, this.rects[t][k].y + 25, 18, "black")
                     // circle.draw()
-                } else if (this.board[t][k].valueOf() > .666) {
+                } else if (this.board[t][k].valueOf() > .66) {
                     this.rects[t][k].draw()
                     // let circle = new Circle(this.rects[t][k].x + 25, this.rects[t][k].y + 25, 18, "white")
                     // circle.draw()
@@ -2173,7 +2216,7 @@
                     // this.rects[t][k].draw()
                     let circle = new Circle(this.rects[t][k].x + 5, this.rects[t][k].y + 5, 5, "black")
                     circle.draw()
-                } else if (this.board[t][k].valueOf() > .666) {
+                } else if (this.board[t][k].valueOf() > .66) {
                     // this.rects[t][k].draw()
                     let circle = new Circle(this.rects[t][k].x + 5, this.rects[t][k].y + 5, 5, "white")
                     circle.draw()
@@ -2204,6 +2247,60 @@
         }
         return d / 81
     }
+
+
+
+    neighborsCheck(node) {
+        let boole = false
+        // let gnode = new Data(node.valueOf)
+        // gnode.type = node.type*-1
+        // gnode.t = node.t
+        // gnode.k = node.k
+        let n = this.neighbors(node)
+        n.push(node)
+        let f = [...n]
+        let ind = []
+        for (let k = 0; k < 40; k++) {
+            for (let d = 0; d < n.length; d++) {
+                let r
+                if (ind.includes(d)) {
+                    r = []
+                } else {
+
+                    r = this.neighbors(n[d])
+                    ind.push(d)
+                }
+                for (let e = 0; e < r.length; e++) {
+                    if (f.includes(r[e])) {
+
+                    } else {
+                        f.push(r[e])
+                    }
+                }
+            }
+            n = [...f]
+        }
+        let wet = 0
+        for (let t = 0; t < n.length; t++) {
+            if (n[t].type == 0) {
+                wet = 1
+            }
+        }
+        if (wet == 0) {
+            for (let t = 0; t < n.length; t++) {
+                if (n[t].type == 1 && this.turn == 0 || n[t].type == -1 && this.turn == 1) {
+                    this.countup++
+                    n[t].type = 0
+                    n[t].value = .5
+                    boole = true
+                }
+            }
+        }
+        return boole
+    }
+
+
+    
     neighborsCheck(node) {
         let boole = false
         // let gnode = new Data(node.valueOf)
@@ -2385,7 +2482,7 @@
             wet = 1
         }
         if (keysPressed['6']) {
-            ///////////console.log(eggs, bread, wet)
+            /////////////console.log(eggs, bread, wet)
         }
 
         if (wet == 0) {
@@ -2402,6 +2499,17 @@
         }
         return boole
     }
+    badwholeSort() {
+        let boole = false
+        for (let t = 0; t < this.board.length; t++) {
+            for (let k = 0; k < this.board[t].length; k++) {
+                boole = (this.badneighborsCheck(this.board[t][k], this.turn) || boole)
+            }
+        }
+
+        return boole
+    }
+
     wholeSort() {
         let boole = false
         for (let t = 0; t < this.board.length; t++) {
@@ -2442,7 +2550,7 @@
     //                 // if (goBoard.strings.includes(this.stringify())) {
     //                 //     this.board[t][k].value = .5
     //                 //     this.board[t][k].type = 0
-    //                 //     // ///////////console.log("repeat", t,k)
+    //                 //     // /////////////console.log("repeat", t,k)
     //                 //     return 2
     //                 // }
     //                 // this.strings.push(this.stringify())
@@ -2451,7 +2559,7 @@
     //                 // if (this.dumbSort()) {
     //                 //     this.board[t][k].value = .5
     //                 //     this.board[t][k].type = 0
-    //                 //     // ///////////console.log("clash", t,k)
+    //                 //     // /////////////console.log("clash", t,k)
     //                 //     return 1
     //                 // }
     //                 // this.wholeSort()
@@ -2461,10 +2569,10 @@
 
     //                 // this.board = coib.board
     //                 this.turn = 1
-    //                 // ///////////console.log("works", t,k)
+    //                 // /////////////console.log("works", t,k)
     //                 return 0
     //             } else {
-    //                 // ///////////console.log("overlap", t,k)
+    //                 // /////////////console.log("overlap", t,k)
     //                 return 3
     //             }
     //         } else {
@@ -2475,7 +2583,7 @@
     //                 // if (goBoard.strings.includes(this.stringify())) {
     //                 //     this.board[t][k].value = .5
     //                 //     this.board[t][k].type = 0
-    //                 //     // ///////////console.log("repeat", t,k)
+    //                 //     // /////////////console.log("repeat", t,k)
     //                 //     return 2
     //                 // }
     //                 // this.strings.push(this.stringify())
@@ -2487,7 +2595,7 @@
     //                 // if (this.dumbSort()) {
     //                 //     this.board[t][k].value = .5
     //                 //     this.board[t][k].type = 0
-    //                 //     // ///////////console.log("clash", t,k)
+    //                 //     // /////////////console.log("clash", t,k)
     //                 //     return 1
     //                 // }
     //                 // this.board = coib.board
@@ -2498,10 +2606,10 @@
     //                 // this.score[this.turn] += this.countup
 
     //                 this.turn = 0
-    //                 // ///////////console.log("works", t,k)
+    //                 // /////////////console.log("works", t,k)
     //                 return 0
     //             } else {
-    //                 // ///////////console.log("overlap", t,k)
+    //                 // /////////////console.log("overlap", t,k)
     //                 return 3
     //             }
     //         }
@@ -2537,7 +2645,7 @@
                     if (goBoard.strings.includes(this.stringify())) {
                         this.board[t][k].value = .5
                         this.board[t][k].type = 0
-                        // ///////////console.log("repeat", t,k)
+                        // /////////////console.log("repeat", t,k)
                         return 2
                     }
                     this.strings.push(this.stringify())
@@ -2546,7 +2654,7 @@
                     if (this.dumbSort()) {
                         this.board[t][k].value = .5
                         this.board[t][k].type = 0
-                        // ///////////console.log("clash", t,k)
+                        // /////////////console.log("clash", t,k)
                         return 1
                     }
                     this.wholeSort()
@@ -2556,10 +2664,10 @@
 
                     this.board = coip.board
                     this.turn = 1
-                    // ///////////console.log("works", t,k)
+                    // /////////////console.log("works", t,k)
                     return 0
                 } else {
-                    // ///////////console.log("overlap", t,k)
+                    // /////////////console.log("overlap", t,k)
                     return 3
                 }
             } else {
@@ -2570,7 +2678,7 @@
                     if (goBoard.strings.includes(this.stringify())) {
                         this.board[t][k].value = .5
                         this.board[t][k].type = 0
-                        // ///////////console.log("repeat", t,k)
+                        // /////////////console.log("repeat", t,k)
                         return 2
                     }
                     this.strings.push(this.stringify())
@@ -2582,7 +2690,7 @@
                     if (this.dumbSort()) {
                         this.board[t][k].value = .5
                         this.board[t][k].type = 0
-                        // ///////////console.log("clash", t,k)
+                        // /////////////console.log("clash", t,k)
                         return 1
                     }
                     this.board = coip.board
@@ -2593,10 +2701,10 @@
                     this.score[this.turn] += this.countup
 
                     this.turn = 0
-                    // ///////////console.log("works", t,k)
+                    // /////////////console.log("works", t,k)
                     return 0
                 } else {
-                    // ///////////console.log("overlap", t,k)
+                    // /////////////console.log("overlap", t,k)
                     return 3
                 }
             }
@@ -2640,23 +2748,23 @@
             this.turn = 0
             this.colors = [[99999, 0, 0], [0, 0, 99999]]
             this.supa = []
-            for (let k = -2; k < 3; k++) {
+            for (let k = -3; k < 3; k++) {
                 this.supa.push([])
-                for (let t = -2; t < 3; t++) {
-                this.supa[k+2].push([])
-                    for (let e = -2; e < 3; e++) {
+                for (let t = -3; t < 3; t++) {
+                this.supa[k+3].push([])
+                    for (let e = -3; e < 3; e++) {
 
                         let dis = .75 - ((k / 17) * .63)
                         let a = (t / 40) * 6.28
                         let r = k * (t / 2)
                         let g = k * k
                         let b = t * 5
-                        let point = new Point3D((k) * .75, (t) * .75, (e) * .75, 128 + (e * 35), 128 + (t * 35), 128 + (k * 35))
+                        let point = new Point3D((k+.5) * .6, (t+.5) * .6, (e+.5) * .6, 128 + (e * 35), 128 + (t * 35), 128 + (k * 35))
                         point.t = t
                         point.e = e
                         point.k = k
                         this.dots.push(point)
-                        this.supa[k+2][t+2].push(point)
+                        this.supa[k+3][t+3].push(point)
                         this.links.push(new LineOP(this.center, point))
                         if (k < 12) {
                             if (t == 14) {
@@ -2681,6 +2789,21 @@
 
 
         }
+
+    badwholeSort() {
+        let boole = false
+
+        for (let t = 0; t < this.supa.length; t++) {
+            for (let k = 0; k < this.supa[t].length; k++) {
+            for (let e = 0; e < this.supa[t][k].length; e++) {
+                boole = (this.badneighborsCheck(this.supa[t][k][e], this.turn) || boole)
+            }
+            }
+        }
+
+        return boole
+    }
+    
         wholeSort() {
         let boole = false
         for (let t = 0; t < this.supa.length; t++) {
@@ -2729,7 +2852,7 @@
                 wet = 1
             }
         }
-        console.log(n)
+        //console.log(n)
         if (wet == 0) {
             for (let t = 0; t < n.length; t++) {
                 if (n[t].turned == 1 && this.turn == 0 || n[t].turned == -1 && this.turn == 1) {
@@ -2743,15 +2866,82 @@
         }
         return boole
     }
+
+    badneighborsCheck(node) {
+        let boole = false
+        // let gnode = new Data(node.valueOf)
+        // gnode.type = node.type*-1
+        // gnode.t = node.t
+        // gnode.k = node.k
+        let n = this.badneighbors(node)
+        n.push(node)
+        let f = [...n]
+        let ind = []
+        for (let k = 0; k < 62; k++) {
+            for (let d = 0; d < n.length; d++) {
+                let r
+                if (ind.includes(d)) {
+                    r = []
+                } else {
+
+                    r = this.badneighbors(n[d])
+                    ind.push(d)
+                }
+                for (let e = 0; e < r.length; e++) {
+                    if (f.includes(r[e])) {
+
+                    } else {
+                        f.push(r[e])
+                    }
+                }
+            }
+            n = [...f]
+        }
+        let wet = 0
+        let f1 = 0
+        let f2 = 0
+        for (let t = 0; t < n.length; t++) {
+            n[t].mark = 0
+            if (n[t].turned == 1) {
+                f1=1
+                wet = 0
+            }
+            if (n[t].turned == -1) {
+                f2=1
+                wet = 0
+            }
+        }
+        //console.log(n)
+        if (wet == 0) {
+            for (let t = 0; t < n.length; t++) {
+                if(f1 == 1 && f2 == 0){
+                    if(n[t].turned == 0){
+                    n[t].mark = 1
+                    boole = true
+                    }
+                }
+                if(f2 == 1 && f1 == 0){
+                    if(n[t].turned == 0){
+
+                        n[t].mark = -1
+                    boole = true
+                    }
+                }
+            }
+        }
+        return boole
+    }
+
+
     neighbors(node) {
         if (node.turned == 0) {
             return []
         }
-        //console.log(node.x, node.y)
+        ////console.log(node.x, node.y)
         var ret = [];
-        var x = node.k+2;
-        var y = node.t+2;
-        var z = node.e+2;
+        var x = node.k+3;
+        var y = node.t+3;
+        var z = node.e+3;
         var grid = this.supa;
         
         this.diagonal = false
@@ -2787,10 +2977,64 @@
                 ret.push(grid[x][y][z+1]);
             }
         }
-        // //console.log(node, grid)
+        // ////console.log(node, grid)
         return ret;
     }
-        spin1(){
+     
+    
+    
+    badneighbors(node) {
+        if (node.turned != 0) {
+            return []
+        }
+        ////console.log(node.x, node.y)
+        var ret = [];
+        var x = node.k+3;
+        var y = node.t+3;
+        var z = node.e+3;
+        var grid = this.supa;
+        
+        this.diagonal = false
+        // West)
+        if (grid[x - 1] && grid[x - 1][y] &&  grid[x - 1][y][z]) {
+            if (grid[x - 1][y][z].turned != node.turned || grid[x - 1][y][z].turned == 0) {
+                ret.push(grid[x - 1][y][z]);
+            }
+        }
+
+        if (grid[x+1] && grid[x+1][y] &&  grid[x+1][y][z]) {
+            if (grid[x+1][y][z].turned != node.turned || grid[x+1][y][z].turned == 0) {
+                ret.push(grid[x+1][y][z]);
+            }
+        }
+        if (grid[x] && grid[x][y-1] &&  grid[x][y-1][z]) {
+            if (grid[x][y-1][z].turned != node.turned || grid[x][y-1][z].turned == 0) {
+                ret.push(grid[x][y-1][z]);
+            }
+        }
+        if (grid[x] && grid[x][y+1] &&  grid[x][y+1][z]) {
+            if (grid[x][y+1][z].turned != node.turned || grid[x][y+1][z].turned == 0) {
+                ret.push(grid[x][y+1][z]);
+            }
+        }
+        if (grid[x] && grid[x][y] &&  grid[x][y][z-1]) {
+            if (grid[x][y][z-1].turned != node.turned || grid[x][y][z-1].turned == 0) {
+                ret.push(grid[x][y][z-1]);
+            }
+        }
+        if (grid[x] && grid[x][y] &&  grid[x][y][z+1]) {
+            if (grid[x][y][z+1].turned != node.turned || grid[x][y][z+1].turned == 0) {
+                ret.push(grid[x][y][z+1]);
+            }
+        }
+        // ////console.log(node, grid)
+        return ret;
+    }
+    
+    
+    
+    
+    spin1(){
             
 
             this.rotateZ(-Math.PI/16)
@@ -2802,7 +3046,7 @@
         export2() {
             let out = ''
 
-            for (let t = 0; t < 125; t++) {
+            for (let t = 0; t < (6*6*6); t++) {
                 if (this.dots[t].marked != 0) {
 
                     out += this.dots[t].turned.valueOf()
@@ -2814,7 +3058,7 @@
             return out
         }
         clean() {
-            for (let t = 0; t < 125; t++) {
+            for (let t = 0; t < (6*6*6); t++) {
                 this.dots[t].turned = 0
                 this.dots[t].marked = 0
                 this.dots[t].r = 128
@@ -2826,7 +3070,7 @@
         }
         export() {
             let out = []
-            for (let t = 0; t < 125; t++) {
+            for (let t = 0; t < (6*6*6); t++) {
                 if (this.dots[t].turned == 1) {
                     out.push(new Data(1))
                 } else if (this.dots[t].turned == -1) {
@@ -3099,8 +3343,37 @@
                     canvas_context.font = "30px arial"
                     canvas_context.fillStyle = "white"
                     canvas_context.fillText("<-- Online light, if it stops flashing you have no opponent.", 60, 30)
+                    let c1 = 0
+                    let c2 = 0
+                    let f1 =0
+                    let f2 =0
+                    for(let t =0;t<b.board.dots.length;t++){
+                        if(b.board.dots[t].mark == 1 ||b.board.dots[t].turned == 1){
+                            c1++
+                        }
+                        if(b.board.dots[t].mark == -1||b.board.dots[t].turned == -1){
+                            c2++
+                        }
+                        if(b.board.dots[t].turned == -1){
+                            f1= 1
+                        }
+                        if(b.board.dots[t].turned == 1){
+                            f2++
+                        }
+                    }
+                    if(c1==216 && f2==1){c1=1}
+                    canvas_context.fillText(c1, 800, 200)
+                    canvas_context.fillStyle = "black"
+                    canvas_context.fillText(c2, 800, 250)
                     if(b.cald == 1){
-                        canvas_context.fillText("Your turn!", 60, 60)
+                        if(playerID== -1 || playerID == b.board.turn){
+                            if(b.board.turn == 1){
+                                canvas_context.fillStyle = "black"
+                            }else{
+                                canvas_context.fillStyle = "white"
+                            }
+                            canvas_context.fillText("Your turn!", 60, 60)
+                        }
                     }
                 }
             }
@@ -3138,17 +3411,17 @@
             }
             if(playerID == b.board.turn || playerID == -1){
                 let i = b.check(TIP_engine)
-                console.log(i)
-                if(playerID == -1 && i[0] != -3){
+                //console.log(i)
+                if(playerID == -1 && i[0] != -10){
                     playerID = Math.abs(b.board.turn-1) //b.board.turn
                 }
-                console.log(i)
-                if(i[0] != -3){
+                //console.log(i)
+                if(i[0] != -10){
                     b.cald = 0
             let pson = {}
-            pson.te = i[0]+2
-            pson.ke = i[1]+2
-            pson.ee = i[2]+2
+            pson.te = i[0]+3
+            pson.ke = i[1]+3
+            pson.ee = i[2]+3
             pson.tile = i[3]
             pson.id = Math.abs(playerID-1)
             pson.guy = 1
@@ -3222,7 +3495,7 @@
         //         //     start  = 1
         //         //     pair[1] = 13
         //         // }
-        //         ///////console.log(pair[0])
+        //         /////////console.log(pair[0])
         //         // let pair = p.minimax(3, p.right)
 
         //         if (pair[1] != -1) {
@@ -3294,7 +3567,7 @@
         // ind++
         // ind%=data.length
         // if(keysPressed[' ']){
-        //     ///////////console.log(globlin.outputs, ind)
+        //     /////////////console.log(globlin.outputs, ind)
 
         // }
         // globlin.log()
@@ -3321,7 +3594,7 @@
         if (isNaN(y)) {
             y = (line1.target.y + line1.object.y) / 2
         }
-        console.log({ x, y })
+        //console.log({ x, y })
         return { x, y };
     }
 
@@ -3340,24 +3613,24 @@
     let newboard = 0
     function Socketize(ws) {
 
-        // console.log("0hit")
+        // //console.log("0hit")
 
-        // console.log("hit")
+        // //console.log("hit")
         ws.addEventListener("message", ({
             data
         }) => {
 
-            // console.log(data)
+            // //console.log(data)
             if (JSON.parse(data).faction) {
                 // playerID = Math.abs(JSON.parse(data).faction)
-                // console.log(playerID)
+                // //console.log(playerID)
             } else if ( JSON.parse(data).tile > -1) {
                 //   b.teams[JSON.parse(data).id].crew[JSON.parse(data).guy].tile = JSON.parse(data).tile
                 let tile = JSON.parse(data).tile
                 let te = JSON.parse(data).te
                 let ke = JSON.parse(data).ke
                 let ee = JSON.parse(data).ee
-                console.log(tile)
+                //console.log(tile)
                 let t = new Point(b.board.supa[ke][te][ee].sx, b.board.supa[ke][te][ee].sy)
             
                 b.check(t, tile, te, ke, ee)
@@ -3369,7 +3642,7 @@
                 b.cald = 1
 
             } else {
-                // console.log(JSON.parse(data))
+                // //console.log(JSON.parse(data))
                 if (JSON.parse(data).roomlist) {
                     roomslist = JSON.parse(data).roomlist
                 } else {
