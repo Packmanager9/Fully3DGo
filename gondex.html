@@ -3642,13 +3642,16 @@
 if (!b.isGameOver()) {
 
     let depth = 3
-    if(fr.length < 180){
+    if(fr.length < 200){
         depth++
     }
-    if(fr.length < 100){
+    if(fr.length < 120){
         depth++
     }
-    if(fr.length < 50){
+    if(fr.length < 60){
+        depth++
+    }
+    if(fr.length < 20){
         depth++
     }
     let pair = b.minimax(2, true, (b.board.turn - .5) * 2)
