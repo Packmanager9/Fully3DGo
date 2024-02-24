@@ -1057,13 +1057,15 @@
             } else {
 
                 // //console.log("h")
-                canvas_context.strokeStyle = "white"
+                canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.strokeStyle = `rgb(${this.r+35},${this.g+35},${this.b+35})`
                 canvas_context.strokeRect(this.sx - 3, this.sy - 3, 6, 6)
                 canvas_context.beginPath();
                 canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, 10, 0, (Math.PI * 2), true)
                 canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
                 canvas_context.lineWidth = 2
+                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.strokeRect(this.sx - 2, this.sy - 2, 4, 4)
             }
 
@@ -1098,7 +1100,7 @@
             
             this.board.spin2()
         }
-        check(point, tile = -1) {
+        check(point, tile = -1, top= -1, kop= -1, eep = -1) {
 
             let box = []
                     for(let t1 = 0;t1<125;t1++){
@@ -1111,18 +1113,92 @@
                     //         }
                     //     }
                     }
-            let i = -1
+            let i = -3
+            let t = -3
+            let ke = -3
+            let e = -3
             let flagger = []
             for (let k = 0; k < 125; k++) {
 
                 // ///////////console.log(this.board.dots[k])
-                if (this.board.dots[k].isPointInside(point)) {
+                if(top != -1){
+                    if (this.board.supa[kop][top][eep].isPointInside(point)) {
+                    if (this.board.supa[kop][top][eep].marked != 1) {
+                        this.board.supa[kop][top][eep].marked = 1
+                        this.board.supa[kop][top][eep].turned = 0
+                        this.board.supa[kop][top][eep].value = .5
+                        if (this.board.turn == 0) {
+                            this.board.supa[kop][top][eep].turned = 1
+                            this.board.supa[kop][top][eep].type = 1
+                            this.board.supa[kop][top][eep].value = 1
+                            this.board.supa[kop][top][eep].r = 255
+                            this.board.supa[kop][top][eep].g = 255
+                            this.board.supa[kop][top][eep].b = 255
+                            flagger = [this.board.supa[kop][top][eep].t, this.board.supa[kop][top][eep].k, this.board.supa[kop][top][eep].e]
+                            if (this.strings.includes(this.export())) {
+                                flagger = []
+                                this.board.supa[kop][top][eep].turned = 0
+                                this.board.supa[kop][top][eep].type = 0
+                                this.board.supa[kop][top][eep].value = .5
+                                this.board.supa[kop][top][eep].r = 128
+                                this.board.supa[kop][top][eep].g = 128
+                                this.board.supa[kop][top][eep].b = 128
+                                // this.board.turn++
+                                // this.board.turn %= 2
+                                console.log(this.board.turn)
+                                this.board.supa[kop][top][eep].marked = 0
+                                console.log(this.board.supa[kop][top][eep], this.board.turn)
+                                i = -1
+                            } else {
+                                this.strings.push(this.export())
+                                this.board.turn++
+                                this.board.turn %= 2
 
-                    if(tile != -1){
-                        k = tile
+                                console.log(this.board.turn)
+                            }
+                        } else if (this.board.turn == 1) {
+                            this.board.supa[kop][top][eep].turned = -1
+                            this.board.supa[kop][top][eep].type = -1
+                            this.board.supa[kop][top][eep].value = 0
+                            this.board.supa[kop][top][eep].r = 0
+                            this.board.supa[kop][top][eep].g = 0
+                            this.board.supa[kop][top][eep].b = 0
+                            flagger = [this.board.supa[kop][top][eep].t, this.board.supa[kop][top][eep].k, this.board.supa[kop][top][eep].e]
+                            if (this.strings.includes(this.export())) {
+                                flagger = []
+                                this.board.supa[kop][top][eep].turned = 0
+                                this.board.supa[kop][top][eep].type = 0
+                                this.board.supa[kop][top][eep].value = .5
+                                this.board.supa[kop][top][eep].r = 128
+                                this.board.supa[kop][top][eep].g = 128
+                                this.board.supa[kop][top][eep].b = 128
+                                // this.board.turn++
+                                // this.board.turn %= 2
+                                console.log(this.board.turn)
+                                this.board.supa[kop][top][eep].marked = 0
+                                console.log(this.board.supa[kop][top][eep], this.board.turn)
+                                i = -1
+                            } else {
+                                this.strings.push(this.export())
+                                this.board.turn++
+                                this.board.turn %= 2
+
+                                console.log(this.board.turn)
+                            }
+                        }
+                        ///////////console.log("h")
+                        clicked = 1
+                        this.board.wholeSort()
+                        i = k
+                        t = this.board.supa[kop][top][eep].t
+                        ke = this.board.supa[kop][top][eep].k
+                        e = this.board.supa[kop][top][eep].e
+                        break
                     }
-                    i = k
-                    //console.log(this.board.dots[k])
+
+                }
+                }else{
+                    if (this.board.dots[k].isPointInside(point)) {
                     if (this.board.dots[k].marked != 1) {
                         this.board.dots[k].marked = 1
                         this.board.dots[k].turned = 0
@@ -1188,334 +1264,424 @@
                         }
                         ///////////console.log("h")
                         clicked = 1
+                        this.board.wholeSort()
+                        i = k
+                        t = this.board.dots[k].t
+                        ke = this.board.dots[k].k
+                        e = this.board.dots[k].e
                         break
                     }
+
                 }
+                }
+                
+
             }
-            // }else{
-            //     if(restart.isPointInside(TIP_engine)){
-            //         p = new Pairs()
-            //         mod = -1
-            //         clicked = 1
-            //         // start = 0
+
+            return [t,ke,e, i]
+            // for (let k = 0; k < 0; k++) {
+
+            // for (let k = 0; k < 0; k++) {
+                
+
+            //         if(tile != -1){
+            //             k = tile
+            //         }
+            //         i = k
+            //         //console.log(this.board.dots[k])
+            //         if (this.board.dots[k].marked != 1) {
+            //             this.board.dots[k].marked = 1
+            //             this.board.dots[k].turned = 0
+            //             this.board.dots[k].value = .5
+            //             if (this.board.turn == 0) {
+            //                 this.board.dots[k].turned = 1
+            //                 this.board.dots[k].type = 1
+            //                 this.board.dots[k].value = 1
+            //                 this.board.dots[k].r = 255
+            //                 this.board.dots[k].g = 255
+            //                 this.board.dots[k].b = 255
+            //                 flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
+            //                 if (this.strings.includes(this.export())) {
+            //                     flagger = []
+            //                     this.board.dots[k].turned = 0
+            //                     this.board.dots[k].type = 0
+            //                     this.board.dots[k].value = .5
+            //                     this.board.dots[k].r = 128
+            //                     this.board.dots[k].g = 128
+            //                     this.board.dots[k].b = 128
+            //                     // this.board.turn++
+            //                     // this.board.turn %= 2
+            //                     console.log(this.board.turn)
+            //                     this.board.dots[k].marked = 0
+            //                     console.log(this.board.dots[k], this.board.turn)
+            //                     i = -1
+            //                 } else {
+            //                     this.strings.push(this.export())
+            //                     this.board.turn++
+            //                     this.board.turn %= 2
+
+            //                     console.log(this.board.turn)
+            //                 }
+            //             } else if (this.board.turn == 1) {
+            //                 this.board.dots[k].turned = -1
+            //                 this.board.dots[k].type = -1
+            //                 this.board.dots[k].value = 0
+            //                 this.board.dots[k].r = 0
+            //                 this.board.dots[k].g = 0
+            //                 this.board.dots[k].b = 0
+            //                 flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
+            //                 if (this.strings.includes(this.export())) {
+            //                     flagger = []
+            //                     this.board.dots[k].turned = 0
+            //                     this.board.dots[k].type = 0
+            //                     this.board.dots[k].value = .5
+            //                     this.board.dots[k].r = 128
+            //                     this.board.dots[k].g = 128
+            //                     this.board.dots[k].b = 128
+            //                     // this.board.turn++
+            //                     // this.board.turn %= 2
+            //                     console.log(this.board.turn)
+            //                     this.board.dots[k].marked = 0
+            //                     console.log(this.board.dots[k], this.board.turn)
+            //                     i = -1
+            //                 } else {
+            //                     this.strings.push(this.export())
+            //                     this.board.turn++
+            //                     this.board.turn %= 2
+
+            //                     console.log(this.board.turn)
+            //                 }
+            //             }
+            //             ///////////console.log("h")
+            //             clicked = 1
+            //             break
+            //         }
             //     }
             // }
-            /////console.log(this.board)
+            // // }else{
+            // //     if(restart.isPointInside(TIP_engine)){
+            // //         p = new Pairs()
+            // //         mod = -1
+            // //         clicked = 1
+            // //         // start = 0
+            // //     }
+            // // }
+            // /////console.log(this.board)
 
 
 
 
-            let board1 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
-            let board2 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
-            let board3 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
-            let board4 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
-            let board5 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
-            let board6 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            // let board1 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            // let board2 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            // let board3 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            // let board4 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            // let board5 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
+            // let board6 = [[[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]], [[new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)], [new Data(.5), new Data(.5), new Data(.5), new Data(.5), new Data(.5)]]]
 
 
-            let flag = 0
+            // let flag = 0
 
-            for (let k = 0; k < this.board.dots.length; k++) {
-                let a = this.board.dots[k].t + 2
-                let b = this.board.dots[k].e + 2
-                let c = this.board.dots[k].k + 2
-                board1[a][b][c].value = this.board.dots[k].value
-                board1[a][b][c].t = this.board.dots[k].t
-                board1[a][b][c].k = this.board.dots[k].k
-                board1[a][b][c].e = this.board.dots[k].e
-                board1[a][b][c].turned = this.board.dots[k].turned
-                board1[a][b][c].type = this.board.dots[k].turned
-                board2[b][c][a].value = this.board.dots[k].value
-                board2[b][c][a].t = this.board.dots[k].t
-                board2[b][c][a].k = this.board.dots[k].k
-                board2[b][c][a].e = this.board.dots[k].e
-                board2[b][c][a].turned = this.board.dots[k].turned
-                board2[b][c][a].type = this.board.dots[k].turned
-                board3[c][a][b].value = this.board.dots[k].value
-                board3[c][a][b].t = this.board.dots[k].t
-                board3[c][a][b].k = this.board.dots[k].k
-                board3[c][a][b].e = this.board.dots[k].e
-                board3[c][a][b].turned = this.board.dots[k].turned
-                board3[c][a][b].type = this.board.dots[k].turned
+            // for (let k = 0; k < this.board.dots.length; k++) {
+            //     let a = this.board.dots[k].t + 2
+            //     let b = this.board.dots[k].e + 2
+            //     let c = this.board.dots[k].k + 2
+            //     board1[a][b][c].value = this.board.dots[k].value
+            //     board1[a][b][c].t = this.board.dots[k].t
+            //     board1[a][b][c].k = this.board.dots[k].k
+            //     board1[a][b][c].e = this.board.dots[k].e
+            //     board1[a][b][c].turned = this.board.dots[k].turned
+            //     board1[a][b][c].type = this.board.dots[k].turned
+            //     board2[b][c][a].value = this.board.dots[k].value
+            //     board2[b][c][a].t = this.board.dots[k].t
+            //     board2[b][c][a].k = this.board.dots[k].k
+            //     board2[b][c][a].e = this.board.dots[k].e
+            //     board2[b][c][a].turned = this.board.dots[k].turned
+            //     board2[b][c][a].type = this.board.dots[k].turned
+            //     board3[c][a][b].value = this.board.dots[k].value
+            //     board3[c][a][b].t = this.board.dots[k].t
+            //     board3[c][a][b].k = this.board.dots[k].k
+            //     board3[c][a][b].e = this.board.dots[k].e
+            //     board3[c][a][b].turned = this.board.dots[k].turned
+            //     board3[c][a][b].type = this.board.dots[k].turned
 
 
                 
-                board4[a][c][b].value = this.board.dots[k].value
-                board4[a][c][b].t = this.board.dots[k].t
-                board4[a][c][b].k = this.board.dots[k].k
-                board4[a][c][b].e = this.board.dots[k].e
-                board4[a][c][b].turned = this.board.dots[k].turned
-                board4[a][c][b].type = this.board.dots[k].turned
-                board5[b][a][c].value = this.board.dots[k].value
-                board5[b][a][c].t = this.board.dots[k].t
-                board5[b][a][c].k = this.board.dots[k].k
-                board5[b][a][c].e = this.board.dots[k].e
-                board5[b][a][c].turned = this.board.dots[k].turned
-                board5[b][a][c].type = this.board.dots[k].turned
-                board6[c][b][a].value = this.board.dots[k].value
-                board6[c][b][a].t = this.board.dots[k].t
-                board6[c][b][a].k = this.board.dots[k].k
-                board6[c][b][a].e = this.board.dots[k].e
-                board6[c][b][a].turned = this.board.dots[k].turned
-                board6[c][b][a].type = this.board.dots[k].turned
-            }
+            //     board4[a][c][b].value = this.board.dots[k].value
+            //     board4[a][c][b].t = this.board.dots[k].t
+            //     board4[a][c][b].k = this.board.dots[k].k
+            //     board4[a][c][b].e = this.board.dots[k].e
+            //     board4[a][c][b].turned = this.board.dots[k].turned
+            //     board4[a][c][b].type = this.board.dots[k].turned
+            //     board5[b][a][c].value = this.board.dots[k].value
+            //     board5[b][a][c].t = this.board.dots[k].t
+            //     board5[b][a][c].k = this.board.dots[k].k
+            //     board5[b][a][c].e = this.board.dots[k].e
+            //     board5[b][a][c].turned = this.board.dots[k].turned
+            //     board5[b][a][c].type = this.board.dots[k].turned
+            //     board6[c][b][a].value = this.board.dots[k].value
+            //     board6[c][b][a].t = this.board.dots[k].t
+            //     board6[c][b][a].k = this.board.dots[k].k
+            //     board6[c][b][a].e = this.board.dots[k].e
+            //     board6[c][b][a].turned = this.board.dots[k].turned
+            //     board6[c][b][a].type = this.board.dots[k].turned
+            // }
 
-            let boo = 0
+            // let boo = 0
 
 
-            let f = [board1, board2, board3]
+            // let f = [board1, board2, board3]
 
-            for (let k = 0; k < f.length; k++) {
-                for (let t = 0; t < f[k].length; t++) {
-                    let goBoard1 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard2 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard3 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard4 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard5 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    goBoard1.turn = this.board.turn
-                    goBoard2.turn = this.board.turn
-                    goBoard3.turn = this.board.turn
-                    goBoard4.turn = this.board.turn
-                    goBoard5.turn = this.board.turn
-                    goBoard1.wholeSort()
-                    goBoard2.wholeSort()
-                    goBoard3.wholeSort()
-                    goBoard4.wholeSort()
-                    goBoard5.wholeSort()
+            // for (let k = 0; k < f.length; k++) {
+            //     for (let t = 0; t < f[k].length; t++) {
+            //         let goBoard1 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard2 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard3 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard4 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard5 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         goBoard1.turn = this.board.turn
+            //         goBoard2.turn = this.board.turn
+            //         goBoard3.turn = this.board.turn
+            //         goBoard4.turn = this.board.turn
+            //         goBoard5.turn = this.board.turn
+            //         goBoard1.wholeSort()
+            //         goBoard2.wholeSort()
+            //         goBoard3.wholeSort()
+            //         goBoard4.wholeSort()
+            //         goBoard5.wholeSort()
                   
 
-                    goBoard1.turn = (this.board.turn + 1) % 2
-                    goBoard2.turn = (this.board.turn + 1) % 2
-                    goBoard3.turn = (this.board.turn + 1) % 2
-                    goBoard4.turn = (this.board.turn + 1) % 2
-                    goBoard5.turn = (this.board.turn + 1) % 2
+            //         goBoard1.turn = (this.board.turn + 1) % 2
+            //         goBoard2.turn = (this.board.turn + 1) % 2
+            //         goBoard3.turn = (this.board.turn + 1) % 2
+            //         goBoard4.turn = (this.board.turn + 1) % 2
+            //         goBoard5.turn = (this.board.turn + 1) % 2
 
-                    goBoard1.wholeSort()
-                    goBoard2.wholeSort()
-                    goBoard3.wholeSort()
-                    goBoard4.wholeSort()
-                    goBoard5.wholeSort()
+            //         goBoard1.wholeSort()
+            //         goBoard2.wholeSort()
+            //         goBoard3.wholeSort()
+            //         goBoard4.wholeSort()
+            //         goBoard5.wholeSort()
                   
 
-                    /////console.log(goBoard1)
+            //         /////console.log(goBoard1)
          
-                    let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
-                    for (let r = 0; r < arr.length; r++) {
-                        for (let w = 0; w < arr[r].board.length; w++) {
-                            for (let m = 0; m < arr[r].board[w].length; m++) {
-                                let ot = ((arr[r].board[w][m].k + 2)) * 25
-                                ot += ((arr[r].board[w][m].t + 2)) * 5
-                                ot += ((arr[r].board[w][m].e + 2))
-                                box[ot] += Math.abs(arr[r].board[w][m].type)
-                                // console.log(arr[r].board[w][m].type)
+            //         let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
+            //         for (let r = 0; r < arr.length; r++) {
+            //             for (let w = 0; w < arr[r].board.length; w++) {
+            //                 for (let m = 0; m < arr[r].board[w].length; m++) {
+            //                     let ot = ((arr[r].board[w][m].k + 2)) * 25
+            //                     ot += ((arr[r].board[w][m].t + 2)) * 5
+            //                     ot += ((arr[r].board[w][m].e + 2))
+            //                     box[ot] += Math.abs(arr[r].board[w][m].type)
+            //                     // console.log(arr[r].board[w][m].type)
 
-                                // if (this.board.dots[ot].turned != 0 && (arr[r].board[w][m].type) == 0) {
-                                //     // this.board.dots[ot].turned = (arr[r].board[w][m].type)
-                                //     // this.board.dots[ot].marked = 0
-                                //     // this.board.dots[ot].value = .5
-                                //     let flaggerz = [this.board.dots[ot].t, this.board.dots[ot].k, this.board.dots[ot].e]
-                                //     if (flaggerz[0] == flagger[0]) {
-                                //         if (flaggerz[1] == flagger[1]) {
-                                //             if (flaggerz[2] == flagger[2]) {
-                                //                 if (this.board.turn == 0) {
-                                //                     flag = 1
-                                //                 } else {
-                                //                     flag = -1
-                                //                 }
-                                //             }
-                                //         }
-                                //     }
-                                // }
-                            }
-                        }
-                    } 
-                    console.log(box)
-                }
-            }
+            //                     // if (this.board.dots[ot].turned != 0 && (arr[r].board[w][m].type) == 0) {
+            //                     //     // this.board.dots[ot].turned = (arr[r].board[w][m].type)
+            //                     //     // this.board.dots[ot].marked = 0
+            //                     //     // this.board.dots[ot].value = .5
+            //                     //     let flaggerz = [this.board.dots[ot].t, this.board.dots[ot].k, this.board.dots[ot].e]
+            //                     //     if (flaggerz[0] == flagger[0]) {
+            //                     //         if (flaggerz[1] == flagger[1]) {
+            //                     //             if (flaggerz[2] == flagger[2]) {
+            //                     //                 if (this.board.turn == 0) {
+            //                     //                     flag = 1
+            //                     //                 } else {
+            //                     //                     flag = -1
+            //                     //                 }
+            //                     //             }
+            //                     //         }
+            //                     //     }
+            //                     // }
+            //                 }
+            //             }
+            //         } 
+            //         console.log(box)
+            //     }
+            // }
 
-            for (let k = 0; k < f.length; k++) {
-                for (let t = 0; t < f[k].length; t++) {
-                    let goBoard1 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard2 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard3 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard4 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard5 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    goBoard1.turn = this.board.turn
-                    goBoard2.turn = this.board.turn
-                    goBoard3.turn = this.board.turn
-                    goBoard4.turn = this.board.turn
-                    goBoard5.turn = this.board.turn
-                    goBoard1.wholeSort()
-                    goBoard2.wholeSort()
-                    goBoard3.wholeSort()
-                    goBoard4.wholeSort()
-                    goBoard5.wholeSort()
+            // for (let k = 0; k < f.length; k++) {
+            //     for (let t = 0; t < f[k].length; t++) {
+            //         let goBoard1 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard2 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard3 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard4 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard5 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         goBoard1.turn = this.board.turn
+            //         goBoard2.turn = this.board.turn
+            //         goBoard3.turn = this.board.turn
+            //         goBoard4.turn = this.board.turn
+            //         goBoard5.turn = this.board.turn
+            //         goBoard1.wholeSort()
+            //         goBoard2.wholeSort()
+            //         goBoard3.wholeSort()
+            //         goBoard4.wholeSort()
+            //         goBoard5.wholeSort()
                   
 
-                    goBoard1.turn = (this.board.turn + 1) % 2
-                    goBoard2.turn = (this.board.turn + 1) % 2
-                    goBoard3.turn = (this.board.turn + 1) % 2
-                    goBoard4.turn = (this.board.turn + 1) % 2
-                    goBoard5.turn = (this.board.turn + 1) % 2
+            //         goBoard1.turn = (this.board.turn + 1) % 2
+            //         goBoard2.turn = (this.board.turn + 1) % 2
+            //         goBoard3.turn = (this.board.turn + 1) % 2
+            //         goBoard4.turn = (this.board.turn + 1) % 2
+            //         goBoard5.turn = (this.board.turn + 1) % 2
 
-                    goBoard1.wholeSort()
-                    goBoard2.wholeSort()
-                    goBoard3.wholeSort()
-                    goBoard4.wholeSort()
-                    goBoard5.wholeSort()
+            //         goBoard1.wholeSort()
+            //         goBoard2.wholeSort()
+            //         goBoard3.wholeSort()
+            //         goBoard4.wholeSort()
+            //         goBoard5.wholeSort()
                   
 
          
-                    let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
+            //         let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
 
-                    for (let r = 0; r < arr.length; r++) {
-                        for (let w = 0; w < arr[r].board.length; w++) {
-                            for (let m = 0; m < arr[r].board[w].length; m++) {
-                                let ot = ((arr[r].board[w][m].k + 2)) * 25
-                                ot += ((arr[r].board[w][m].t + 2)) * 5
-                                ot += ((arr[r].board[w][m].e + 2))
+            //         for (let r = 0; r < arr.length; r++) {
+            //             for (let w = 0; w < arr[r].board.length; w++) {
+            //                 for (let m = 0; m < arr[r].board[w].length; m++) {
+            //                     let ot = ((arr[r].board[w][m].k + 2)) * 25
+            //                     ot += ((arr[r].board[w][m].t + 2)) * 5
+            //                     ot += ((arr[r].board[w][m].e + 2))
                                 
 
 
-                                if (this.board.dots[ot].turned != 0 && box[ot] == 0) {
-                                    // this.board.dots[ot].turned = (arr[r].board[w][m].type)
-                                    // this.board.dots[ot].marked = 0
-                                    // this.board.dots[ot].value = .5
-                                    let flaggerz = [this.board.dots[ot].t, this.board.dots[ot].k, this.board.dots[ot].e]
-                                    if (flaggerz[0] == flagger[0]) {
-                                        if (flaggerz[1] == flagger[1]) {
-                                            if (flaggerz[2] == flagger[2]) {
-                                                if (this.board.turn == 0) {
-                                                    flag = 1
-                                                } else {
-                                                    flag = -1
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } 
+            //                     if (this.board.dots[ot].turned != 0 && box[ot] == 0) {
+            //                         // this.board.dots[ot].turned = (arr[r].board[w][m].type)
+            //                         // this.board.dots[ot].marked = 0
+            //                         // this.board.dots[ot].value = .5
+            //                         let flaggerz = [this.board.dots[ot].t, this.board.dots[ot].k, this.board.dots[ot].e]
+            //                         if (flaggerz[0] == flagger[0]) {
+            //                             if (flaggerz[1] == flagger[1]) {
+            //                                 if (flaggerz[2] == flagger[2]) {
+            //                                     if (this.board.turn == 0) {
+            //                                         flag = 1
+            //                                     } else {
+            //                                         flag = -1
+            //                                     }
+            //                                 }
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         } 
                     
                     
-                    for (let r = 0; r < arr.length; r++) {
-                        for (let w = 0; w < arr[r].board.length; w++) {
-                            for (let m = 0; m < arr[r].board[w].length; m++) {
-                                let ot = ((arr[r].board[w][m].k + 2)) * 25
-                                ot += ((arr[r].board[w][m].t + 2)) * 5
-                                ot += ((arr[r].board[w][m].e + 2))
-                                if (this.board.dots[ot].turned != flag && (arr[r].board[w][m].type) == 0&& box[ot] == 0) {
-                                    // if(flag != 1){
-                                    this.board.dots[ot].turned = (arr[r].board[w][m].type)
-                                    this.board.dots[ot].marked = 0
-                                    this.board.dots[ot].value = .5
-                                    // }
-                                    let flaggerz = [this.board.dots[ot].t, this.board.dots[ot].k, this.board.dots[ot].e]
-                                    // if (flaggerz[0] == flagger[0]) {
-                                    //     if (flaggerz[1] == flagger[1]) {
-                                    //         if (flaggerz[2] == flagger[2]) {
-                                    //             flag = 1
-                                    //         }
-                                    //     }
-                                    // }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //         for (let r = 0; r < arr.length; r++) {
+            //             for (let w = 0; w < arr[r].board.length; w++) {
+            //                 for (let m = 0; m < arr[r].board[w].length; m++) {
+            //                     let ot = ((arr[r].board[w][m].k + 2)) * 25
+            //                     ot += ((arr[r].board[w][m].t + 2)) * 5
+            //                     ot += ((arr[r].board[w][m].e + 2))
+            //                     if (this.board.dots[ot].turned != flag && (arr[r].board[w][m].type) == 0&& box[ot] == 0) {
+            //                         // if(flag != 1){
+            //                         this.board.dots[ot].turned = (arr[r].board[w][m].type)
+            //                         this.board.dots[ot].marked = 0
+            //                         this.board.dots[ot].value = .5
+            //                         // }
+            //                         let flaggerz = [this.board.dots[ot].t, this.board.dots[ot].k, this.board.dots[ot].e]
+            //                         // if (flaggerz[0] == flagger[0]) {
+            //                         //     if (flaggerz[1] == flagger[1]) {
+            //                         //         if (flaggerz[2] == flagger[2]) {
+            //                         //             flag = 1
+            //                         //         }
+            //                         //     }
+            //                         // }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
 
 
-            for (let k = 0; k < this.board.dots.length; k++) {
-                let a = this.board.dots[k].t + 2
-                let b = this.board.dots[k].e + 2
-                let c = this.board.dots[k].k + 2
-                board1[a][b][c].value = this.board.dots[k].value
-                board1[a][b][c].t = this.board.dots[k].t
-                board1[a][b][c].k = this.board.dots[k].k
-                board1[a][b][c].e = this.board.dots[k].e
-                board1[a][b][c].turned = this.board.dots[k].turned
-                board1[a][b][c].type = this.board.dots[k].turned
-                board2[b][c][a].value = this.board.dots[k].value
-                board2[b][c][a].t = this.board.dots[k].t
-                board2[b][c][a].k = this.board.dots[k].k
-                board2[b][c][a].e = this.board.dots[k].e
-                board2[b][c][a].turned = this.board.dots[k].turned
-                board2[b][c][a].type = this.board.dots[k].turned
-                board3[c][a][b].value = this.board.dots[k].value
-                board3[c][a][b].t = this.board.dots[k].t
-                board3[c][a][b].k = this.board.dots[k].k
-                board3[c][a][b].e = this.board.dots[k].e
-                board3[c][a][b].turned = this.board.dots[k].turned
-                board3[c][a][b].type = this.board.dots[k].turned
-                board4[a][c][b].value = this.board.dots[k].value
-                board4[a][c][b].t = this.board.dots[k].t
-                board4[a][c][b].k = this.board.dots[k].k
-                board4[a][c][b].e = this.board.dots[k].e
-                board4[a][c][b].turned = this.board.dots[k].turned
-                board4[a][c][b].type = this.board.dots[k].turned
-                board5[b][a][c].value = this.board.dots[k].value
-                board5[b][a][c].t = this.board.dots[k].t
-                board5[b][a][c].k = this.board.dots[k].k
-                board5[b][a][c].e = this.board.dots[k].e
-                board5[b][a][c].turned = this.board.dots[k].turned
-                board5[b][a][c].type = this.board.dots[k].turned
-                board6[c][b][a].value = this.board.dots[k].value
-                board6[c][b][a].t = this.board.dots[k].t
-                board6[c][b][a].k = this.board.dots[k].k
-                board6[c][b][a].e = this.board.dots[k].e
-                board6[c][b][a].turned = this.board.dots[k].turned
-                board6[c][b][a].type = this.board.dots[k].turned
-            }
+            // for (let k = 0; k < this.board.dots.length; k++) {
+            //     let a = this.board.dots[k].t + 2
+            //     let b = this.board.dots[k].e + 2
+            //     let c = this.board.dots[k].k + 2
+            //     board1[a][b][c].value = this.board.dots[k].value
+            //     board1[a][b][c].t = this.board.dots[k].t
+            //     board1[a][b][c].k = this.board.dots[k].k
+            //     board1[a][b][c].e = this.board.dots[k].e
+            //     board1[a][b][c].turned = this.board.dots[k].turned
+            //     board1[a][b][c].type = this.board.dots[k].turned
+            //     board2[b][c][a].value = this.board.dots[k].value
+            //     board2[b][c][a].t = this.board.dots[k].t
+            //     board2[b][c][a].k = this.board.dots[k].k
+            //     board2[b][c][a].e = this.board.dots[k].e
+            //     board2[b][c][a].turned = this.board.dots[k].turned
+            //     board2[b][c][a].type = this.board.dots[k].turned
+            //     board3[c][a][b].value = this.board.dots[k].value
+            //     board3[c][a][b].t = this.board.dots[k].t
+            //     board3[c][a][b].k = this.board.dots[k].k
+            //     board3[c][a][b].e = this.board.dots[k].e
+            //     board3[c][a][b].turned = this.board.dots[k].turned
+            //     board3[c][a][b].type = this.board.dots[k].turned
+            //     board4[a][c][b].value = this.board.dots[k].value
+            //     board4[a][c][b].t = this.board.dots[k].t
+            //     board4[a][c][b].k = this.board.dots[k].k
+            //     board4[a][c][b].e = this.board.dots[k].e
+            //     board4[a][c][b].turned = this.board.dots[k].turned
+            //     board4[a][c][b].type = this.board.dots[k].turned
+            //     board5[b][a][c].value = this.board.dots[k].value
+            //     board5[b][a][c].t = this.board.dots[k].t
+            //     board5[b][a][c].k = this.board.dots[k].k
+            //     board5[b][a][c].e = this.board.dots[k].e
+            //     board5[b][a][c].turned = this.board.dots[k].turned
+            //     board5[b][a][c].type = this.board.dots[k].turned
+            //     board6[c][b][a].value = this.board.dots[k].value
+            //     board6[c][b][a].t = this.board.dots[k].t
+            //     board6[c][b][a].k = this.board.dots[k].k
+            //     board6[c][b][a].e = this.board.dots[k].e
+            //     board6[c][b][a].turned = this.board.dots[k].turned
+            //     board6[c][b][a].type = this.board.dots[k].turned
+            // }
 
 
 
-            f = [board1, board2, board3]
+            // f = [board1, board2, board3]
 
-            for (let k = 0; k < f.length; k++) {
-                for (let t = 0; t < f[k].length; t++) {
-                    let goBoard1 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard2 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard3 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard4 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    let goBoard5 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
-                    goBoard1.turn = this.board.turn
-                    goBoard2.turn = this.board.turn
-                    goBoard3.turn = this.board.turn
-                    goBoard4.turn = this.board.turn
-                    goBoard5.turn = this.board.turn
-                    // goBoard1.wholeSort()
-                    // goBoard2.wholeSort()
-                    // goBoard3.wholeSort()
-                    // goBoard4.wholeSort()
-                    // goBoard5.wholeSort()
+            // for (let k = 0; k < f.length; k++) {
+            //     for (let t = 0; t < f[k].length; t++) {
+            //         let goBoard1 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard2 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard3 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard4 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         let goBoard5 = new Go(f[k][t], (t * 55) + 50, (k * 55) + 50)
+            //         goBoard1.turn = this.board.turn
+            //         goBoard2.turn = this.board.turn
+            //         goBoard3.turn = this.board.turn
+            //         goBoard4.turn = this.board.turn
+            //         goBoard5.turn = this.board.turn
+            //         // goBoard1.wholeSort()
+            //         // goBoard2.wholeSort()
+            //         // goBoard3.wholeSort()
+            //         // goBoard4.wholeSort()
+            //         // goBoard5.wholeSort()
                   
 
-                    goBoard1.turn = (this.board.turn + 1) % 2
-                    goBoard2.turn = (this.board.turn + 1) % 2
-                    goBoard3.turn = (this.board.turn + 1) % 2
-                    goBoard4.turn = (this.board.turn + 1) % 2
-                    goBoard5.turn = (this.board.turn + 1) % 2
+            //         goBoard1.turn = (this.board.turn + 1) % 2
+            //         goBoard2.turn = (this.board.turn + 1) % 2
+            //         goBoard3.turn = (this.board.turn + 1) % 2
+            //         goBoard4.turn = (this.board.turn + 1) % 2
+            //         goBoard5.turn = (this.board.turn + 1) % 2
 
-                    // goBoard1.wholeSort()
-                    // goBoard2.wholeSort()
-                    // goBoard3.wholeSort()
-                    // goBoard4.wholeSort()
-                    // goBoard5.wholeSort()
+            //         // goBoard1.wholeSort()
+            //         // goBoard2.wholeSort()
+            //         // goBoard3.wholeSort()
+            //         // goBoard4.wholeSort()
+            //         // goBoard5.wholeSort()
                   
 
-                }
-            }
-            if (flag == 1) {
+            //     }
+            // }
+            // if (flag == 1) {
 
-                // this.board.turn++
-                // this.board.turn %= 2
-                console.log(this.board.turn)
-                // this.strings.splice(this.strings.length-1,1)
-            } else {
+            //     // this.board.turn++
+            //     // this.board.turn %= 2
+            //     console.log(this.board.turn)
+            //     // this.strings.splice(this.strings.length-1,1)
+            // } else {
 
-            }
+            // }
 
 
             return i
@@ -2467,8 +2633,11 @@
             this.links = []
             this.turn = 0
             this.colors = [[99999, 0, 0], [0, 0, 99999]]
+            this.supa = []
             for (let k = -2; k < 3; k++) {
+                this.supa.push([])
                 for (let t = -2; t < 3; t++) {
+                this.supa[k+2].push([])
                     for (let e = -2; e < 3; e++) {
 
                         let dis = .75 - ((k / 17) * .63)
@@ -2476,11 +2645,12 @@
                         let r = k * (t / 2)
                         let g = k * k
                         let b = t * 5
-                        let point = new Point3D((k) * .75, (t) * .75, (e) * .75, 128 + (e * 5), 128 + (t * 5), 128 + (k * 5))
+                        let point = new Point3D((k) * .75, (t) * .75, (e) * .75, 128 + (e * 35), 128 + (t * 35), 128 + (k * 35))
                         point.t = t
                         point.e = e
                         point.k = k
                         this.dots.push(point)
+                        this.supa[k+2][t+2].push(point)
                         this.links.push(new LineOP(this.center, point))
                         if (k < 12) {
                             if (t == 14) {
@@ -2505,6 +2675,115 @@
 
 
         }
+        wholeSort() {
+        let boole = false
+        for (let t = 0; t < this.supa.length; t++) {
+            for (let k = 0; k < this.supa[t].length; k++) {
+            for (let e = 0; e < this.supa[t][k].length; e++) {
+                boole = (this.neighborsCheck(this.supa[t][k][e], this.turn) || boole)
+            }
+            }
+        }
+
+        return boole
+    }
+    neighborsCheck(node) {
+        let boole = false
+        // let gnode = new Data(node.valueOf)
+        // gnode.type = node.type*-1
+        // gnode.t = node.t
+        // gnode.k = node.k
+        let n = this.neighbors(node)
+        n.push(node)
+        let f = [...n]
+        let ind = []
+        for (let k = 0; k < 62; k++) {
+            for (let d = 0; d < n.length; d++) {
+                let r
+                if (ind.includes(d)) {
+                    r = []
+                } else {
+
+                    r = this.neighbors(n[d])
+                    ind.push(d)
+                }
+                for (let e = 0; e < r.length; e++) {
+                    if (f.includes(r[e])) {
+
+                    } else {
+                        f.push(r[e])
+                    }
+                }
+            }
+            n = [...f]
+        }
+        let wet = 0
+        for (let t = 0; t < n.length; t++) {
+            if (n[t].turned == 0) {
+                wet = 1
+            }
+        }
+        console.log(n)
+        if (wet == 0) {
+            for (let t = 0; t < n.length; t++) {
+                if (n[t].turned == 1 && this.turn == 0 || n[t].turned == -1 && this.turn == 1) {
+                    this.countup++
+                    n[t].turned = 0
+                    n[t].marked = 0
+                    n[t].value = .5
+                    boole = true
+                }
+            }
+        }
+        return boole
+    }
+    neighbors(node) {
+        if (node.turned == 0) {
+            return []
+        }
+        //console.log(node.x, node.y)
+        var ret = [];
+        var x = node.k+2;
+        var y = node.t+2;
+        var z = node.e+2;
+        var grid = this.supa;
+        
+        this.diagonal = false
+        // West)
+        if (grid[x - 1] && grid[x - 1][y] &&  grid[x - 1][y][z]) {
+            if (grid[x - 1][y][z].turned == node.turned || grid[x - 1][y][z].turned == 0) {
+                ret.push(grid[x - 1][y][z]);
+            }
+        }
+
+        if (grid[x+1] && grid[x+1][y] &&  grid[x+1][y][z]) {
+            if (grid[x+1][y][z].turned == node.turned || grid[x+1][y][z].turned == 0) {
+                ret.push(grid[x+1][y][z]);
+            }
+        }
+        if (grid[x] && grid[x][y-1] &&  grid[x][y-1][z]) {
+            if (grid[x][y-1][z].turned == node.turned || grid[x][y-1][z].turned == 0) {
+                ret.push(grid[x][y-1][z]);
+            }
+        }
+        if (grid[x] && grid[x][y+1] &&  grid[x][y+1][z]) {
+            if (grid[x][y+1][z].turned == node.turned || grid[x][y+1][z].turned == 0) {
+                ret.push(grid[x][y+1][z]);
+            }
+        }
+        if (grid[x] && grid[x][y] &&  grid[x][y][z-1]) {
+            if (grid[x][y][z-1].turned == node.turned || grid[x][y][z-1].turned == 0) {
+                ret.push(grid[x][y][z-1]);
+            }
+        }
+        if (grid[x] && grid[x][y] &&  grid[x][y][z+1]) {
+            if (grid[x][y][z+1].turned == node.turned || grid[x][y][z+1].turned == 0) {
+                ret.push(grid[x][y][z+1]);
+            }
+        }
+        // //console.log(node, grid)
+        return ret;
+    }
         spin1(){
             
 
@@ -2559,7 +2838,7 @@
                 this.dots[t].line = this.links[t]
                 pairs.push([this.dots[t], this.links[t]])
             }
-            // pairs.sort((a, b) => a[0].z > b[0].z ? -1 : 1)
+            pairs.sort((a, b) => a[0].z > b[0].z ? -1 : 1)
 
             this.links = []
             for (let t = 0; t < pairs.length; t++) {
@@ -2594,6 +2873,9 @@
         this.turns = [0,0]
         for (let t = 0; t < this.dots.length; t++) {
             this.dots[t].draw()
+        }
+
+        for (let t = 0; t < this.dots.length; t++) {
             for (let k = 0; k < this.dots.length; k++) {
                 if(t!=k){
                     if(this.dots[t].turned == this.dots[k].turned && this.dots[t].turned != 0){
@@ -2603,7 +2885,7 @@
                                 if(this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e){
                                     let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
                                     let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
-                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+2)
+                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+1.8)
                                     // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                     // link2.draw()
                                     link.draw()
@@ -2618,7 +2900,7 @@
                                 if(this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e){
                                     let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
                                     let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
-                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+2)
+                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+1.8)
                                     // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                     // link2.draw()
                                     link.draw()
@@ -2634,7 +2916,7 @@
                                 if(this.dots[t].e == this.dots[k].e+1 || this.dots[t].e == this.dots[k].e-1 || this.dots[t].e == this.dots[k].e){
                                     let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
                                     let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
-                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+2)
+                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+1.8)
                                     // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                     // link2.draw()
                                     link.draw()
@@ -2745,9 +3027,9 @@
             // }
 
 
-            for (let t = 0; t < this.dots.length; t++) {
-                this.dots[t].draw()
-            }
+            // for (let t = 0; t < this.dots.length; t++) {
+            //     this.dots[t].draw()
+            // }
         }
         rotateZ(angle) {
             for (let t = 0; t < this.dots.length; t++) {
@@ -2849,14 +3131,17 @@
             if(playerID == b.board.turn || playerID == -1){
                 let i = b.check(TIP_engine)
                 console.log(i)
-                if(playerID == -1 && i != -1){
+                if(playerID == -1 && i[0] != -3){
                     playerID = Math.abs(b.board.turn-1) //b.board.turn
                 }
-
-                if(i != -1){
+                console.log(i)
+                if(i[0] != -3){
                     b.cald = 0
             let pson = {}
-            pson.tile = i
+            pson.te = i[0]+2
+            pson.ke = i[1]+2
+            pson.ee = i[2]+2
+            pson.tile = i[3]
             pson.id = Math.abs(playerID-1)
             pson.guy = 1
             ws.send(JSON.stringify(pson))
@@ -3061,10 +3346,13 @@
             } else if ( JSON.parse(data).tile > -1) {
                 //   b.teams[JSON.parse(data).id].crew[JSON.parse(data).guy].tile = JSON.parse(data).tile
                 let tile = JSON.parse(data).tile
+                let te = JSON.parse(data).te
+                let ke = JSON.parse(data).ke
+                let ee = JSON.parse(data).ee
                 console.log(tile)
-                let t = new Point(b.board.dots[tile].sx, b.board.dots[tile].sy)
+                let t = new Point(b.board.supa[ke][te][ee].sx, b.board.supa[ke][te][ee].sy)
             
-                b.check(t, tile)
+                b.check(t, tile, te, ke, ee)
                 if(playerID == -1){
                     playerID = Math.abs(b.board.turn)
                 }
