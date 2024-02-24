@@ -2591,6 +2591,63 @@
                 this.dots[t].draw()
                 // }
             }
+        this.turns = [0,0]
+        for (let t = 0; t < this.dots.length; t++) {
+            this.dots[t].draw()
+            for (let k = 0; k < this.dots.length; k++) {
+                if(t!=k){
+                    if(this.dots[t].turned == this.dots[k].turned && this.dots[t].turned != 0){
+
+                        if(this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k){
+                        if(this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t){
+                                if(this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e){
+                                    let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+                                    let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+                                    let link = new LineOP(p1,p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z/2)+1.5)
+                                    // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+                                    // link2.draw()
+                                    link.draw()
+                                    // this.turns[(this.dots[t].turned*.5)+.5]+=.5
+                                }
+    
+                            }
+                        }   
+    
+
+                        
+                        // if(this.dots[t].k == this.dots[k].k){
+                        //     if(this.dots[t].e == this.dots[k].e+1 || this.dots[t].e == this.dots[k].e-1 || this.dots[t].e == this.dots[k].e){
+
+                        //         if(this.dots[t].t == this.dots[k].t+1 || this.dots[t].t == this.dots[k].t-1 || this.dots[t].t == this.dots[k].t){
+                        //             let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+                        //             let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+                        //             let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
+                        //             let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+                        //             link2.draw()
+                        //             link.draw()
+        
+                        //         }
+                        //     }
+                        // }   
+    
+                        //     if(this.dots[t].t == this.dots[k].t){
+                        //         if(this.dots[t].e == this.dots[k].e+1 || this.dots[t].e == this.dots[k].e-1 || this.dots[t].e == this.dots[k].e){
+                        //         if(this.dots[t].k == this.dots[k].k+1 || this.dots[t].k == this.dots[k].k-1 || this.dots[t].k == this.dots[k].k){
+                        //             let p1 = new Point(this.dots[t].sx,this.dots[t].sy)
+                        //             let p2 = new Point(this.dots[k].sx,this.dots[k].sy)
+                        //             let link = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .2)
+                        //             let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
+                        //             link2.draw()
+                        //             link.draw()
+        
+                        //         }
+                        //     }
+                        // }   
+                    }
+                    }
+            }
+
+        }
 
             // for (let t = 0; t < this.dots.length; t++) {
             //     for (let k = 0; k < this.dots.length; k++) {
