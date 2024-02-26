@@ -1193,7 +1193,9 @@
                                 }
                             }
                             ///////////////console.log("h")
-                            clicked = 5
+                            if(AI == 1){
+                                clicked = 5
+                            }
                             this.board.wholeSort()
                             // this.board.badwholeSort()
 
@@ -1271,7 +1273,9 @@
                                 }
                             }
                             ///////////////console.log("h")
-                            clicked = 5
+                            if(AI == 1){
+                                clicked = 5
+                            }
                             this.board.wholeSort()
                             // this.board.badwholeSort()
                             i = k
@@ -3727,7 +3731,9 @@
             }
             if (aiButton.isPointInside(TIP_engine)) {
                 AI *=-1
-                clicked = 5
+                if(AI == 1){
+                                clicked = 5
+                            }
             }
                 if (difficultyButton.isPointInside(TIP_engine)) {
                 if(difficulty == 1){
