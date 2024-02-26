@@ -1786,13 +1786,13 @@
                         index += k
                         ///////////////console.log(index)
                         if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark === 0 || (f3 < 2 && f2 < 2)))) {
-                            // if(Math.random()< .5){
+                            if(Math.random()< .5){
 
-                            //     nextMoves.push([i,j,k]);
-                            // }else{
+                                nextMoves.push([i,j,k]);
+                            }else{
 
                                 nextMoves.unshift([i,j,k]);
-                            // }
+                            }
                         }
                     }
                 }
@@ -2037,7 +2037,7 @@
                     this.board.supa[move[0]][move[1]][move[2]].turned = player
                     let score = this.minimax(depth - 1, false, player)[0];
                     this.board.supa[move[0]][move[1]][move[2]].turned = 0
-                    if ((score > bestScore) || (score == bestScore && Math.random() < -.05)) {
+                    if ((score > bestScore) || (score == bestScore && Math.random() < .05)) {
                         bestmove = move
                     }
                     bestScore = Math.max(score, bestScore);
@@ -2050,7 +2050,7 @@
                     this.board.supa[move[0]][move[1]][move[2]].turned = player
                     let score = this.minimax(depth - 1, true, player )[0];
                     this.board.supa[move[0]][move[1]][move[2]].turned = 0
-                    if ((score < bestScore) || (score == bestScore && Math.random() < -.05)) {
+                    if ((score < bestScore) || (score == bestScore && Math.random() < .05)) {
                         bestmove = move
                     }
                     bestScore = Math.min(score, bestScore);
