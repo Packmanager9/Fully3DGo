@@ -1024,9 +1024,9 @@
                 let r = 7 + (Math.max(-5, -this.z * 1))
                 canvas_context.beginPath();
                 canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
-                canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
-                canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
-                canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.lineWidth = 4
                 canvas_context.stroke()
                 // if (this.marked == 1) {
@@ -1035,14 +1035,14 @@
             } else if (this.turned == -1) {
                 // //////console.log("h")
                 // canvas_context.beginPath();
-                // canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
-                // canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
                 // canvas_context.moveTo(this.sx - 10, this.sy - 10);
                 // canvas_context.lineTo(this.sx + 10, this.sy + 10);
                 // canvas_context.lineWidth = 4
                 // canvas_context.stroke()
                 // canvas_context.beginPath();
-                // canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 // canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
                 // canvas_context.moveTo(this.sx + 10, this.sy - 10);
                 // canvas_context.lineTo(this.sx - 10, this.sy + 10);
@@ -1051,7 +1051,7 @@
                 canvas_context.beginPath();
                 let r = 7 + (Math.max(-5, -this.z * 1))
                 canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
-                canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.lineWidth = 4
@@ -1063,15 +1063,15 @@
             } else {
 
                 // //////console.log("h")
-                canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.strokeStyle = `rgb(${this.r + 35},${this.g + 35},${this.b + 35})`
                 canvas_context.strokeRect(this.sx - 3, this.sy - 3, 6, 6)
                 canvas_context.beginPath();
                 canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, 10, 0, (Math.PI * 2), true)
-                canvas_context.fillStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
-                canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.lineWidth = 2
-                canvas_context.strokeStyle = this.valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.z)) * Math.sign(this.z)) * 5 / 3)))
+                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.strokeRect(this.sx - 2, this.sy - 2, 4, 4)
             }
 
@@ -3485,7 +3485,7 @@
                                     if (this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e) {
                                         let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
                                         let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
-                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z / 2) + 1.8)
+                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, 2.5)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
                                         link.draw()
@@ -3500,7 +3500,7 @@
                                     if (this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e) {
                                         let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
                                         let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
-                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z / 2) + 1.8)
+                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, 2.5)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
                                         link.draw()
@@ -3516,7 +3516,7 @@
                                     if (this.dots[t].e == this.dots[k].e + 1 || this.dots[t].e == this.dots[k].e - 1 || this.dots[t].e == this.dots[k].e) {
                                         let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
                                         let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
-                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, (this.dots[t].z / 2) + 1.8)
+                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, 2.5)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
                                         link.draw()
@@ -3571,7 +3571,7 @@
                                         // Set the fill style and draw a rectangle
 
 
-                                        let link = new LineOP(p1, p2, gradient, .25+(Math.abs(this.dots[t].turned)*.5))
+                                        let link = new LineOP(p1, p2, gradient, .5+(Math.abs(this.dots[t].turned)*.5))
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
                                         
@@ -3598,7 +3598,7 @@
                                         // Set the fill style and draw a rectangle
 
 
-                                        let link = new LineOP(p1, p2, gradient, .25+(Math.abs(this.dots[t].turned)*.5))
+                                        let link = new LineOP(p1, p2, gradient, .5+(Math.abs(this.dots[t].turned)*.5))
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
                                         
@@ -3626,7 +3626,7 @@
                                         // Set the fill style and draw a rectangle
 
 
-                                        let link = new LineOP(p1, p2, gradient, .25+(Math.abs(this.dots[t].turned)*.5))
+                                        let link = new LineOP(p1, p2, gradient, .5+(Math.abs(this.dots[t].turned)*.5))
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
                                         
@@ -3734,7 +3734,7 @@
 
 
     let roombox = new Numbox()
-    function setUp(canvas_pass, style = "#660066") {
+    function setUp(canvas_pass, style = "#666666") {
         canvas = canvas_pass
         canvas_context = canvas.getContext('2d');
         canvas.style.background = style
