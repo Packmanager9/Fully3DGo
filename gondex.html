@@ -19,6 +19,10 @@
     });
 
 
+    let last = {}
+    last.k = -1
+    last.t = -1
+    last.e = -1
 
     let ws
     let HOST = location.origin.replace(/^http/, 'ws')
@@ -360,7 +364,7 @@
     //             // let crew3 = new Crew(80-6, 1, 1)
     //             // let crew4 = new Crew(80-7, 1, 0)
     //             // let crew5 = new Crew(80-2, 1, 2)
-    //             // let crew6 = new Crew(80-3, 1, 1)
+    //             // let crew6 = new Crew(80this.sizeStep, 1, 1)
     //             // let crew7 = new Crew(80-8, 1, 2)
     //             // let crew8 = new Crew(80-9, 1, 1)
     //             // let crew9 = new Crew(80-4, 1, 0)
@@ -1012,6 +1016,7 @@
 
             this.sy = (this.y * 120) + 350
             this.sx = (this.x * 120) + 350
+            this.p = new Point(this.sx, this.sy)
         }
         draw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
@@ -1063,16 +1068,17 @@
             } else {
 
                 // //////console.log("h")
-                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
-                canvas_context.strokeStyle = `rgb(${this.r + 35},${this.g + 35},${this.b + 35})`
+                // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                canvas_context.strokeStyle = `rgb(${this.r + b.board.cstep},${this.g + b.board.cstep},${this.b + b.board.cstep})`
+                canvas_context.lineWidth = 1
                 canvas_context.strokeRect(this.sx - 3, this.sy - 3, 6, 6)
-                canvas_context.beginPath();
-                canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, 10, 0, (Math.PI * 2), true)
-                canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
-                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
-                canvas_context.lineWidth = 2
-                canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
-                canvas_context.strokeRect(this.sx - 2, this.sy - 2, 4, 4)
+                // canvas_context.beginPath();
+                // canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, 10, 0, (Math.PI * 2), true)
+                // canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.lineWidth = 1
+                // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
+                // canvas_context.strokeRect(this.sx - 2, this.sy - 2, 4, 4)
             }
 
 
@@ -1090,8 +1096,8 @@
             // this.left.turn = -1
             // this.right = new Network(intus, [12, 12, (6*6*6)])
             // this.right.turn = 1
-            this.board = new ThreeDeeObject()
-            this.boardStorage = new ThreeDeeObject()
+            this.board = new ThreeDeeObject(6)
+            // this.boardStorage = new ThreeDeeObject()
             this.strings = []
 
             this.cald = 1
@@ -1109,7 +1115,7 @@
         check(point, tile = -1, top = -1, kop = -1, eep = -1) {
 
             let box = []
-            for (let t1 = 0; t1 < (6 * 6 * 6); t1++) {
+            for (let t1 = 0; t1 < (b.board.size * b.board.size * b.board.size); t1++) {
                 box.push(0)
                 //     for(let k1 = 0;k1<5;k1++){
                 //         box[t1].push([])
@@ -1124,7 +1130,7 @@
             let ke = -10
             let e = -10
             let flagger = []
-            for (let k = 0; k < (6 * 6 * 6); k++) {
+            for (let k = 0; k < (b.board.size * b.board.size * b.board.size); k++) {
 
                 // ///////////////console.log(this.board.dots[k])
                 if (top != -1) {
@@ -1193,7 +1199,7 @@
                                 }
                             }
                             ///////////////console.log("h")
-                            if(AI == 1){
+                            if (AI == 1) {
                                 clicked = 5
                             }
                             this.board.wholeSort()
@@ -1273,7 +1279,7 @@
                                 }
                             }
                             ///////////////console.log("h")
-                            if(AI == 1){
+                            if (AI == 1) {
                                 clicked = 5
                             }
                             this.board.wholeSort()
@@ -1291,7 +1297,14 @@
 
             }
 
-            this.board.badwholeSort()
+            b.board.wholeSort()
+            b.board.badwholeSort()
+            b.board.turn++
+            b.board.turn %= 2
+            b.board.wholeSort()
+            b.board.badwholeSort()
+            b.board.turn++
+            b.board.turn %= 2
             return [t, ke, e, i]
             // for (let k = 0; k < 0; k++) {
 
@@ -1710,6 +1723,8 @@
 
             let c1 = .5
             let c2 = 0
+            let c1x = .5
+            let c2x = 0
             let f1 = 0
             let f2 = 0
             let f3 = 0
@@ -1719,6 +1734,12 @@
                 }
                 if (b.board.dots[t].mark == -1 || b.board.dots[t].turned == -1) {
                     c2++
+                }
+                if (b.board.dots[t].mark == 1) {
+                    c1x++
+                }
+                if (b.board.dots[t].mark == -1 ) {
+                    c2x++
                 }
                 if (b.board.dots[t].turned == -1) {
                     f1 = 1
@@ -1778,14 +1799,14 @@
             // }
 
 
-            for (let i = 0; i < 6; i++) {
-                for (let j = 0; j < 6; j++) {
-                    for (let k = 0; k < 6; k++) {
-                        let index = i * 36
-                        index += j * 6
+            for (let i = 0; i < this.board.size; i++) {
+                for (let j = 0; j < this.board.size; j++) {
+                    for (let k = 0; k < this.board.size; k++) {
+                        let index = i * (this.board.size * this.board.size)
+                        index += j * this.board.size
                         index += k
                         ///////////////console.log(index)
-                        if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark === 0 || (f3 < 2 && f2 < 2)))) {
+                        if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark === 0 ||  (this.board.supa[i][j][k].mark  == ((b.board.turn-.5)*2) && (c1x == 1 || c2x == 1))|| (f3 < 2 && f2 < 2)))) {
                             if(Math.random()< .5){
 
                                 nextMoves.push([i,j,k]);
@@ -1793,11 +1814,11 @@
 
                                 nextMoves.unshift([i,j,k]);
                             }
-                        }
+                            }
                     }
                 }
             }
-            
+
             return nextMoves;
         }
 
@@ -1959,23 +1980,36 @@
         evaluate(w, player) {
             const winner = this.checkWinner();
 
-            this.board.wholeSort()
-            this.board.badwholeSort()
+
+            b.board.storage.turn = b.board.turn
+
+            for (let t = 0; t < b.board.dots.length; t++) {
+                b.board.storage.dots[t].turned = b.board.dots[t].turned
+                b.board.storage.dots[t].marked = b.board.dots[t].marked
+            }
+            b.board.storage.wholeSort()
+            b.board.storage.badwholeSort()
+            b.board.storage.turn++
+            b.board.storage.turn %= 2
+            b.board.storage.wholeSort()
+            b.board.storage.badwholeSort()
+            b.board.storage.turn++
+            b.board.storage.turn %= 2
             let c1 = .5
             let c2 = 0
             let f1 = 0
             let f2 = 0
-            for (let t = 0; t < b.board.dots.length; t++) {
-                if (b.board.dots[t].mark == 1 || b.board.dots[t].turned == 1) {
+            for (let t = 0; t < b.board.storage.dots.length; t++) {
+                if (b.board.storage.dots[t].mark == 1 || b.board.storage.dots[t].turned == 1) {
                     c1++
                 }
-                if (b.board.dots[t].mark == -1 || b.board.dots[t].turned == -1) {
+                if (b.board.storage.dots[t].mark == -1 || b.board.storage.dots[t].turned == -1) {
                     c2++
                 }
-                if (b.board.dots[t].turned == -1) {
+                if (b.board.storage.dots[t].turned == -1) {
                     f1 = 1
                 }
-                if (b.board.dots[t].turned == -1) {
+                if (b.board.storage.dots[t].turned == -1) {
                     f2++
                 }
             }
@@ -1983,37 +2017,41 @@
 
             let s1 = 0
             let s2 = 0
-            for (let t = 0; t < b.board.dots.length; t++) {
-                let n = b.board.subneighbors(b.board.dots[t])
-                if (b.board.dots[t].turned == -1) {
-                    s2+=n.length
-                }  
-                if (b.board.dots[t].turned == 1) {
-                    s1+=n.length
+            for (let t = 0; t < b.board.storage.dots.length; t++) {
+                let n = b.board.storage.subneighbors(b.board.storage.dots[t])
+                if (b.board.storage.dots[t].turned == -1) {
+                    s2 += n.length
+                }
+                if (b.board.storage.dots[t].turned == 1) {
+                    s1 += n.length
                 }
             }
-            for (let t = 0; t < b.board.dots.length; t++) {
-                let n = b.board.smartsubneighbors(b.board.dots[t])
-                if (b.board.dots[t].turned == -1) {
-                    s1+=n.length*.875
-                }  
-                if (b.board.dots[t].turned == 1) {
-                    s2+=n.length*.875
+            for (let t = 0; t < b.board.storage.dots.length; t++) {
+                let n = b.board.storage.smartsubneighbors(b.board.storage.dots[t])
+                if (b.board.storage.dots[t].turned == -1) {
+                    s1 += n.length * .875
+                }
+                if (b.board.storage.dots[t].turned == 1) {
+                    s2 += n.length * .875
                 }
             }
-            for (let t = 0; t < b.board.dots.length; t++) {
-                let n = b.board.stupidsubneighbors(b.board.dots[t])
-                if (b.board.dots[t].turned == -1) {
-                    s1+=n.length*.5
-                }  
-                if (b.board.dots[t].turned == 1) {
-                    s2+=n.length*.5
+            for (let t = 0; t < b.board.storage.dots.length; t++) {
+                let n = b.board.storage.stupidsubneighbors(b.board.storage.dots[t])
+                if (b.board.storage.dots[t].turned == -1) {
+                    s1 += n.length * .5
+                }
+                if (b.board.storage.dots[t].turned == 1) {
+                    s2 += n.length * .5
                 }
             }
-            c1+=s1/100
-            c2+=s2/100
+            c1 += s1 / 100
+            c2 += s2 / 100
             // //console.log(player, c1, c2)
 
+            // for (let t = 0; t < b.board.storage.dots.length; t++) {
+            //     b.board.storage.dots[t].turned = b.board.storage.storage.dots[t].turned
+            //     b.board.storage.dots[t].marked = b.board.storage.storage.dots[t].marked
+            // }
 
             if (player == 1) {
                 return c1
@@ -2048,7 +2086,7 @@
                 let bestmove = -1
                 for (let move of this.generateMoves()) {
                     this.board.supa[move[0]][move[1]][move[2]].turned = player
-                    let score = this.minimax(depth - 1, true, player )[0];
+                    let score = this.minimax(depth - 1, true, player)[0];
                     this.board.supa[move[0]][move[1]][move[2]].turned = 0
                     if ((score < bestScore) || (score == bestScore && Math.random() < .05)) {
                         bestmove = move
@@ -2425,7 +2463,7 @@
             n.push(node)
             let f = [...n]
             let ind = []
-            for (let k = 0; k < 40; k++) {
+            for (let k = 0; k < b.board.size * b.board.size; k++) {
                 for (let d = 0; d < n.length; d++) {
                     let r
                     if (ind.includes(d)) {
@@ -2476,7 +2514,7 @@
             n.push(node)
             let f = [...n]
             let ind = []
-            for (let k = 0; k < 40; k++) {
+            for (let k = 0; k < b.board.size * b.board.size; k++) {
                 for (let d = 0; d < n.length; d++) {
                     let r
                     if (ind.includes(d)) {
@@ -2524,7 +2562,7 @@
             n.push(node)
             let f = [...n]
             let ind = []
-            for (let k = 0; k < 40; k++) {
+            for (let k = 0; k < b.board.size * b.board.size; k++) {
                 for (let d = 0; d < n.length; d++) {
                     let r
                     if (ind.includes(d)) {
@@ -2568,7 +2606,7 @@
                 n.push(crumbs[t])
                 let f = [...n]
                 let ind = []
-                for (let k = 0; k < 40; k++) {
+                for (let k = 0; k < b.board.size * b.board.size; k++) {
                     for (let d = 0; d < n.length; d++) {
                         let r
                         if (ind.includes(d)) {
@@ -2608,7 +2646,7 @@
                 n.push(seeds[t])
                 let f = [...n]
                 let ind = []
-                for (let k = 0; k < 40; k++) {
+                for (let k = 0; k < b.board.size * b.board.size; k++) {
                     for (let d = 0; d < n.length; d++) {
                         let r
                         if (ind.includes(d)) {
@@ -2906,44 +2944,58 @@
     }
 
     class ThreeDeeObject {
-        constructor() {
+        constructor(size, store = -1) {
             this.center = new Point3D(0, 0, 0, "00FF00")
             this.dots = []
             this.links = []
             this.turn = 1
             this.colors = [[99999, 0, 0], [0, 0, 99999]]
             this.supa = []
-            for (let k = -3; k < 3; k++) {
+            this.size = size
+            if (store == -1) {
+                this.storage = new ThreeDeeObject(size, 1)
+            }
+            this.sizeDown = Math.floor(this.size * -.5)
+            this.sizeStep = Math.floor(this.size * .5)
+            this.cstep = ((35 / this.size) * 6)
+            for (let k = this.sizeDown; k < this.sizeStep; k++) {
                 this.supa.push([])
-                for (let t = -3; t < 3; t++) {
-                    this.supa[k + 3].push([])
-                    for (let e = -3; e < 3; e++) {
+                for (let t = this.sizeDown; t < this.sizeStep; t++) {
+                    this.supa[k - this.sizeDown].push([])
+                    for (let e = this.sizeDown; e < this.sizeStep; e++) {
 
                         let dis = .75 - ((k / 17) * .63)
                         let a = (t / 40) * 6.28
                         let r = k * (t / 2)
                         let g = k * k
                         let b = t * 5
-                        let point = new Point3D((k + .5) * .6, (t + .5) * .6, (e + .5) * .6, 128 + (e * 35), 128 + (t * 35), 128 + (k * 35))
+                        let point = new Point3D((k + .5) * ((.6 / this.size) * 6), (t + .5) * ((.6 / this.size) * 6), (e + .5) * ((.6 / this.size) * 6), 128 + (e * ((35 / this.size) * 6)), 128 + (t * ((35 / this.size) * 6)), 128 + (k * ((35 / this.size) * 6)))
+                        if (this.size % 2 == 0) {
+
+                            point = new Point3D((k + .5) * ((.6 / this.size) * 6), (t + .5) * ((.6 / this.size) * 6), (e + .5) * ((.6 / this.size) * 6), 128 + (e * ((35 / this.size) * 6)), 128 + (t * ((35 / this.size) * 6)), 128 + (k * ((35 / this.size) * 6)))
+                        } else {
+
+                            point = new Point3D((k + 1.0) * ((.6 / this.size) * 6), (t + 1.0) * ((.6 / this.size) * 6), (e + 1.0) * ((.6 / this.size) * 6), 128 + (e * ((35 / this.size) * 6)), 128 + (t * ((35 / this.size) * 6)), 128 + (k * ((35 / this.size) * 6)))
+                        }
                         point.t = t
                         point.e = e
                         point.k = k
                         this.dots.push(point)
-                        this.supa[k + 3][t + 3].push(point)
+                        this.supa[k - this.sizeDown][t - this.sizeDown].push(point)
                         this.links.push(new LineOP(this.center, point))
-                        if (k < 12) {
-                            if (t == 14) {
-                                point.r = 90
-                                point.g = 129
-                                point.b = 184
-                            }
-                        } if (k < 9) {
-                            if (t == 13) {
-                                point.r = 64
-                                point.g = 129
-                                point.b = 184
-                            }
-                        }
+                        // if (k < 12) {
+                        //     if (t == 14) {
+                        //         point.r = 90
+                        //         point.g = 129
+                        //         point.b = 184
+                        //     }
+                        // } if (k < 9) {
+                        //     if (t == 13) {
+                        //         point.r = 64
+                        //         point.g = 129
+                        //         point.b = 184
+                        //     }
+                        // }
                     }
                 }
             }
@@ -3000,7 +3052,7 @@
             n.push(node)
             let f = [...n]
             let ind = []
-            for (let k = 0; k < 40; k++) {
+            for (let k = 0; k < b.board.size * b.board.size; k++) {
                 for (let d = 0; d < n.length; d++) {
                     let r
                     if (ind.includes(d)) {
@@ -3051,7 +3103,7 @@
             n.push(node)
             let f = [...n]
             let ind = []
-            for (let k = 0; k < 40; k++) {
+            for (let k = 0; k < b.board.size * b.board.size; k++) {
                 for (let d = 0; d < n.length; d++) {
                     let r
                     if (ind.includes(d)) {
@@ -3079,24 +3131,24 @@
                 if (n[t].turned == 1) {
                     f1 = 1
                     wet = 0
-                }else  if (n[t].turned == -1) {
+                } else if (n[t].turned == -1) {
                     f2 = 1
                     wet = 0
-                }else{
+                } else {
 
-                    n[t].r = 128 + 35*n[t].k
-                                n[t].b = 128+ 35*n[t].t
-                                n[t].g = 128+ 35*n[t].e
+                    n[t].r = 128 + b.board.cstep * n[t].k
+                    n[t].b = 128 + b.board.cstep * n[t].t
+                    n[t].g = 128 + b.board.cstep * n[t].e
                 }
             }
-            let q1 =0
-            let q2 =0
-            for(let t = 0;t<this.dots.length;t++){
-                if(this.dots[t].turned == -1){
-                    q1=1
+            let q1 = 0
+            let q2 = 0
+            for (let t = 0; t < this.dots.length; t++) {
+                if (this.dots[t].turned == -1) {
+                    q1 = 1
                 }
-                if(this.dots[t].turned == 1){
-                    q2=1
+                if (this.dots[t].turned == 1) {
+                    q2 = 1
                 }
             }
             ////console.log(n)
@@ -3105,10 +3157,10 @@
                     if (f1 == 1 && f2 == 0) {
                         if (n[t].turned == 0) {
                             n[t].mark = 1
-                            if(q1 == 1){
+                            if (q1 == 1) {
                                 n[t].r = 255
-                            n[t].b = 255
-                            n[t].g = 255
+                                n[t].b = 255
+                                n[t].g = 255
                             }
                             boole = true
                         }
@@ -3117,10 +3169,10 @@
                         if (n[t].turned == 0) {
 
                             n[t].mark = -1
-                            if(q2 == 1){
-                            n[t].r = 0
-                            n[t].b = 0
-                            n[t].g = 0
+                            if (q2 == 1) {
+                                n[t].r = 0
+                                n[t].b = 0
+                                n[t].g = 0
                             }
                             boole = true
                         }
@@ -3136,9 +3188,9 @@
             }
             //////console.log(node.x, node.y)
             var ret = [];
-            var x = node.k + 3;
-            var y = node.t + 3;
-            var z = node.e + 3;
+            var x = node.k - b.board.sizeDown;
+            var y = node.t - b.board.sizeDown
+            var z = node.e - b.board.sizeDown
             var grid = this.supa;
 
             this.diagonal = false
@@ -3186,41 +3238,41 @@
             }
             //////console.log(node.x, node.y)
             var ret = [];
-            var x = node.k + 3;
-            var y = node.t + 3;
-            var z = node.e + 3;
+            var x = node.k - b.board.sizeDown;
+            var y = node.t - b.board.sizeDown
+            var z = node.e - b.board.sizeDown
             var grid = this.supa;
 
             this.diagonal = false
             // West)
             if (grid[x - 1] && grid[x - 1][y] && grid[x - 1][y][z]) {
-                if (grid[x - 1][y][z].turned == node.turned*-1) {
+                if (grid[x - 1][y][z].turned == node.turned * -1) {
                     ret.push(grid[x - 1][y][z]);
                 }
             }
 
             if (grid[x + 1] && grid[x + 1][y] && grid[x + 1][y][z]) {
-                if (grid[x + 1][y][z].turned == node.turned*-1) {
+                if (grid[x + 1][y][z].turned == node.turned * -1) {
                     ret.push(grid[x + 1][y][z]);
                 }
             }
             if (grid[x] && grid[x][y - 1] && grid[x][y - 1][z]) {
-                if (grid[x][y - 1][z].turned == node.turned*-1) {
+                if (grid[x][y - 1][z].turned == node.turned * -1) {
                     ret.push(grid[x][y - 1][z]);
                 }
             }
             if (grid[x] && grid[x][y + 1] && grid[x][y + 1][z]) {
-                if (grid[x][y + 1][z].turned == node.turned*-1) {
+                if (grid[x][y + 1][z].turned == node.turned * -1) {
                     ret.push(grid[x][y + 1][z]);
                 }
             }
             if (grid[x] && grid[x][y] && grid[x][y][z - 1]) {
-                if (grid[x][y][z - 1].turned == node.turned*-1) {
+                if (grid[x][y][z - 1].turned == node.turned * -1) {
                     ret.push(grid[x][y][z - 1]);
                 }
             }
             if (grid[x] && grid[x][y] && grid[x][y][z + 1]) {
-                if (grid[x][y][z + 1].turned == node.turned*-1) {
+                if (grid[x][y][z + 1].turned == node.turned * -1) {
                     ret.push(grid[x][y][z + 1]);
                 }
             }
@@ -3236,9 +3288,9 @@
             }
             //////console.log(node.x, node.y)
             var ret = [];
-            var x = node.k + 3;
-            var y = node.t + 3;
-            var z = node.e + 3;
+            var x = node.k - b.board.sizeDown;
+            var y = node.t - b.board.sizeDown
+            var z = node.e - b.board.sizeDown
             var grid = this.supa;
 
             this.diagonal = false
@@ -3287,9 +3339,9 @@
             }
             //////console.log(node.x, node.y)
             var ret = [];
-            var x = node.k + 3;
-            var y = node.t + 3;
-            var z = node.e + 3;
+            var x = node.k - b.board.sizeDown;
+            var y = node.t - b.board.sizeDown
+            var z = node.e - b.board.sizeDown
             var grid = this.supa;
 
             this.diagonal = false
@@ -3337,9 +3389,9 @@
             }
             //////console.log(node.x, node.y)
             var ret = [];
-            var x = node.k + 3;
-            var y = node.t + 3;
-            var z = node.e + 3;
+            var x = node.k - b.board.sizeDown;
+            var y = node.t - b.board.sizeDown
+            var z = node.e - b.board.sizeDown
             var grid = this.supa;
 
             this.diagonal = false
@@ -3394,7 +3446,7 @@
         export2() {
             let out = ''
 
-            for (let t = 0; t < (6 * 6 * 6); t++) {
+            for (let t = 0; t < (b.board.size * b.board.size * b.board.size); t++) {
                 if (this.dots[t].marked != 0) {
 
                     out += this.dots[t].turned.valueOf()
@@ -3406,7 +3458,7 @@
             return out
         }
         clean() {
-            for (let t = 0; t < (6 * 6 * 6); t++) {
+            for (let t = 0; t < (b.board.size * b.board.size * b.board.size); t++) {
                 this.dots[t].turned = 0
                 this.dots[t].marked = 0
                 this.dots[t].r = 128
@@ -3418,7 +3470,7 @@
         }
         export() {
             let out = []
-            for (let t = 0; t < (6 * 6 * 6); t++) {
+            for (let t = 0; t < (b.board.size * b.board.size * b.board.size); t++) {
                 if (this.dots[t].turned == 1) {
                     out.push(new Data(1))
                 } else if (this.dots[t].turned == -1) {
@@ -3473,7 +3525,7 @@
 
                 this.dots[t].subdraw()
             }
-
+            this.link = new LineOP(new Point(0, 0), new Point(0, 0))
             for (let t = 0; t < this.dots.length; t++) {
                 this.dots[t].draw()
                 for (let k = 0; k < this.dots.length; k++) {
@@ -3483,12 +3535,15 @@
                             if (this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k) {
                                 if (this.dots[t].t == this.dots[k].t + 1 || this.dots[t].t == this.dots[k].t - 1 || this.dots[t].t == this.dots[k].t) {
                                     if (this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e) {
-                                        let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
-                                        let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
-                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, 2.5)
+                                        // let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
+                                        // let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
+                                        this.link.object = this.dots[t].p
+                                        this.link.target = this.dots[k].p
+                                        this.link.color = `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`
+                                        this.link.width = 2.5
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
-                                        link.draw()
+                                        this.link.draw()
                                         // this.turns[(this.dots[t].turned*.5)+.5]+=.5
                                     }
 
@@ -3498,12 +3553,15 @@
                             if (this.dots[t].k == this.dots[k].k + 1 || this.dots[t].k == this.dots[k].k - 1 || this.dots[t].k == this.dots[k].k) {
                                 if (this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t) {
                                     if (this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e) {
-                                        let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
-                                        let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
-                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, 2.5)
+                                        // let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
+                                        // let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
+                                        this.link.object = this.dots[t].p
+                                        this.link.target = this.dots[k].p
+                                        this.link.color = `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`
+                                        this.link.width = 2.5
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
-                                        link.draw()
+                                        this.link.draw()
                                         // this.turns[(this.dots[t].turned*.5)+.5]+=.5
                                     }
 
@@ -3514,12 +3572,15 @@
                             if (this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k) {
                                 if (this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t || this.dots[t].t == this.dots[k].t) {
                                     if (this.dots[t].e == this.dots[k].e + 1 || this.dots[t].e == this.dots[k].e - 1 || this.dots[t].e == this.dots[k].e) {
-                                        let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
-                                        let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
-                                        let link = new LineOP(p1, p2, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`, 2.5)
+                                        // let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
+                                        // let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
+                                        this.link.object = this.dots[t].p
+                                        this.link.target = this.dots[k].p
+                                        this.link.color = `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`
+                                        this.link.width = 2.5
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
-                                        link.draw()
+                                        this.link.draw()
                                         // this.turns[(this.dots[t].turned*.5)+.5]+=.5
                                     }
 
@@ -3553,14 +3614,14 @@
                             //         }
                             //     }
                             // }   
-                        }else{
+                        } else if (this.size < 9) {
 
                             if (this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k || this.dots[t].k == this.dots[k].k) {
                                 if (this.dots[t].t == this.dots[k].t + 1 || this.dots[t].t == this.dots[k].t - 1 || this.dots[t].t == this.dots[k].t) {
                                     if (this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e) {
-                                        let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
-                                        let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
-                                        const gradient = canvas_context.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
+                                        // let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
+                                        // let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
+                                        const gradient = canvas_context.createLinearGradient(this.dots[t].p.x, this.dots[t].p.y, this.dots[k].p.x, this.dots[k].p.y);
 
                                         // Add three color stops
                                         gradient.addColorStop(0, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`);
@@ -3571,11 +3632,14 @@
                                         // Set the fill style and draw a rectangle
 
 
-                                        let link = new LineOP(p1, p2, gradient, .5+(Math.abs(this.dots[t].turned)*.5))
+                                        this.link.object = this.dots[t].p
+                                        this.link.target = this.dots[k].p
+                                        this.link.color = gradient
+                                        this.link.width = 1
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
-                                        
-                                        link.draw()
+
+                                        this.link.draw()
                                         // this.turns[(this.dots[t].turned*.5)+.5]+=.5
                                     }
 
@@ -3587,7 +3651,7 @@
                                     if (this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e || this.dots[t].e == this.dots[k].e) {
                                         let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
                                         let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
-                                        const gradient = canvas_context.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
+                                        const gradient = canvas_context.createLinearGradient(this.dots[t].p.x, this.dots[t].p.y, this.dots[k].p.x, this.dots[k].p.y);
 
                                         // Add three color stops
                                         gradient.addColorStop(0, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`);
@@ -3598,11 +3662,14 @@
                                         // Set the fill style and draw a rectangle
 
 
-                                        let link = new LineOP(p1, p2, gradient, .5+(Math.abs(this.dots[t].turned)*.5))
+                                        this.link.object = this.dots[t].p
+                                        this.link.target = this.dots[k].p
+                                        this.link.color = gradient
+                                        this.link.width = .5 + (Math.abs(this.dots[t].turned) * .5)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
-                                        
-                                        link.draw()
+
+                                        this.link.draw()
                                         // this.turns[(this.dots[t].turned*.5)+.5]+=.5
                                     }
 
@@ -3615,7 +3682,7 @@
                                     if (this.dots[t].e == this.dots[k].e + 1 || this.dots[t].e == this.dots[k].e - 1 || this.dots[t].e == this.dots[k].e) {
                                         let p1 = new Point(this.dots[t].sx, this.dots[t].sy)
                                         let p2 = new Point(this.dots[k].sx, this.dots[k].sy)
-                                        const gradient = canvas_context.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
+                                        const gradient = canvas_context.createLinearGradient(this.dots[t].p.x, this.dots[t].p.y, this.dots[k].p.x, this.dots[k].p.y);
 
                                         // Add three color stops
                                         gradient.addColorStop(0, `rgb(${this.dots[t].r}, ${this.dots[t].g}, ${this.dots[t].b})`);
@@ -3626,11 +3693,14 @@
                                         // Set the fill style and draw a rectangle
 
 
-                                        let link = new LineOP(p1, p2, gradient, .5+(Math.abs(this.dots[t].turned)*.5))
+                                        this.link.object = this.dots[t].p
+                                        this.link.target = this.dots[k].p
+                                        this.link.color = gradient
+                                        this.link.width = .5 + (Math.abs(this.dots[t].turned) * .5)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
-                                        
-                                        link.draw()
+
+                                        this.link.draw()
                                         // this.turns[(this.dots[t].turned*.5)+.5]+=.5
                                     }
 
@@ -3814,12 +3884,12 @@
                 canvas_context.clearRect(0, 0, canvas.width, canvas.height)
                 canvas_context.drawImage(canvas2, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height)
             }
-        }, 25)
+        }, 40)
 
 
         window.addEventListener('pointerdown', e => {
-        // b.board.rotateZ(1.2)
-        // b.board.rotateY(.751)
+            // b.board.rotateZ(1.2)
+            // b.board.rotateY(.751)
             e.preventDefault()
             canvas.focus();
             FLEX_engine = canvas.getBoundingClientRect();
@@ -3837,19 +3907,19 @@
                 b.spin1()
             }
             if (aiButton.isPointInside(TIP_engine)) {
-                AI *=-1
-                if(AI == 1){
-                                clicked = 5
-                            }
-            }
-                if (difficultyButton.isPointInside(TIP_engine)) {
-                if(difficulty == 1){
-                    difficulty = 2
-                }else{
-                    if(difficulty == 2){
-                    difficulty = 1
-                     }
+                AI *= -1
+                if (AI == 1) {
+                    clicked = 5
+                    playerID = -1
                 }
+            }
+            if (difficultyButton.isPointInside(TIP_engine)) {
+                difficulty++
+                if (difficulty == 10) {
+                    difficulty = 2
+                }
+                b.board = new ThreeDeeObject(difficulty)
+
             }
             if (spin2.isPointInside(TIP_engine)) {
                 b.spin2()
@@ -3867,9 +3937,9 @@
                 if (i[0] != -10) {
                     b.cald = 0
                     let pson = {}
-                    pson.te = i[0] + 3
-                    pson.ke = i[1] + 3
-                    pson.ee = i[2] + 3
+                    pson.te = i[0] - b.board.sizeDown
+                    pson.ke = i[1] - b.board.sizeDown
+                    pson.ee = i[2] - b.board.sizeDown
                     pson.tile = i[3]
                     pson.id = Math.abs(playerID - 1)
                     pson.guy = 1
@@ -3899,7 +3969,7 @@
 
     let lock = 1
 
-    let difficulty = 1
+    let difficulty = 6
 
     let flooble = new ThreeDeeObject()
 
@@ -3937,20 +4007,47 @@
         canvas_context.fillText("scale", scaler.x + 20, scaler.y + 30)
         canvas_context.fillStyle = "black"
         canvas_context.font = "30px comic sans ms"
-        if(AI == 1){
-        canvas_context.fillText("playAI: ON", aiButton.x + 20, aiButton.y + 30)
-    }else{
-        canvas_context.fillText("playAI: OFF", aiButton.x + 20, aiButton.y + 30)
-    }
+        if (AI == 1) {
+            canvas_context.fillText("playAI: ON", aiButton.x + 20, aiButton.y + 30)
+        } else {
+            canvas_context.fillText("playAI: OFF", aiButton.x + 20, aiButton.y + 30)
+        }
         // if(AI == 1){
 
-            if(difficulty == 1){
+            if (difficulty == 5) {
             difficultyButton.color = "#00FF00"
-            canvas_context.fillText("AI: Easy", difficultyButton.x + 20, difficultyButton.y + 30)
-        }else{
+            canvas_context.fillText("Cube size: 5", difficultyButton.x + 20, difficultyButton.y + 30)
+        } else     if (difficulty == 4) {
+            difficultyButton.color = "#00FF00"
+            canvas_context.fillText("Cube size: 4", difficultyButton.x + 20, difficultyButton.y + 30)
+        } else     if (difficulty == 3) {
+            difficultyButton.color = "#00FF00"
+            canvas_context.fillText("Cube size: 3", difficultyButton.x + 20, difficultyButton.y + 30)
+        } else     if (difficulty == 2) {
+            difficultyButton.color = "#00FF00"
+            canvas_context.fillText("Cube size: 2", difficultyButton.x + 20, difficultyButton.y + 30)
+        } else     if (difficulty == 5) {
+            difficultyButton.color = "#00FF00"
+            canvas_context.fillText("Cube size: 5", difficultyButton.x + 20, difficultyButton.y + 30)
+        } else if (difficulty == 6) {
+            difficultyButton.color = "#00FF00"
+            canvas_context.fillText("Cube size: 6", difficultyButton.x + 20, difficultyButton.y + 30)
+        } else if (difficulty == 7) {
+            difficultyButton.color = "#00FF00"
+            canvas_context.fillText("Cube size: 7", difficultyButton.x + 20, difficultyButton.y + 30)
+        } else if (difficulty == 8) {
+            difficultyButton.color = "#00FF00"
+            canvas_context.fillText("Cube size: 8", difficultyButton.x + 20, difficultyButton.y + 30)
+        } else {
             difficultyButton.color = "#FF0000"
-            canvas_context.fillText("AI: Hard", difficultyButton.x + 20, difficultyButton.y + 30)
+            canvas_context.fillText("Cube size: 9", difficultyButton.x + 20, difficultyButton.y + 30)
         }
+
+        canvas_context.fillStyle = "black"
+        canvas_context.font = "18px comic sans ms"
+            canvas_context.fillText("Changing cube size resets game", difficultyButton.x + 220, difficultyButton.y -30)
+            canvas_context.fillText("Online play is 6 by default", difficultyButton.x + 220, difficultyButton.y + 30)
+            canvas_context.fillText("Other sizes may cause issues", difficultyButton.x + 220, difficultyButton.y + 80)
         // }
         // gamepadAPI.update() //checks for button presses/stick movement on the connected controller)lovlock
         // game code goes here
@@ -3958,87 +4055,116 @@
 
         // flooble.draw()
 
-       let fr=  b.generateMoves()
+        let fr = b.generateMoves()
 
-       if(clicked >= 2){
-                canvas_context.font = "30px arial"
-                    canvas_context.fillStyle = "white"
-                    canvas_context.fillText("AI Processing", 60, 90)
-            }
+        if (clicked >= 2) {
+            canvas_context.font = "30px arial"
+            canvas_context.fillStyle = "white"
+            canvas_context.fillText("AI Processing", 60, 90)
+        }
+        if(clicked >1){
             clicked--
-        if(AI==1){
+
+        }
+        if (AI == 1) {
 
             if (clicked == 1) {
 
 
-if (!b.isGameOver()) {
+                if (!b.isGameOver()) {
 
-    let depth = difficulty
-    // if(b.board.turn == 0){
-    //     depth = 1
-    //     if(Math.random() < .05){
-    //         depth = 2    
-    //     }
-    // }else{
-    // }
-    // if(fr.length < 50){
-    //     depth++
-    // }
-    // if(fr.length < 25){
-    //     depth++
-    // }
-    // if(fr.length < 15){
-    //     depth++
-    // }
-    // if(fr.length < 10){
-    //     depth++
-    // }
-    let pair =[]
-    // if(b.board.turn ==0){
-        pair = b.minimax(depth, true, ((b.board.turn - .5) * 2)*-1)
-    // }else{
-    //     pair = b.minimax(depth, false, ((b.board.turn - .5) * 2)*-1)
-    // }
+                    let depth = difficulty
+                    // if(b.board.turn == 0){
+                    //     depth = 1
+                    //     if(Math.random() < .05){
+                    //         depth = 2    
+                    //     }
+                    // }else{
+                    // }
+                    // if(fr.length < 50){
+                    //     depth++
+                    // }
+                    // if(fr.length < 25){
+                    //     depth++
+                    // }
+                    // if(fr.length < 15){
+                    //     depth++
+                    // }
+                    // if(fr.length < 10){
+                    //     depth++
+                    // }
+                    let pair = []
+                    if (b.board.turn == 0) {
+                        pair = b.minimax(1, true, ((b.board.turn - .5) * 2) * -1)
+                    } else {
+                        pair = b.minimax(1, true, ((b.board.turn - .5) * 2) * -1)
+                    }
+                    // if(start == 0){
+                    //     start  = 1
+                    //     pair[1] = 13
+                    // }
+                    //console.log(pair)
+                    // let pair = p.minimax(3, p.right)
 
-    // if(start == 0){
-    //     start  = 1
-    //     pair[1] = 13
-    // }
-    //console.log(pair)
-    // let pair = p.minimax(3, p.right)
 
+                    if (pair[1] != -1) {
+                        // last.k = pair[1][0]
+                        // last.t = pair[1][1]
+                        // last.e = pair[1][2]
+                        b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = ((b.board.turn * .5) * 2);
+                        b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].marked = 1;
+                        if (b.board.turn == 0) {
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].r = 255;
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].g = 255;
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].b = 255;
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 1
+                        } else {
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].r = 0;
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].g = 0;
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].b = 0;
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = -1
+                        }
+                        b.board.turn++
+                        b.board.turn %= 2
+                        clicked = 0
+                    }
 
-    if (pair[1] != -1) {
-        b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = ((b.board.turn * .5) * 2);
-        b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].marked = 1;
-        if (b.board.turn == 0) {
-            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].r = 255;
-            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].g = 255;
-            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].b = 255;
-            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 1
-        } else {
-            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].r = 0;
-            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].g = 0;
-            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].b = 0;
-            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = -1
-        }
-        b.board.turn++
-        b.board.turn %= 2
-    }
-}
+                    // if (b.strings.includes(b.export())) {
+                    //     flagger = []
+                    //     b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 0
+                    //     b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].type = 0
+                    //     b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].value = .5
+                    //     b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].r = 128
+                    //     b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].g = 128
+                    //     b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].b = 128
+                    //     // this.board.turn++
+                    //     // this.board.turn %= 2
+                    //     ////console.log(this.board.turn)
+                    //     b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].marked = 0
+                    //     ////console.log(this.board.dots[k], this.board.turn)
+                    //     i = -1
+                    // } else {
+                    //     b.strings.push(b.export())
+                    //     b.board.turn++
+                    //     b.board.turn %= 2
 
-b.board.wholeSort()
-b.board.badwholeSort()
-        b.board.turn++
-        b.board.turn %= 2
-b.board.wholeSort()
-b.board.badwholeSort()
-        b.board.turn++
-        b.board.turn %= 2
-        // b.board.rotateZ(.01)
-        // b.board.rotateY(.0051)
-// clicked = 0
-}
+                    //     ////console.log(this.board.turn)
+                    // }
+
+                }
+
+                b.board.wholeSort()
+                b.board.badwholeSort()
+                b.board.turn++
+                b.board.turn %= 2
+                b.board.wholeSort()
+                b.board.badwholeSort()
+                b.board.turn++
+                b.board.turn %= 2
+                // b.board.rotateZ(.01)
+                // b.board.rotateY(.0051)
+                // clicked = 0
+            }
 
 
         }
