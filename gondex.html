@@ -3821,6 +3821,10 @@
                     canvas_context.clearRect(-10000, -10000, canvas.width * 1000, canvas.height * 1000)
                     roombox.draw()
                     goRect.draw()
+        canvas_context.fillStyle = "white"
+
+        canvas_context.font = "50px comic sans ms"
+        canvas_context.fillText("Play!", goRect.x + 40, goRect.y + 70)
 
                 } else {
                     main()
@@ -3844,6 +3848,8 @@
                     canvas_context.font = "30px arial"
                     canvas_context.fillStyle = "white"
                     canvas_context.fillText("<-- Online light, if it stops flashing you have no opponent.", 60, 30)
+                    canvas_context.fillText("You are in room: "+globalRoom, 860, 30)
+                    
                     let c1 = .5
                     let c2 = 0
                     let f1 = 0
