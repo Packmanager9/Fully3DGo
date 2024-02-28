@@ -945,8 +945,14 @@
         }
         isPointInside(point) {
 
+            if(orth == 1){
             this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
            this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
+            }else{
+            this.sy = ((this.y * 120)) + 350
+           this.sx = ((this.x * 120) ) + 350
+
+            }
 
             this.areaY = point.y - this.sy
             this.areaX = point.x - this.sx
@@ -1023,16 +1029,27 @@
         subdraw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
             //special thanks to tcurtis526 
+            if(orth == 1){
             this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
            this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
+            }else{
+            this.sy = ((this.y * 120)) + 350
+           this.sx = ((this.x * 120) ) + 350
+
+            }
             this.p = new Point(this.sx, this.sy)
         }
         draw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
 
+            if(orth == 1){
             this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
            this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
+            }else{
+            this.sy = ((this.y * 120)) + 350
+           this.sx = ((this.x * 120) ) + 350
 
+            }
             if (this.turned == 1) {
                 // //////console.log("h")
                 let r = 7 + (Math.max(-5, -this.z * 1))
@@ -3993,6 +4010,9 @@
             if (spin3.isPointInside(TIP_engine)) {
                 b.spin3()
             }
+            if (spin4.isPointInside(TIP_engine)) {
+                orth*=-1
+            }
             
             if (scaler.isPointInside(TIP_engine)) {
                 scale *= -1
@@ -4052,9 +4072,11 @@
     let spin1 = new Rectangle(50, 700, 200, 50, "green")
     let spin2 = new Rectangle(250, 700, 200, 50, "yellow")
     let spin3 = new Rectangle(250, 750, 200, 50, "orange")
+    let spin4 = new Rectangle(50, 750, 200, 50, "cyan")
     let scaler = new Rectangle(500, 700, 200, 50, "white")
     let scale = -1
     let AI = -1
+    let orth = 1
     let aiButton = new Rectangle(750, 700, 200, 50, "pink")
     let difficultyButton = new Rectangle(750, 750, 200, 50, "white")
     function main() {
@@ -4065,6 +4087,7 @@
         spin1.draw()
         spin2.draw()
         spin3.draw()
+        spin4.draw()
         aiButton.draw()
         // if(AI == 1){
         difficultyButton.draw()
@@ -4078,6 +4101,9 @@
         canvas_context.fillStyle = "black"
         canvas_context.font = "30px comic sans ms"
         canvas_context.fillText("rotate", spin3.x + 20, spin3.y + 30)
+        canvas_context.fillStyle = "black"
+        canvas_context.font = "30px comic sans ms"
+        canvas_context.fillText("project", spin4.x + 20, spin4.y + 30)
         canvas_context.fillStyle = "black"
         canvas_context.font = "30px comic sans ms"
         canvas_context.fillText("scale", scaler.x + 20, scaler.y + 30)
