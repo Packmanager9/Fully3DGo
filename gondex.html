@@ -2024,7 +2024,7 @@
                     f2++
                 }
             }
-            if (c2 >= 200 && f2 == 1) { c2 = 1 }
+            if (c2 >= ((b.board.size*b.board.size*b.board.size)-10) && f2 == 1) { c2 = 1 }
             if (c2 > c1) {
                 return -1
             }
@@ -2071,7 +2071,7 @@
                     f2++
                 }
             }
-            if (c2 >= 200 && f2 == 1) { c2 = 1 }
+            if (c2 >= ((b.board.size*b.board.size*b.board.size)-10) && f2 == 1) { c2 = 1 }
 
             let s1 = 0
             let s2 = 0
@@ -2087,10 +2087,10 @@
             for (let t = 0; t < b.board.storage.dots.length; t++) {
                 let n = b.board.storage.smartsubneighbors(b.board.storage.dots[t])
                 if (b.board.storage.dots[t].turned == -1) {
-                    s1 += n.length * 875
+                    s1 += n.length * .875
                 }
                 if (b.board.storage.dots[t].turned == 1) {
-                    s2 += n.length * 875
+                    s2 += n.length * .875
                 }
             }
             for (let t = 0; t < b.board.storage.dots.length; t++) {
@@ -3945,7 +3945,7 @@
                             f2++
                         }
                     }
-                    if (c2 >= 200 && f2 == 1) { c2 = 1 }
+                    if (c2 >= ((b.board.size*b.board.size*b.board.size)-10) && f2 == 1) { c2 = 1 }
                     canvas_context.fillText(c1, 800, 200)
                     canvas_context.fillStyle = "black"
                     canvas_context.fillText(c2, 800, 250)
