@@ -1083,7 +1083,7 @@
                 // }
                 let rekt = new Rectangle(this.sx-.5, this.sy-.5, 7,7)
                 if(rekt.isPointInside(TIP_engine)){
-                canvas_context.strokeStyle ="black"
+                canvas_context.strokeStyle ="white"
                 canvas_context.lineWidth = 2
                 canvas_context.fillStyle = `rgb(${this.r + b.board.cstep},${this.g + b.board.cstep},${this.b + b.board.cstep})`
                     canvas_context.strokeText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), TIP_engine.y + 10+(this.y*3))
