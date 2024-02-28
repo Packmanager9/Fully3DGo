@@ -945,8 +945,8 @@
         }
         isPointInside(point) {
 
-            this.sy = (this.y * 120) + 350
-            this.sx = (this.x * 120) + 350
+            this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
+           this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
 
             this.areaY = point.y - this.sy
             this.areaX = point.x - this.sx
@@ -1022,22 +1022,22 @@
         }
         subdraw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
-
-            this.sy = (this.y * 120) + 350
-            this.sx = (this.x * 120) + 350
+            //special thanks to tcurtis526 
+            this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
+           this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
             this.p = new Point(this.sx, this.sy)
         }
         draw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
 
-            this.sy = (this.y * 120) + 350
-            this.sx = (this.x * 120) + 350
+            this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
+           this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
 
             if (this.turned == 1) {
                 // //////console.log("h")
                 let r = 7 + (Math.max(-5, -this.z * 1))
                 canvas_context.beginPath();
-                canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
+                canvas_context.arc((this.sx * 1) + 0, (this.sy * 1) + 0, r, 0, (Math.PI * 2), true)
                 canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
@@ -1073,7 +1073,7 @@
                 // canvas_context.stroke()
                 canvas_context.beginPath();
                 let r = 7 + (Math.max(-5, -this.z * 1))
-                canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, r, 0, (Math.PI * 2), true)
+                canvas_context.arc((this.sx * 1) + 0, (this.sy * 1) + 0, r, 0, (Math.PI * 2), true)
                 canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.fillStyle = `rgb(${this.r},${this.g},${this.b})`
@@ -1847,7 +1847,7 @@
                         index += j * this.board.size
                         index += k
                         ///////////////console.log(index)
-                        if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark === 0 ||  (this.board.supa[i][j][k].mark  == ((b.board.turn-.5)*2) && (c1x == 1 || c2x == 1))|| (f3 < 2 && f2 < 2)))) {
+                        if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark == 0 ||  (this.board.supa[i][j][k].mark  == ((b.board.turn-.5)*2) && (c1x == 1 || c2x == 1))|| (f3 < 2 && f2 < 2)))) {
                             if(Math.random()< .5){
 
                                 nextMoves.push([i,j,k]);
@@ -2070,10 +2070,10 @@
             for (let t = 0; t < b.board.storage.dots.length; t++) {
                 let n = b.board.storage.smartsubneighbors(b.board.storage.dots[t])
                 if (b.board.storage.dots[t].turned == -1) {
-                    s1 += n.length * .875
+                    s1 += n.length * 875
                 }
                 if (b.board.storage.dots[t].turned == 1) {
-                    s2 += n.length * .875
+                    s2 += n.length * 875
                 }
             }
             for (let t = 0; t < b.board.storage.dots.length; t++) {
@@ -4142,6 +4142,7 @@
             clicked--
 
         }
+        // clicked = 1
         if (AI == 1) {
 
             if (clicked == 1) {
