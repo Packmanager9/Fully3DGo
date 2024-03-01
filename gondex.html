@@ -946,19 +946,24 @@
         isPointInside(point) {
 
             if(orth == 1){
-            this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
-           this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
+            this.sy = ((this.y * 120)*(((this.z)/8)+.9) ) + 350
+           this.sx = ((this.x * 120)*(((this.z)/8)+.9) ) + 350
             }else{
             this.sy = ((this.y * 120)) + 350
            this.sx = ((this.x * 120) ) + 350
 
             }
 
-            this.areaY = point.y - this.sy
-            this.areaX = point.x - this.sx
-            if (((this.areaX * this.areaX) + (this.areaY * this.areaY)) <= (this.radius * this.radius)) {
-                return true
-            }
+            let rekt = new Rectangle(this.sx-3.5, this.sy-3.5, 7,7)
+                if(rekt.isPointInside(TIP_engine)){
+                    return true
+                }
+
+            // this.areaY = point.y - this.sy
+            // this.areaX = point.x - this.sx
+            // if (((this.areaX * this.areaX) + (this.areaY * this.areaY)) <= (this.radius * this.radius)) {
+            //     return true
+            // }
             return false
         }
         valueShift(mag) {
@@ -1022,16 +1027,14 @@
             } else if (g < 16) {
                 g = 16
             }
-
             return endstring + (g | (b << 8) | (r << 16)).toString(16)
-
         }
         subdraw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
             //special thanks to tcurtis526 
             if(orth == 1){
-            this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
-           this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
+            this.sy = ((this.y * 120)*(((this.z)/8)+.9) ) + 350
+           this.sx = ((this.x * 120)*(((this.z)/8)+.9) ) + 350
             }else{
             this.sy = ((this.y * 120)) + 350
            this.sx = ((this.x * 120) ) + 350
@@ -1043,8 +1046,8 @@
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
 
             if(orth == 1){
-            this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
-           this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
+            this.sy = ((this.y * 120)*(((this.z)/8)+.9) ) + 350
+           this.sx = ((this.x * 120)*(((this.z)/8)+.9) ) + 350
             }else{
             this.sy = ((this.y * 120)) + 350
            this.sx = ((this.x * 120) ) + 350
@@ -1063,14 +1066,15 @@
                 // if (this.marked == 1) {
                 canvas_context.fill()
                 // }   
-                 let rekt = new Rectangle(this.sx-.5, this.sy-.5, 7,7)
+                 let rekt = new Rectangle(this.sx-3.5, this.sy-3.5, 7,7)
                 if(rekt.isPointInside(TIP_engine)){
+                    bril+=30
                 canvas_context.strokeStyle ="black"
                 canvas_context.lineWidth = 2
         canvas_context.font = "30px comic sans ms"
                 canvas_context.fillStyle = `rgb(${this.r + b.board.cstep},${this.g + b.board.cstep},${this.b + b.board.cstep})`
-                    canvas_context.strokeText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), TIP_engine.y + 10+(this.y*3))
-                    canvas_context.fillText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), TIP_engine.y + 10+(this.y*3))
+                    canvas_context.strokeText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), bril+(TIP_engine.y + 10+(this.y*3)))
+                    canvas_context.fillText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), bril+(TIP_engine.y + 10+(this.y*3)))
                 }
             } else if (this.turned == -1) {
                 // //////console.log("h")
@@ -1099,15 +1103,16 @@
                 // if (this.marked == 1) {
                 canvas_context.fill()
                 // }
-                let rekt = new Rectangle(this.sx-.5, this.sy-.5, 7,7)
+                let rekt = new Rectangle(this.sx-3.5, this.sy-3.5, 7,7)
                 if(rekt.isPointInside(TIP_engine)){
+                    bril+=30
                 canvas_context.strokeStyle ="white"
                 canvas_context.lineWidth = 2
 
         canvas_context.font = "30px comic sans ms"
                 canvas_context.fillStyle = `rgb(${this.r + b.board.cstep},${this.g + b.board.cstep},${this.b + b.board.cstep})`
-                    canvas_context.strokeText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), TIP_engine.y + 10+(this.y*3))
-                    canvas_context.fillText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), TIP_engine.y + 10+(this.y*3))
+                    canvas_context.strokeText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), bril+(TIP_engine.y + 10+(this.y*3)))
+                    canvas_context.fillText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), bril+(TIP_engine.y + 10+(this.y*3)))
                 }
             } else {
 
@@ -1115,16 +1120,17 @@
                 // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.strokeStyle = `rgb(${this.r + b.board.cstep},${this.g + b.board.cstep},${this.b + b.board.cstep})`
                 canvas_context.lineWidth = 1
-                canvas_context.strokeRect(this.sx - 3, this.sy - 3, 6, 6)
-                let rekt = new Rectangle(this.sx-.5, this.sy-.5, 7,7)
+                canvas_context.strokeRect(this.sx - 3.5, this.sy - 3.5, 7, 7)
+                let rekt = new Rectangle(this.sx-3.5, this.sy-3.5, 7,7)
                 if(rekt.isPointInside(TIP_engine)){
+                    bril+=30
                 canvas_context.strokeStyle ="black"
                 canvas_context.lineWidth = 2
 
         canvas_context.font = "30px comic sans ms"
                 canvas_context.fillStyle = `rgb(${this.r + b.board.cstep},${this.g + b.board.cstep},${this.b + b.board.cstep})`
-                    canvas_context.strokeText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), TIP_engine.y + 10+(this.y*3))
-                    canvas_context.fillText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), TIP_engine.y + 10+(this.y*3))
+                    canvas_context.strokeText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), bril+(TIP_engine.y + 10+(this.y*3)))
+                    canvas_context.fillText(`(${this.k-b.board.sizeDown}, ${this.t-b.board.sizeDown}, ${this.e-b.board.sizeDown})`, TIP_engine.x + 10+(this.x*3), bril+(TIP_engine.y + 10+(this.y*3)))
                 }
                 // canvas_context.beginPath();
                 // canvas_context.arc((this.x * 120) + 350, (this.y * 120) + 350, 10, 0, (Math.PI * 2), true)
@@ -3594,6 +3600,7 @@
 
                 this.dots[t].subdraw()
             }
+            bril=0
             this.link = new LineOP(new Point(0, 0), new Point(0, 0))
             for (let t = 0; t < this.dots.length; t++) {
                 this.dots[t].draw()
@@ -4079,6 +4086,7 @@
     let orth = 1
     let aiButton = new Rectangle(750, 700, 200, 50, "pink")
     let difficultyButton = new Rectangle(750, 750, 200, 50, "white")
+    let    bril=0
     function main() {
         // if(keysPressed['l']){
 
