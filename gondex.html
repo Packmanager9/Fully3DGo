@@ -954,7 +954,7 @@
 
             }
 
-            let rekt = new Rectangle(this.sx-3.5, this.sy-3.5, 7,7)
+            let rekt = new Rectangle(this.sx-3, this.sy-3, 6,6)
                 if(rekt.isPointInside(TIP_engine)){
                     return true
                 }
@@ -1066,7 +1066,7 @@
                 // if (this.marked == 1) {
                 canvas_context.fill()
                 // }   
-                 let rekt = new Rectangle(this.sx-3.5, this.sy-3.5, 7,7)
+                 let rekt = new Rectangle(this.sx-3, this.sy-3, 6,6)
                 if(rekt.isPointInside(TIP_engine)){
                     bril+=30
                 canvas_context.strokeStyle ="black"
@@ -1103,7 +1103,7 @@
                 // if (this.marked == 1) {
                 canvas_context.fill()
                 // }
-                let rekt = new Rectangle(this.sx-3.5, this.sy-3.5, 7,7)
+                let rekt = new Rectangle(this.sx-3, this.sy-3, 6,6)
                 if(rekt.isPointInside(TIP_engine)){
                     bril+=30
                 canvas_context.strokeStyle ="white"
@@ -1121,7 +1121,7 @@
                 canvas_context.strokeStyle = `rgb(${this.r + b.board.cstep},${this.g + b.board.cstep},${this.b + b.board.cstep})`
                 canvas_context.lineWidth = 1
                 canvas_context.strokeRect(this.sx - 3.5, this.sy - 3.5, 7, 7)
-                let rekt = new Rectangle(this.sx-3.5, this.sy-3.5, 7,7)
+                let rekt = new Rectangle(this.sx-3, this.sy-3, 6,6)
                 if(rekt.isPointInside(TIP_engine)){
                     bril+=30
                 canvas_context.strokeStyle ="black"
