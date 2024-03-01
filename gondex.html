@@ -1224,7 +1224,11 @@
                                     ////console.log(this.board.turn)
                                     this.board.supa[kop][top][eep].marked = 0
                                     ////console.log(this.board.supa[kop][top][eep], this.board.turn)
-                                    i = -1
+                                    i = -10
+                                    t = -10
+                                    ke = -10
+                                    e = -10
+                                    b.cald = 1
                                 } else {
                                     this.strings.push(this.export())
                                     this.board.turn++
@@ -1253,7 +1257,11 @@
                                     ////console.log(this.board.turn)
                                     this.board.supa[kop][top][eep].marked = 0
                                     ////console.log(this.board.supa[kop][top][eep], this.board.turn)
-                                    i = -1
+                                    i = -10
+                                    t = -10
+                                    ke = -10
+                                    e = -10
+                                    b.cald = 1
                                 } else {
                                     this.strings.push(this.export())
                                     this.board.turn++
@@ -1304,7 +1312,11 @@
                                     ////console.log(this.board.turn)
                                     this.board.dots[k].marked = 0
                                     ////console.log(this.board.dots[k], this.board.turn)
-                                    i = -1
+                                    i = -10
+                                    t = -10
+                                    ke = -10
+                                    e = -10
+                                    b.cald = 1
                                 } else {
                                     this.strings.push(this.export())
                                     this.board.turn++
@@ -1333,7 +1345,11 @@
                                     ////console.log(this.board.turn)
                                     this.board.dots[k].marked = 0
                                     ////console.log(this.board.dots[k], this.board.turn)
-                                    i = -1
+                                    i = -10
+                                    t = -10
+                                    ke = -10
+                                    e = -10
+                                    b.cald = 1
                                 } else {
                                     this.strings.push(this.export())
                                     this.board.turn++
@@ -3956,7 +3972,7 @@
                     canvas_context.fillText(c1, 800, 200)
                     canvas_context.fillStyle = "black"
                     canvas_context.fillText(c2, 800, 250)
-                    if (b.cald == 1) {
+                    // if (b.cald == 1) {
                         if (playerID == -1 || playerID == b.board.turn) {
                             if (b.board.turn == 1) {
                                 canvas_context.fillStyle = "black"
@@ -3965,7 +3981,7 @@
                             }
                             canvas_context.fillText("Your turn!", 60, 60)
                         }
-                    }
+                    // }
                 }
             }
             if (scale == 1) {
