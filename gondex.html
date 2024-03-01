@@ -935,7 +935,7 @@
             this.r = r
             this.g = g
             this.b = b
-            this.radius = 7
+            this.radius = 5
             this.turned = 0
             this.value = .5
             this.marked = 0
@@ -946,24 +946,24 @@
         isPointInside(point) {
 
             if(orth == 1){
-            this.sy = ((this.y * 120)*(((this.z)/8)+.9) ) + 350
-           this.sx = ((this.x * 120)*(((this.z)/8)+.9) ) + 350
+            this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
+           this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
             }else{
             this.sy = ((this.y * 120)) + 350
            this.sx = ((this.x * 120) ) + 350
 
             }
 
-            let rekt = new Rectangle(this.sx-3, this.sy-3, 6,6)
-                if(rekt.isPointInside(TIP_engine)){
-                    return true
-                }
+            // let rekt = new Rectangle(this.sx-3, this.sy-3, 6,6)
+            //     if(rekt.isPointInside(TIP_engine)){
+            //         return true
+            //     }
 
-            // this.areaY = point.y - this.sy
-            // this.areaX = point.x - this.sx
-            // if (((this.areaX * this.areaX) + (this.areaY * this.areaY)) <= (this.radius * this.radius)) {
-            //     return true
-            // }
+            this.areaY = point.y - this.sy
+            this.areaX = point.x - this.sx
+            if (((this.areaX * this.areaX) + (this.areaY * this.areaY)) <= (this.radius * this.radius)) {
+                return true
+            }
             return false
         }
         valueShift(mag) {
@@ -1033,8 +1033,8 @@
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
             //special thanks to tcurtis526 
             if(orth == 1){
-            this.sy = ((this.y * 120)*(((this.z)/8)+.9) ) + 350
-           this.sx = ((this.x * 120)*(((this.z)/8)+.9) ) + 350
+            this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
+           this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
             }else{
             this.sy = ((this.y * 120)) + 350
            this.sx = ((this.x * 120) ) + 350
@@ -1046,8 +1046,8 @@
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
 
             if(orth == 1){
-            this.sy = ((this.y * 120)*(((this.z)/8)+.9) ) + 350
-           this.sx = ((this.x * 120)*(((this.z)/8)+.9) ) + 350
+            this.sy = ((this.y * 120)*(((1-this.z)/10)+.92) ) + 350
+           this.sx = ((this.x * 120)*(((1-this.z)/10)+.92) ) + 350
             }else{
             this.sy = ((this.y * 120)) + 350
            this.sx = ((this.x * 120) ) + 350
@@ -4389,7 +4389,7 @@
                 let te = JSON.parse(data).te
                 let ke = JSON.parse(data).ke
                 let ee = JSON.parse(data).ee
-                ////console.log(tile)
+                // console.log(tile)
                 let t = new Point(b.board.supa[ke][te][ee].sx, b.board.supa[ke][te][ee].sy)
 
                 b.check(t, tile, te, ke, ee)
