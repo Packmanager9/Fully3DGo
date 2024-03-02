@@ -950,6 +950,8 @@
             this.radius = 5
             this.value = .5
             this.marked = 0
+
+            this.scale = 1
         }
         valueOf() {
             return this.value
@@ -1043,6 +1045,8 @@
         subdraw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
             //special thanks to tcurtis526 
+
+            this.scale = 1
             if (orth == 1) {
                 this.sy = ((this.y * 120) * (((1 - this.z) / 10) + .92)) + 350
                 this.sx = ((this.x * 120) * (((1 - this.z) / 10) + .92)) + 350
@@ -1052,6 +1056,11 @@
 
             }
             this.p = new Point(this.sx, this.sy)
+
+            let rekt = new Rectangle(this.sx - 3, this.sy - 3, 6, 6)
+                if (rekt.isPointInside(TIP_engine)) {
+                    this.scale = 1.7
+                }
         }
         draw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
@@ -1153,13 +1162,16 @@
                     canvas_context.fillText(`(${this.k - b.board.sizeDown}, ${this.t - b.board.sizeDown}, ${this.e - b.board.sizeDown})`, TIP_engine.x + 10 + (this.x * 3), bril + (TIP_engine.y + 10 + (this.y * 3)))
                 }
             } else {
-
+                let rekt = new Rectangle(this.sx - 3, this.sy - 3, 6, 6)
+                if (rekt.isPointInside(TIP_engine)) {
+                    this.scale = 1.7
+                }
                 // //////console.log("h")
                 // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.strokeStyle = `rgb(${this.r + b.board.cstep},${this.g + b.board.cstep},${this.b + b.board.cstep})`
                 canvas_context.lineWidth = 1
-                canvas_context.strokeRect(this.sx - 3.5, this.sy - 3.5, 7, 7)
-                let rekt = new Rectangle(this.sx - 3, this.sy - 3, 6, 6)
+                canvas_context.strokeRect(this.sx - (3.5*this.scale), this.sy - (3.5*this.scale), 7*this.scale, 7*this.scale)
+                // let rekt = new Rectangle(this.sx - 3, this.sy - 3, 6, 6)
                 if (rekt.isPointInside(TIP_engine)) {
                     bril += 30
                     canvas_context.strokeStyle = "black"
@@ -3872,7 +3884,7 @@
                                         this.link.object = this.dots[t].p
                                         this.link.target = this.dots[k].p
                                         this.link.color = gradient
-                                        this.link.width = 1
+                                        this.link.width =( .5 + (Math.abs(this.dots[t].turned) * .5))+(((this.dots[k].scale-1)+(this.dots[t].scale-1))*3)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
 
@@ -3902,7 +3914,7 @@
                                         this.link.object = this.dots[t].p
                                         this.link.target = this.dots[k].p
                                         this.link.color = gradient
-                                        this.link.width = .5 + (Math.abs(this.dots[t].turned) * .5)
+                                        this.link.width =( .5 + (Math.abs(this.dots[t].turned) * .5))+(((this.dots[k].scale-1)+(this.dots[t].scale-1))*3)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
 
@@ -3933,7 +3945,7 @@
                                         this.link.object = this.dots[t].p
                                         this.link.target = this.dots[k].p
                                         this.link.color = gradient
-                                        this.link.width = .5 + (Math.abs(this.dots[t].turned) * .5)
+                                        this.link.width = ( .5 + (Math.abs(this.dots[t].turned) * .5))+(((this.dots[k].scale-1)+(this.dots[t].scale-1))*3)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
 
