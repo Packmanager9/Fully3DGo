@@ -1176,6 +1176,10 @@
 
             this.board.spin3()
         }
+        spin5() {
+
+            this.board.spin5()
+        }
         check(point, tile = -1, top = -1, kop = -1, eep = -1) {
 
             let box = []
@@ -3527,6 +3531,36 @@
 
             this.rotateX(-Math.PI / 16)
         }
+        spin5() {
+
+
+
+            let pairs = []
+            for (let t = 0; t < this.dots.length; t++) {
+                this.dots[t].line = this.links[t]
+                pairs.push([this.dots[t], this.links[t]])
+            }
+            
+            pairs.sort((a, b) => a[0].k > b[0].k ? -1 : 1)
+            pairs.sort((a, b) => a[0].t > b[0].t ? -1 : 1)
+            pairs.sort((a, b) => a[0].e > b[0].e ? -1 : 1)
+            
+            for (let t = 0; t < this.dots.length; t++) {
+                        if (this.size % 2 == 0) {
+                            // point = new Point3D((k + .5) * ((.6 / this.size) * 6), (t + .5) * ((.6 / this.size) * 6), (e + .5) * ((.6 / this.size) * 6), 128 + (e * ((35 / this.size) * 6)), 128 + (t * ((35 / this.size) * 6)), 128 + (k * ((35 / this.size) * 6)))
+                            this.dots[t].x = (this.dots[t].k + .5) * ((.6 / this.size) * 6)
+                            this.dots[t].y = (this.dots[t].t + .5) * ((.6 / this.size) * 6)
+                            this.dots[t].z = (this.dots[t].e + .5) * ((.6 / this.size) * 6)
+                        } else {
+                            // point = new Point3D((k + 1.0) * ((.6 / this.size) * 6), (t + 1.0) * ((.6 / this.size) * 6), (e + 1.0) * ((.6 / this.size) * 6), 128 + (e * ((35 / this.size) * 6)), 128 + (t * ((35 / this.size) * 6)), 128 + (k * ((35 / this.size) * 6)))
+                            this.dots[t].x = (this.dots[t].k + 1.0) * ((.6 / this.size) * 6)
+                            this.dots[t].y = (this.dots[t].t + 1.0) * ((.6 / this.size) * 6)
+                            this.dots[t].z = (this.dots[t].e + 1.0) * ((.6 / this.size) * 6)
+                        }
+
+            }
+
+        }
         export2() {
             let out = ''
 
@@ -4036,6 +4070,10 @@
             if (spin4.isPointInside(TIP_engine)) {
                 orth*=-1
             }
+            if (spin5.isPointInside(TIP_engine)) {
+                b.spin5()
+            }
+            
             
             if (scaler.isPointInside(TIP_engine)) {
                 scale *= -1
@@ -4096,6 +4134,7 @@
     let spin2 = new Rectangle(250, 700, 200, 50, "yellow")
     let spin3 = new Rectangle(250, 750, 200, 50, "orange")
     let spin4 = new Rectangle(50, 750, 200, 50, "cyan")
+    let spin5 = new Rectangle(450, 750, 200, 50, "blue")
     let scaler = new Rectangle(500, 700, 200, 50, "white")
     let scale = -1
     let AI = -1
@@ -4112,6 +4151,7 @@
         spin2.draw()
         spin3.draw()
         spin4.draw()
+        spin5.draw()
         aiButton.draw()
         // if(AI == 1){
         difficultyButton.draw()
@@ -4128,6 +4168,9 @@
         canvas_context.fillStyle = "black"
         canvas_context.font = "30px comic sans ms"
         canvas_context.fillText("project", spin4.x + 20, spin4.y + 30)
+        canvas_context.fillStyle = "white"
+        canvas_context.font = "30px comic sans ms"
+        canvas_context.fillText("align", spin5.x + 20, spin5.y + 30)
         canvas_context.fillStyle = "black"
         canvas_context.font = "30px comic sans ms"
         canvas_context.fillText("scale", scaler.x + 20, scaler.y + 30)
