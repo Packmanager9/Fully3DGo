@@ -1801,7 +1801,7 @@
         export() {
             return this.board.export2()
         }
-        generateMoves() {
+        generateMoves(p) {
             const nextMoves = [];
             ///////////////console.log(this.board)
 
@@ -1883,6 +1883,31 @@
             // }
 
 
+            // for (let i = 0; i < this.board.size; i++) {
+            //     for (let j = 0; j < this.board.size; j++) {
+            //         for (let k = 0; k < this.board.size; k++) {
+            //             let index = i * (this.board.size * this.board.size)
+            //             index += j * this.board.size
+            //             index += k
+            //             ///////////////console.log(index)
+            //             if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark == 0 ||  (this.board.supa[i][j][k].mark  == ((b.board.turn-.5)*2) && (c1x == 1 || c2x == 1))|| (f3 < 2 && f2 < 2)))) {
+            //                 if(Math.random()< .5){
+
+            //                     nextMoves.push([i,j,k]);
+            //                 }else{
+
+            //                     nextMoves.unshift([i,j,k]);
+            //                 }
+            //                 }
+            //         }
+            //     }
+            // }
+
+            // if(nextMoves.length > 0){
+            //     return nextMoves;
+            // }
+
+
             for (let i = 0; i < this.board.size; i++) {
                 for (let j = 0; j < this.board.size; j++) {
                     for (let k = 0; k < this.board.size; k++) {
@@ -1890,7 +1915,17 @@
                         index += j * this.board.size
                         index += k
                         ///////////////console.log(index)
-                        if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark == 0 ||  (this.board.supa[i][j][k].mark  == ((b.board.turn-.5)*2) && (c1x == 1 || c2x == 1))|| (f3 < 2 && f2 < 2)))) {
+                        let bonk = 0
+                        if(this.board.supa[i][j][k].mark != p){
+                            let n =  b.board.badneighbors(this.board.supa[i][j][k])
+                       for(let f = 0;f<n.length;f++){
+                        bonk+= n[f].turned
+                       }
+                       if(Math.abs(bonk) == n.length){
+                        continue
+                       }
+                        }
+                        if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark != p ||  (this.board.supa[i][j][k].mark  == ((b.board.turn-.5)*2) && (c1x == 1 || c2x == 1))|| (f3 < 2 && f2 < 2)))) {
                             if(Math.random()< .5){
 
                                 nextMoves.push([i,j,k]);
@@ -1903,7 +1938,11 @@
                 }
             }
 
-            return nextMoves;
+            // if(nextMoves.length > 0){
+                return nextMoves;
+            // }
+
+
         }
 
         vicCheck() {
@@ -2113,10 +2152,10 @@
             for (let t = 0; t < b.board.storage.dots.length; t++) {
                 let n = b.board.storage.smartsubneighbors(b.board.storage.dots[t])
                 if (b.board.storage.dots[t].turned == -1) {
-                    s1 += n.length * .875
+                    s2 += n.length * .5
                 }
                 if (b.board.storage.dots[t].turned == 1) {
-                    s2 += n.length * .875
+                    s1 += n.length * .5
                 }
             }
             for (let t = 0; t < b.board.storage.dots.length; t++) {
@@ -2146,7 +2185,7 @@
         }
         isGameOver() {
             // /////////////console.log(this.checkWinner(), this.generateMoves.length)
-            return (this.generateMoves().length == 0);
+            return (this.generateMoves(((b.board.turn - .5) * 2)).length == 0);
         }
         minimax(depth, isMaximizingPlayer, player) {
             if (this.isGameOver() || depth === 0) {
@@ -2155,7 +2194,7 @@
             if (isMaximizingPlayer) {
                 let bestScore = -Infinity;
                 let bestmove = -1
-                for (let move of this.generateMoves()) {
+                for (let move of this.generateMoves(player)) {
                     this.board.supa[move[0]][move[1]][move[2]].turned = player
                     let score = this.minimax(depth - 1, false, player)[0];
                     this.board.supa[move[0]][move[1]][move[2]].turned = 0
@@ -2168,7 +2207,7 @@
             } else {
                 let bestScore = Infinity;
                 let bestmove = -1
-                for (let move of this.generateMoves()) {
+                for (let move of this.generateMoves(player)) {
                     this.board.supa[move[0]][move[1]][move[2]].turned = player
                     let score = this.minimax(depth - 1, true, player)[0];
                     this.board.supa[move[0]][move[1]][move[2]].turned = 0
@@ -4224,7 +4263,7 @@
 
         // flooble.draw()
 
-        let fr = b.generateMoves()
+        let fr = b.generateMoves(((b.board.turn - .5) * 2))
 
         if (clicked >= 2) {
             canvas_context.font = "30px arial"
@@ -4265,9 +4304,9 @@
                     // }
                     let pair = []
                     if (b.board.turn == 0) {
-                        pair = b.minimax(1, true, ((b.board.turn - .5) * 2) * -1)
+                        pair = b.minimax(1, true, ((b.board.turn - .5) * 2)*-1)
                     } else {
-                        pair = b.minimax(1, true, ((b.board.turn - .5) * 2) * -1)
+                        pair = b.minimax(1, true, ((b.board.turn - .5) * 2)*-1)
                     }
                     // if(start == 0){
                     //     start  = 1
@@ -4288,15 +4327,30 @@
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].g = 255;
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].b = 255;
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 1
+                            if (b.strings.includes(b.export())) {
+                                b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 0
+                                b.board.turn++
+                                b.board.turn %= 2
+                            }else{
+
+                                clicked = 0
+                            }
                         } else {
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].r = 0;
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].g = 0;
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].b = 0;
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = -1
+                            if (b.strings.includes(b.export())) {
+                                b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 0
+                                b.board.turn++
+                                b.board.turn %= 2
+                            }else{
+
+                        clicked = 0
+                            }
                         }
                         b.board.turn++
                         b.board.turn %= 2
-                        clicked = 0
                     }
 
                     // if (b.strings.includes(b.export())) {
