@@ -939,6 +939,7 @@
 
     class Point3D {
         constructor(x, y, z, r, g, b) {
+            this.turned = 0
             this.x = x
             this.y = y
             this.z = z
@@ -947,7 +948,6 @@
             this.g = g
             this.b = b
             this.radius = 5
-            this.turned = 0
             this.value = .5
             this.marked = 0
         }
@@ -1066,6 +1066,19 @@
             }
             if (this.turned == 1) {
                 // //////console.log("h")
+                if(this.last == 1){
+
+                    let r = 9 + (Math.max(-5, -this.z * 1)) + (Math.random()*1.5)
+                    canvas_context.beginPath();
+                    canvas_context.arc((this.sx * 1) + 0, (this.sy * 1) + 0, r, 0, (Math.PI * 2), true)
+                    canvas_context.fillStyle =  "magenta"
+                    canvas_context.strokeStyle =  "magenta"
+                    canvas_context.fillStyle = "magenta"
+                    canvas_context.lineWidth = 4
+                    canvas_context.stroke()
+                    // if (this.marked == 1) {
+                    canvas_context.fill()
+                }
                 let r = 7 + (Math.max(-5, -this.z * 1))
                 canvas_context.beginPath();
                 canvas_context.arc((this.sx * 1) + 0, (this.sy * 1) + 0, r, 0, (Math.PI * 2), true)
@@ -1103,6 +1116,20 @@
                 // canvas_context.lineTo(this.sx - 10, this.sy + 10);
                 // canvas_context.lineWidth = 3
                 // canvas_context.stroke()
+
+                if(this.last == 1){
+
+                let r = 9 + (Math.max(-5, -this.z * 1))+ (Math.random()*1.5)
+                canvas_context.beginPath();
+                canvas_context.arc((this.sx * 1) + 0, (this.sy * 1) + 0, r, 0, (Math.PI * 2), true)
+                canvas_context.fillStyle =  "yellow"
+                canvas_context.strokeStyle =  "yellow"
+                canvas_context.fillStyle = "yellow"
+                canvas_context.lineWidth = 4
+                canvas_context.stroke()
+                // if (this.marked == 1) {
+                canvas_context.fill()
+                }
                 canvas_context.beginPath();
                 let r = 7 + (Math.max(-5, -this.z * 1))
                 canvas_context.arc((this.sx * 1) + 0, (this.sy * 1) + 0, r, 0, (Math.PI * 2), true)
@@ -1225,6 +1252,7 @@
                                 this.board.supa[kop][top][eep].r = 255
                                 this.board.supa[kop][top][eep].g = 255
                                 this.board.supa[kop][top][eep].b = 255
+                                this.board.supa[kop][top][eep].last = 1
                                 flagger = [this.board.supa[kop][top][eep].t, this.board.supa[kop][top][eep].k, this.board.supa[kop][top][eep].e]
                                 if (this.strings.includes(this.export())) {
                                     flagger = []
@@ -1258,6 +1286,7 @@
                                 this.board.supa[kop][top][eep].r = 0
                                 this.board.supa[kop][top][eep].g = 0
                                 this.board.supa[kop][top][eep].b = 0
+                                this.board.supa[kop][top][eep].last = 1
                                 flagger = [this.board.supa[kop][top][eep].t, this.board.supa[kop][top][eep].k, this.board.supa[kop][top][eep].e]
                                 if (this.strings.includes(this.export())) {
                                     flagger = []
@@ -1287,7 +1316,7 @@
                             }
                             ///////////////console.log("h")
                             if (AI == 1) {
-                                clicked = 5
+                                clicked = 13
                             }
                             this.board.wholeSort()
                             // this.board.badwholeSort()
@@ -1313,6 +1342,7 @@
                                 this.board.dots[k].r = 255
                                 this.board.dots[k].g = 255
                                 this.board.dots[k].b = 255
+                                this.board.dots[k].last = 1
                                 flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
                                 if (this.strings.includes(this.export())) {
                                     flagger = []
@@ -1346,6 +1376,7 @@
                                 this.board.dots[k].r = 0
                                 this.board.dots[k].g = 0
                                 this.board.dots[k].b = 0
+                                this.board.dots[k].last = 1
                                 flagger = [this.board.dots[k].t, this.board.dots[k].k, this.board.dots[k].e]
                                 if (this.strings.includes(this.export())) {
                                     flagger = []
@@ -1375,7 +1406,7 @@
                             }
                             ///////////////console.log("h")
                             if (AI == 1) {
-                                clicked = 5
+                                clicked = 13
                             }
                             this.board.wholeSort()
                             // this.board.badwholeSort()
@@ -1392,11 +1423,11 @@
 
             }
 
-            b.board.wholeSort()
+            b.board.wholeSort(1)
             b.board.badwholeSort()
             b.board.turn++
             b.board.turn %= 2
-            b.board.wholeSort()
+            b.board.wholeSort(1)
             b.board.badwholeSort()
             b.board.turn++
             b.board.turn %= 2
@@ -1565,11 +1596,11 @@
             //         goBoard3.turn = this.board.turn
             //         goBoard4.turn = this.board.turn
             //         goBoard5.turn = this.board.turn
-            //         goBoard1.wholeSort()
-            //         goBoard2.wholeSort()
-            //         goBoard3.wholeSort()
-            //         goBoard4.wholeSort()
-            //         goBoard5.wholeSort()
+            //         goBoard1.wholeSort(1)
+            //         goBoard2.wholeSort(1)
+            //         goBoard3.wholeSort(1)
+            //         goBoard4.wholeSort(1)
+            //         goBoard5.wholeSort(1)
 
 
             //         goBoard1.turn = (this.board.turn + 1) % 2
@@ -1578,11 +1609,11 @@
             //         goBoard4.turn = (this.board.turn + 1) % 2
             //         goBoard5.turn = (this.board.turn + 1) % 2
 
-            //         goBoard1.wholeSort()
-            //         goBoard2.wholeSort()
-            //         goBoard3.wholeSort()
-            //         goBoard4.wholeSort()
-            //         goBoard5.wholeSort()
+            //         goBoard1.wholeSort(1)
+            //         goBoard2.wholeSort(1)
+            //         goBoard3.wholeSort(1)
+            //         goBoard4.wholeSort(1)
+            //         goBoard5.wholeSort(1)
 
 
             //         /////////console.log(goBoard1)
@@ -1633,11 +1664,11 @@
             //         goBoard3.turn = this.board.turn
             //         goBoard4.turn = this.board.turn
             //         goBoard5.turn = this.board.turn
-            //         goBoard1.wholeSort()
-            //         goBoard2.wholeSort()
-            //         goBoard3.wholeSort()
-            //         goBoard4.wholeSort()
-            //         goBoard5.wholeSort()
+            //         goBoard1.wholeSort(1)
+            //         goBoard2.wholeSort(1)
+            //         goBoard3.wholeSort(1)
+            //         goBoard4.wholeSort(1)
+            //         goBoard5.wholeSort(1)
 
 
             //         goBoard1.turn = (this.board.turn + 1) % 2
@@ -1646,11 +1677,11 @@
             //         goBoard4.turn = (this.board.turn + 1) % 2
             //         goBoard5.turn = (this.board.turn + 1) % 2
 
-            //         goBoard1.wholeSort()
-            //         goBoard2.wholeSort()
-            //         goBoard3.wholeSort()
-            //         goBoard4.wholeSort()
-            //         goBoard5.wholeSort()
+            //         goBoard1.wholeSort(1)
+            //         goBoard2.wholeSort(1)
+            //         goBoard3.wholeSort(1)
+            //         goBoard4.wholeSort(1)
+            //         goBoard5.wholeSort(1)
 
 
 
@@ -1773,11 +1804,11 @@
             //         goBoard3.turn = this.board.turn
             //         goBoard4.turn = this.board.turn
             //         goBoard5.turn = this.board.turn
-            //         // goBoard1.wholeSort()
-            //         // goBoard2.wholeSort()
-            //         // goBoard3.wholeSort()
-            //         // goBoard4.wholeSort()
-            //         // goBoard5.wholeSort()
+            //         // goBoard1.wholeSort(1)
+            //         // goBoard2.wholeSort(1)
+            //         // goBoard3.wholeSort(1)
+            //         // goBoard4.wholeSort(1)
+            //         // goBoard5.wholeSort(1)
 
 
             //         goBoard1.turn = (this.board.turn + 1) % 2
@@ -1786,11 +1817,11 @@
             //         goBoard4.turn = (this.board.turn + 1) % 2
             //         goBoard5.turn = (this.board.turn + 1) % 2
 
-            //         // goBoard1.wholeSort()
-            //         // goBoard2.wholeSort()
-            //         // goBoard3.wholeSort()
-            //         // goBoard4.wholeSort()
-            //         // goBoard5.wholeSort()
+            //         // goBoard1.wholeSort(1)
+            //         // goBoard2.wholeSort(1)
+            //         // goBoard3.wholeSort(1)
+            //         // goBoard4.wholeSort(1)
+            //         // goBoard5.wholeSort(1)
 
 
             //     }
@@ -1940,9 +1971,11 @@
                                     if (indent == -1) {
                                         indent = nextMoves.length
                                     } else {
-                                        sindent = 1
-                                        nextMoves.splice(indent,1)
-                                        continue
+                                        if(Math.random()<.25){
+                                            sindent = 1
+                                            nextMoves.splice(indent,1)
+                                            continue
+                                        }
                                     }
                                 } else {
                                     continue
@@ -2130,15 +2163,19 @@
 
                 b.board.storage.turn = b.board.turn
 
-                for (let t = 0; t < b.board.dots.length; t++) {
-                    b.board.storage.dots[t].turned = b.board.dots[t].turned
-                    b.board.storage.dots[t].marked = b.board.dots[t].marked
+                for (let t = 0; t < this.board.supa.length; t++) {
+                for (let k = 0; k < this.board.supa[t].length; k++) {
+                    for (let e = 0; e < this.board.supa[t][k].length; e++) {
+                    b.board.storage.supa[t][k][e].turned = b.board.supa[t][k][e].turned
+                    b.board.storage.supa[t][k][e].marked = b.board.supa[t][k][e].marked
                 }
-                b.board.storage.wholeSort()
+            }
+        }
+                b.board.storage.wholeSort(1)
                 b.board.storage.badwholeSort()
                 b.board.storage.turn++
                 b.board.storage.turn %= 2
-                b.board.storage.wholeSort()
+                b.board.storage.wholeSort(1)
                 b.board.storage.badwholeSort()
                 b.board.storage.turn++
                 b.board.storage.turn %= 2
@@ -2146,6 +2183,7 @@
                 let c2 = 0
                 let f1 = 0
                 let f2 = 0
+                // console.log(b.board.storage)
                 for (let t = 0; t < b.board.storage.dots.length; t++) {
                     if (b.board.storage.dots[t].mark == 1 || b.board.storage.dots[t].turned == 1) {
                         c1++
@@ -2176,10 +2214,10 @@
                 for (let t = 0; t < b.board.storage.dots.length; t++) {
                     let n = b.board.storage.smartsubneighbors(b.board.storage.dots[t])
                     if (b.board.storage.dots[t].turned == -1) {
-                        s1 += n.length * .875
+                        s2 += n.length * .125
                     }
                     if (b.board.storage.dots[t].turned == 1) {
-                        s2 += n.length * .875
+                        s1 += n.length * .125
                     }
                 }
                 // if (player == 1) {
@@ -2546,7 +2584,7 @@
             return ret;
         }
         draw() {
-            // this.wholeSort()
+            // this.wholeSort(1)
             // ///////////////console.log("draw")
             for (let t = 0; t < this.board.length; t++) {
                 for (let k = 0; k < this.board[t].length; k++) {
@@ -2909,14 +2947,14 @@
         //                 // }
         //                 // this.strings.push(this.stringify())
         //                 // this.boards.push(new Go(this.board))
-        //                 // this.wholeSort()
+        //                 // this.wholeSort(1)
         //                 // if (this.dumbSort()) {
         //                 //     this.board[t][k].value = .5
         //                 //     this.board[t][k].type = 0
         //                 //     // ///////////////console.log("clash", t,k)
         //                 //     return 1
         //                 // }
-        //                 // this.wholeSort()
+        //                 // this.wholeSort(1)
         //                 // this.score[this.turn] += this.countup
         //                 // this.strings.push(this.stringify())
         //                 // this.boards.push(new Go(this.board))
@@ -2945,7 +2983,7 @@
 
 
         //                 // // this.dumbSort()
-        //                 // this.wholeSort()
+        //                 // this.wholeSort(1)
         //                 // if (this.dumbSort()) {
         //                 //     this.board[t][k].value = .5
         //                 //     this.board[t][k].type = 0
@@ -2956,7 +2994,7 @@
 
         //                 // this.strings.push(this.stringify())
         //                 // this.boards.push(new Go(this.board))
-        //                 // this.wholeSort()
+        //                 // this.wholeSort(1)
         //                 // this.score[this.turn] += this.countup
 
         //                 this.turn = 0
@@ -3004,14 +3042,14 @@
                         }
                         this.strings.push(this.stringify())
                         this.boards.push(new Go(this.board))
-                        this.wholeSort()
+                        this.wholeSort(1)
                         if (this.dumbSort()) {
                             this.board[t][k].value = .5
                             this.board[t][k].type = 0
                             // ///////////////console.log("clash", t,k)
                             return 1
                         }
-                        this.wholeSort()
+                        this.wholeSort(1)
                         this.score[this.turn] += this.countup
                         this.strings.push(this.stringify())
                         this.boards.push(new Go(this.board))
@@ -3040,7 +3078,7 @@
 
 
                         // this.dumbSort()
-                        this.wholeSort()
+                        this.wholeSort(1)
                         if (this.dumbSort()) {
                             this.board[t][k].value = .5
                             this.board[t][k].type = 0
@@ -3051,7 +3089,7 @@
 
                         this.strings.push(this.stringify())
                         this.boards.push(new Go(this.board))
-                        this.wholeSort()
+                        this.wholeSort(1)
                         this.score[this.turn] += this.countup
 
                         this.turn = 0
@@ -3181,7 +3219,7 @@
             return boole
         }
 
-        wholeSort() {
+        wholeSort(flag = 0) {
             let boole = false
             for (let t = 0; t < this.supa.length; t++) {
                 for (let k = 0; k < this.supa[t].length; k++) {
@@ -3190,9 +3228,11 @@
                     }
                 }
             }
-            if(boole){
+            if(boole && flag == 0){
             // if(AI != 1 && boole){
-                stonecollapse.play()
+                if (!b.strings.includes(b.export())) {
+                    stonecollapse.play()
+                }
             }
 
             return boole
@@ -4102,6 +4142,9 @@
         window.addEventListener('pointerdown', e => {
             // b.board.rotateZ(1.2)
             // b.board.rotateY(.751)
+            for(let t = 0;t<b.board.dots.length;t++){
+                b.board.dots[t].last = 0
+            }
             e.preventDefault()
             canvas.focus();
             FLEX_engine = canvas.getBoundingClientRect();
@@ -4121,7 +4164,7 @@
             if (aiButton.isPointInside(TIP_engine)) {
                 AI *= -1
                 if (AI == 1) {
-                    clicked = 5
+                    clicked = 13
                     playerID = -1
                 }
             }
@@ -4198,7 +4241,7 @@
 
     let flooble = new ThreeDeeObject()
 
-    let clicked = 5
+    let clicked = 13
     let start = 0
     let b = new Pairs()
     let mod = 1
@@ -4298,8 +4341,9 @@
         // flooble.draw()
 
         let fr = b.generateMoves(((b.board.turn - .5) * 2))
-
-        if (clicked >= 2) {
+        let fr2 = b.generateMoves(((b.board.turn - .5) * 2)*-1)
+        let len = fr2.length + fr.length
+        if (clicked >= 2 || clicked == 1) {
             canvas_context.font = "30px arial"
             canvas_context.fillStyle = "white"
             canvas_context.fillText("AI Processing", 60, 90)
@@ -4313,10 +4357,14 @@
 
             if (clicked == 1) {
 
+            for(let t = 0;t<b.board.dots.length;t++){
+                b.board.dots[t].last = 0
+            }
+
 
                 if (!b.isGameOver()) {
 
-                    let depth = difficulty
+                    let depth = 1
                     // if(b.board.turn == 0){
                     //     depth = 1
                     //     if(Math.random() < .05){
@@ -4324,23 +4372,17 @@
                     //     }
                     // }else{
                     // }
-                    // if(fr.length < 50){
-                    //     depth++
-                    // }
-                    // if(fr.length < 25){
-                    //     depth++
-                    // }
-                    // if(fr.length < 15){
-                    //     depth++
-                    // }
-                    // if(fr.length < 10){
-                    //     depth++
-                    // }
+                    if(len < 60){
+                        depth++
+                    }
+                    if(len < 12){
+                        depth++
+                    }
                     let pair = []
                     if (b.board.turn == 0) {
-                        pair = b.minimax(1, true, ((b.board.turn - .5) * 2) * -1)
+                        pair = b.minimax(depth, true, ((b.board.turn - .5) * 2) * -1)
                     } else {
-                        pair = b.minimax(1, true, ((b.board.turn - .5) * 2) * -1)
+                        pair = b.minimax(depth, true, ((b.board.turn - .5) * 2) * -1)
                     }
                     // if(start == 0){
                     //     start  = 1
@@ -4360,26 +4402,32 @@
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].r = 255;
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].g = 255;
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].b = 255;
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].last = 1
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 1
                             if (b.strings.includes(b.export())) {
+                                b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].last = 0
                                 b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 0
                                 b.board.turn++
                                 b.board.turn %= 2
                             } else {
 
+                                stoneclick.play()
                                 clicked = 0
                             }
                         } else {
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].r = 0;
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].g = 0;
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].b = 0;
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].last = 1
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = -1
                             if (b.strings.includes(b.export())) {
                                 b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 0
+                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].last = 0
                                 b.board.turn++
                                 b.board.turn %= 2
                             } else {
 
+                                stoneclick.play()
                                 clicked = 0
                             }
                         }
@@ -4409,16 +4457,16 @@
                     //     ////console.log(this.board.turn)
                     // }
 
+                    b.board.wholeSort()
+                b.board.badwholeSort()
+                b.board.turn++
+                b.board.turn %= 2
+                b.board.wholeSort(1)
+                b.board.badwholeSort()
+                b.board.turn++
+                b.board.turn %= 2
                 }
 
-                b.board.wholeSort()
-                b.board.badwholeSort()
-                b.board.turn++
-                b.board.turn %= 2
-                b.board.wholeSort()
-                b.board.badwholeSort()
-                b.board.turn++
-                b.board.turn %= 2
                 // b.board.rotateZ(.01)
                 // b.board.rotateY(.0051)
                 // clicked = 0
