@@ -2152,10 +2152,10 @@
             for (let t = 0; t < b.board.storage.dots.length; t++) {
                 let n = b.board.storage.smartsubneighbors(b.board.storage.dots[t])
                 if (b.board.storage.dots[t].turned == -1) {
-                    s2 += n.length * .5
+                    s1 += n.length * .875
                 }
                 if (b.board.storage.dots[t].turned == 1) {
-                    s1 += n.length * .5
+                    s2 += n.length * .875
                 }
             }
             for (let t = 0; t < b.board.storage.dots.length; t++) {
@@ -2167,6 +2167,8 @@
                     s2 += n.length * .5
                 }
             }
+
+
             c1 += s1 / 100
             c2 += s2 / 100
             // //console.log(player, c1, c2)
