@@ -248,6 +248,17 @@
     }
 
     // let rock = new Image()
+    let stoneclick = new Audio()
+    stoneclick.src = "https://ditzbitz.com/stoneclick.mp3"
+    stoneclick.volume = .4
+    
+
+    
+
+    let stonecollapse = new Audio()
+    stonecollapse.src = "https://ditzbitz.com/stonecollapse2.mp3"
+    stonecollapse.volume = .4
+
     // rock.src = "https://ditzbitz.com/rockRPS.png"
     // let paper = new Image()
     // paper.src = "https://ditzbitz.com/paperRPS.png"
@@ -3179,6 +3190,9 @@
                     }
                 }
             }
+            if(AI != 1 && boole){
+                stonecollapse.play()
+            }
 
             return boole
         }
@@ -4035,6 +4049,7 @@
                         ws.send(JSON.stringify(pson))
                     }
 
+
                     canvas_context.font = "30px arial"
                     canvas_context.fillStyle = "white"
                     canvas_context.fillText("<-- Online light, if it stops flashing you have no opponent.", 60, 30)
@@ -4142,6 +4157,7 @@
                 }
                 ////console.log(i)
                 if (i[0] != -10) {
+                    stoneclick.play()
                     b.cald = 0
                     let pson = {}
                     pson.te = i[0] - b.board.sizeDown
@@ -4530,6 +4546,7 @@
                 // b.board.turn %= 2
                 b.cald = 1
 
+                stoneclick.play()
             } else {
                 // ////console.log(JSON.parse(data))
                 if (JSON.parse(data).roomlist) {
