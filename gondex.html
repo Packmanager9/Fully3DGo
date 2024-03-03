@@ -251,9 +251,9 @@
     let stoneclick = new Audio()
     stoneclick.src = "https://ditzbitz.com/stoneclick.mp3"
     stoneclick.volume = .4
-    
 
-    
+
+
 
     let stonecollapse = new Audio()
     stonecollapse.src = "https://ditzbitz.com/stonecollapse2.mp3"
@@ -1058,9 +1058,9 @@
             this.p = new Point(this.sx, this.sy)
 
             let rekt = new Rectangle(this.sx - 3, this.sy - 3, 6, 6)
-                if (rekt.isPointInside(TIP_engine)) {
-                    this.scale = 1.7
-                }
+            if (rekt.isPointInside(TIP_engine)) {
+                this.scale = 1.7
+            }
         }
         draw() {
             // let circ = new Circle((this.x*120)+350, (this.y*120)+350, 10, this.valueShift(100-(255*(this.z*2/3))))
@@ -1075,13 +1075,13 @@
             }
             if (this.turned == 1) {
                 // //////console.log("h")
-                if(this.last == 1){
+                if (this.last == 1) {
 
-                    let r = 9 + (Math.max(-5, -this.z * 1)) + (Math.random()*1.5)
+                    let r = 9 + (Math.max(-5, -this.z * 1)) + (Math.random() * 1.5)
                     canvas_context.beginPath();
                     canvas_context.arc((this.sx * 1) + 0, (this.sy * 1) + 0, r, 0, (Math.PI * 2), true)
-                    canvas_context.fillStyle =  "magenta"
-                    canvas_context.strokeStyle =  "magenta"
+                    canvas_context.fillStyle = "magenta"
+                    canvas_context.strokeStyle = "magenta"
                     canvas_context.fillStyle = "magenta"
                     canvas_context.lineWidth = 4
                     canvas_context.stroke()
@@ -1126,18 +1126,18 @@
                 // canvas_context.lineWidth = 3
                 // canvas_context.stroke()
 
-                if(this.last == 1){
+                if (this.last == 1) {
 
-                let r = 9 + (Math.max(-5, -this.z * 1))+ (Math.random()*1.5)
-                canvas_context.beginPath();
-                canvas_context.arc((this.sx * 1) + 0, (this.sy * 1) + 0, r, 0, (Math.PI * 2), true)
-                canvas_context.fillStyle =  "yellow"
-                canvas_context.strokeStyle =  "yellow"
-                canvas_context.fillStyle = "yellow"
-                canvas_context.lineWidth = 4
-                canvas_context.stroke()
-                // if (this.marked == 1) {
-                canvas_context.fill()
+                    let r = 9 + (Math.max(-5, -this.z * 1)) + (Math.random() * 1.5)
+                    canvas_context.beginPath();
+                    canvas_context.arc((this.sx * 1) + 0, (this.sy * 1) + 0, r, 0, (Math.PI * 2), true)
+                    canvas_context.fillStyle = "yellow"
+                    canvas_context.strokeStyle = "yellow"
+                    canvas_context.fillStyle = "yellow"
+                    canvas_context.lineWidth = 4
+                    canvas_context.stroke()
+                    // if (this.marked == 1) {
+                    canvas_context.fill()
                 }
                 canvas_context.beginPath();
                 let r = 7 + (Math.max(-5, -this.z * 1))
@@ -1170,7 +1170,7 @@
                 // canvas_context.strokeStyle = `rgb(${this.r},${this.g},${this.b})`
                 canvas_context.strokeStyle = `rgb(${this.r + b.board.cstep},${this.g + b.board.cstep},${this.b + b.board.cstep})`
                 canvas_context.lineWidth = 1
-                canvas_context.strokeRect(this.sx - (3.5*this.scale), this.sy - (3.5*this.scale), 7*this.scale, 7*this.scale)
+                canvas_context.strokeRect(this.sx - (3.5 * this.scale), this.sy - (3.5 * this.scale), 7 * this.scale, 7 * this.scale)
                 // let rekt = new Rectangle(this.sx - 3, this.sy - 3, 6, 6)
                 if (rekt.isPointInside(TIP_engine)) {
                     bril += 30
@@ -1983,9 +1983,9 @@
                                     if (indent == -1) {
                                         indent = nextMoves.length
                                     } else {
-                                        if(Math.random()<.25){
+                                        if (Math.random() < .25) {
                                             sindent = 1
-                                            nextMoves.splice(indent,1)
+                                            nextMoves.splice(indent, 1)
                                             continue
                                         }
                                     }
@@ -1994,447 +1994,447 @@
                                 }
                             }
                         }
-                            if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark != p || (this.board.supa[i][j][k].mark == ((b.board.turn - .5) * 2) && (c1x == 1 || c2x == 1)) || (f3 < 2 && f2 < 2)))) {
-                                // if(Math.random()< .5){
+                        if ((this.board.supa[i][j][k].turned === 0 && (this.board.supa[i][j][k].mark != p || (this.board.supa[i][j][k].mark == ((b.board.turn - .5) * 2) && (c1x == 1 || c2x == 1)) || (f3 < 2 && f2 < 2)))) {
+                            // if(Math.random()< .5){
 
-                                nextMoves.push([i, j, k]);
-                                // }else{
+                            nextMoves.push([i, j, k]);
+                            // }else{
 
-                                //     nextMoves.unshift([i,j,k]);
-                                
-                            }
+                            //     nextMoves.unshift([i,j,k]);
+
                         }
                     }
                 }
-                nextMoves.sort((a,b)=> Math.random()<.5?-1:1)
-                // if(nextMoves.length > 0){
-                return nextMoves;
-                // }
-
-
             }
-
-            vicCheck() {
-
-                // let board1 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board2 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board3 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board4 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board5 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board6 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // // let board7 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // // let board8 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // // let board9 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // for (let k = 0; k < this.board.dots.length; k++) {
-                //     let a = this.board.dots[k].t + 1
-                //     let b = this.board.dots[k].e + 1
-                //     let c = this.board.dots[k].k + 1
-
-                //     board1[a][b][c] = this.board.dots[k].turned
-                //     board2[b][c][a] = this.board.dots[k].turned
-                //     board3[c][a][b] = this.board.dots[k].turned
-                //     board4[a][c][b] = this.board.dots[k].turned
-                //     board5[b][a][c] = this.board.dots[k].turned
-                //     board6[c][b][a] = this.board.dots[k].turned
-                //     // board7[t][e][q] = this.board.dots[k].turned
-                //     // board8[t][e][q] = this.board.dots[k].turned
-                //     // board9[t][e][q] = this.board.dots[k].turned
-
-                // }
-                // let f = [board1, board2, board3, board4, board5, board6]
-
-                // for (let k = 0; k < f.length; k++) {
-                //     for (let t = 0; t < f[k].length; t++) {
-                //         let goboard1 = new Go(f[k][t])
-                //         let goboard2 = new Go(f[k][t])
-                //         let goboard3 = new Go(f[k][t])
-                //         let goboard4 = new Go(f[k][t])
-                //         let goboard5 = new Go(f[k][t])
-                //         goboard1.draw()
-                //         goboard2.draw()
-                //         goboard3.draw()
-                //         goboard4.draw()
-                //         goboard5.draw()
-                //         let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
-                //         for (let r = 0; r < arr.length; r++) {
-                //             for (let w = 0; w < arr[r].blocks.length; w++) {
-                //                 for (let m = 0; m < arr[r].blocks[w].length; m++) {
-                //                     this.board.dots[arr[r].blocks[w][m].t][arr[r].blocks[w][m].k][arr[r].blocks[w][m].e]
-
-
-                //                 }
-                //             }
-                //         }
-
-                //     }
-                // }
-
-                // let goboard11 = new Go(board1[0])
-                // let goboard12 = new Go(board1[1])
-                // let goboard13 = new Go(board1[2])
-                // let goboard14 = new Go(board1[3])
-                // let goboard15 = new Go(board1[4])
-
-
-                // let goboard21 = new Go(board2[0])
-                // let goboard22 = new Go(board2[1])
-                // let goboard23 = new Go(board2[2])
-                // let goboard24 = new Go(board2[3])
-                // let goboard25 = new Go(board2[4])
-
-
-
-                let boo = 0
-                return boo
-            }
-            checkWinner() {
-
-                // let board1 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board2 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board3 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board4 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board5 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // let board6 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
-                // for (let k = 0; k < this.board.dots.length; k++) {
-                //     let a = this.board.dots[k].t + 2
-                //     let b = this.board.dots[k].e + 2
-                //     let c = this.board.dots[k].k + 2
-                //     board1[a][b][c] = this.board.dots[k].turned
-                //     board2[b][c][a] = this.board.dots[k].turned
-                //     board3[c][a][b] = this.board.dots[k].turned
-                //     board4[a][c][b] = this.board.dots[k].turned
-                //     board5[b][a][c] = this.board.dots[k].turned
-                //     board6[c][b][a] = this.board.dots[k].turned
-                // }
-
-                // let boo = 0
-
-
-                // let f = [board1,board2,board3,board4,board5,board6]
-
-                // for(let k = 0;k<f.length;k++){
-                //     for(let t = 0;t<f[k].length;t++){
-                //     let goboard1 = new Go(f[k][t])
-                //     let goboard2 = new Go(f[k][t])
-                //     let goboard3 = new Go(f[k][t])
-                //     let goboard4 = new Go(f[k][t])
-                //     let goboard5 = new Go(f[k][t])
-                //     goboard1.draw()
-                //     goboard2.draw()
-                //     goboard3.draw()
-                //     goboard4.draw()
-                //     goboard5.draw()
-                //     let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
-                //     for(let r = 0;r<arr.length;r++){
-                //         for(let w = 0;w<arr[r].blocks.length;w++){
-                //             for(let m = 0;m<arr[r].blocks[w].length;m++){
-                //                this.board.dots[arr[r].blocks[w][m].t][arr[r].blocks[w][m].k][arr[r].blocks[w][m].e]
-
-
-                //             }
-                //         }
-                //     }
-
-                //     }
-                // }
-
-                let boo = false
-
-                let c1 = .5
-                let c2 = 0
-                let f1 = 0
-                let f2 = 0
-                for (let t = 0; t < b.board.dots.length; t++) {
-                    if (b.board.dots[t].mark == 1 || b.board.dots[t].turned == 1) {
-                        c1++
-                    }
-                    if (b.board.dots[t].mark == -1 || b.board.dots[t].turned == -1) {
-                        c2++
-                    }
-                    if (b.board.dots[t].turned == -1) {
-                        f1 = 1
-                    }
-                    if (b.board.dots[t].turned == -1) {
-                        f2++
-                    }
-                }
-                if (c2 >= ((b.board.size * b.board.size * b.board.size) - 10) && f2 == 1) { c2 = 1 }
-                if (c2 > c1) {
-                    return -1
-                }
-                if (c2 < c1) {
-                    return 1
-                }
-                return 0
-
-                return boo
-            }
-            evaluate(w, player) {
-                const winner = this.checkWinner();
-
-
-                b.board.storage.turn = b.board.turn
-
-                for (let t = 0; t < this.board.supa.length; t++) {
-                for (let k = 0; k < this.board.supa[t].length; k++) {
-                    for (let e = 0; e < this.board.supa[t][k].length; e++) {
-                    b.board.storage.supa[t][k][e].turned = b.board.supa[t][k][e].turned
-                    b.board.storage.supa[t][k][e].marked = b.board.supa[t][k][e].marked
-                }
-            }
-        }
-                b.board.storage.wholeSort(1)
-                b.board.storage.badwholeSort()
-                b.board.storage.turn++
-                b.board.storage.turn %= 2
-                b.board.storage.wholeSort(1)
-                b.board.storage.badwholeSort()
-                b.board.storage.turn++
-                b.board.storage.turn %= 2
-                let c1 = .5
-                let c2 = 0
-                let f1 = 0
-                let f2 = 0
-                // console.log(b.board.storage)
-                for (let t = 0; t < b.board.storage.dots.length; t++) {
-                    if (b.board.storage.dots[t].mark == 1 || b.board.storage.dots[t].turned == 1) {
-                        c1++
-                    }
-                    if (b.board.storage.dots[t].mark == -1 || b.board.storage.dots[t].turned == -1) {
-                        c2++
-                    }
-                    if (b.board.storage.dots[t].turned == -1) {
-                        f1 = 1
-                    }
-                    if (b.board.storage.dots[t].turned == -1) {
-                        f2++
-                    }
-                }
-                if (c2 >= ((b.board.size * b.board.size * b.board.size) - 10) && f2 == 1) { c2 = 1 }
-
-                let s1 = 0
-                let s2 = 0
-                for (let t = 0; t < b.board.storage.dots.length; t++) {
-                    let n = b.board.storage.subneighbors(b.board.storage.dots[t])
-                    if (b.board.storage.dots[t].turned == -1) {
-                        s2 += n.length
-                    }
-                    if (b.board.storage.dots[t].turned == 1) {
-                        s1 += n.length
-                    }
-                }
-                for (let t = 0; t < b.board.storage.dots.length; t++) {
-                    let n = b.board.storage.smartsubneighbors(b.board.storage.dots[t])
-                    if (b.board.storage.dots[t].turned == -1) {
-                        s2 += n.length * .125
-                    }
-                    if (b.board.storage.dots[t].turned == 1) {
-                        s1 += n.length * .125
-                    }
-                }
-                // if (player == 1) {
-                for (let t = 0; t < b.board.storage.dots.length; t++) {
-                    let n = b.board.storage.stupidsubneighbors(b.board.storage.dots[t])
-                    if (b.board.storage.dots[t].turned == -1) {
-                        s1 += n.length * .5
-                    }
-                    if (b.board.storage.dots[t].turned == 1) {
-                        s2 += n.length * .5
-                    }
-                }
+            nextMoves.sort((a, b) => Math.random() < .5 ? -1 : 1)
+            // if(nextMoves.length > 0){
+            return nextMoves;
             // }
 
 
-                c1 += s1 / 100
-                c2 += s2 / 100
-                // //console.log(player, c1, c2)
+        }
 
-                // for (let t = 0; t < b.board.storage.dots.length; t++) {
-                //     b.board.storage.dots[t].turned = b.board.storage.storage.dots[t].turned
-                //     b.board.storage.dots[t].marked = b.board.storage.storage.dots[t].marked
-                // }
+        vicCheck() {
 
-                if (player == 1) {
-                    return c1
+            // let board1 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board2 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board3 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board4 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board5 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board6 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // // let board7 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // // let board8 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // // let board9 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // for (let k = 0; k < this.board.dots.length; k++) {
+            //     let a = this.board.dots[k].t + 1
+            //     let b = this.board.dots[k].e + 1
+            //     let c = this.board.dots[k].k + 1
+
+            //     board1[a][b][c] = this.board.dots[k].turned
+            //     board2[b][c][a] = this.board.dots[k].turned
+            //     board3[c][a][b] = this.board.dots[k].turned
+            //     board4[a][c][b] = this.board.dots[k].turned
+            //     board5[b][a][c] = this.board.dots[k].turned
+            //     board6[c][b][a] = this.board.dots[k].turned
+            //     // board7[t][e][q] = this.board.dots[k].turned
+            //     // board8[t][e][q] = this.board.dots[k].turned
+            //     // board9[t][e][q] = this.board.dots[k].turned
+
+            // }
+            // let f = [board1, board2, board3, board4, board5, board6]
+
+            // for (let k = 0; k < f.length; k++) {
+            //     for (let t = 0; t < f[k].length; t++) {
+            //         let goboard1 = new Go(f[k][t])
+            //         let goboard2 = new Go(f[k][t])
+            //         let goboard3 = new Go(f[k][t])
+            //         let goboard4 = new Go(f[k][t])
+            //         let goboard5 = new Go(f[k][t])
+            //         goboard1.draw()
+            //         goboard2.draw()
+            //         goboard3.draw()
+            //         goboard4.draw()
+            //         goboard5.draw()
+            //         let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
+            //         for (let r = 0; r < arr.length; r++) {
+            //             for (let w = 0; w < arr[r].blocks.length; w++) {
+            //                 for (let m = 0; m < arr[r].blocks[w].length; m++) {
+            //                     this.board.dots[arr[r].blocks[w][m].t][arr[r].blocks[w][m].k][arr[r].blocks[w][m].e]
+
+
+            //                 }
+            //             }
+            //         }
+
+            //     }
+            // }
+
+            // let goboard11 = new Go(board1[0])
+            // let goboard12 = new Go(board1[1])
+            // let goboard13 = new Go(board1[2])
+            // let goboard14 = new Go(board1[3])
+            // let goboard15 = new Go(board1[4])
+
+
+            // let goboard21 = new Go(board2[0])
+            // let goboard22 = new Go(board2[1])
+            // let goboard23 = new Go(board2[2])
+            // let goboard24 = new Go(board2[3])
+            // let goboard25 = new Go(board2[4])
+
+
+
+            let boo = 0
+            return boo
+        }
+        checkWinner() {
+
+            // let board1 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board2 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board3 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board4 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board5 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // let board6 = [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]]
+            // for (let k = 0; k < this.board.dots.length; k++) {
+            //     let a = this.board.dots[k].t + 2
+            //     let b = this.board.dots[k].e + 2
+            //     let c = this.board.dots[k].k + 2
+            //     board1[a][b][c] = this.board.dots[k].turned
+            //     board2[b][c][a] = this.board.dots[k].turned
+            //     board3[c][a][b] = this.board.dots[k].turned
+            //     board4[a][c][b] = this.board.dots[k].turned
+            //     board5[b][a][c] = this.board.dots[k].turned
+            //     board6[c][b][a] = this.board.dots[k].turned
+            // }
+
+            // let boo = 0
+
+
+            // let f = [board1,board2,board3,board4,board5,board6]
+
+            // for(let k = 0;k<f.length;k++){
+            //     for(let t = 0;t<f[k].length;t++){
+            //     let goboard1 = new Go(f[k][t])
+            //     let goboard2 = new Go(f[k][t])
+            //     let goboard3 = new Go(f[k][t])
+            //     let goboard4 = new Go(f[k][t])
+            //     let goboard5 = new Go(f[k][t])
+            //     goboard1.draw()
+            //     goboard2.draw()
+            //     goboard3.draw()
+            //     goboard4.draw()
+            //     goboard5.draw()
+            //     let arr = [goBoard1, goBoard2, goBoard3, goBoard4, goBoard5]
+            //     for(let r = 0;r<arr.length;r++){
+            //         for(let w = 0;w<arr[r].blocks.length;w++){
+            //             for(let m = 0;m<arr[r].blocks[w].length;m++){
+            //                this.board.dots[arr[r].blocks[w][m].t][arr[r].blocks[w][m].k][arr[r].blocks[w][m].e]
+
+
+            //             }
+            //         }
+            //     }
+
+            //     }
+            // }
+
+            let boo = false
+
+            let c1 = .5
+            let c2 = 0
+            let f1 = 0
+            let f2 = 0
+            for (let t = 0; t < b.board.dots.length; t++) {
+                if (b.board.dots[t].mark == 1 || b.board.dots[t].turned == 1) {
+                    c1++
                 }
-                if (player == -1) {
-                    return c2
+                if (b.board.dots[t].mark == -1 || b.board.dots[t].turned == -1) {
+                    c2++
+                }
+                if (b.board.dots[t].turned == -1) {
+                    f1 = 1
+                }
+                if (b.board.dots[t].turned == -1) {
+                    f2++
                 }
             }
-            isGameOver() {
-                // /////////////console.log(this.checkWinner(), this.generateMoves.length)
-                return (this.generateMoves(((b.board.turn - .5) * 2)).length == 0);
+            if (c2 >= ((b.board.size * b.board.size * b.board.size) - 10) && f2 == 1) { c2 = 1 }
+            if (c2 > c1) {
+                return -1
             }
-            minimax(depth, isMaximizingPlayer, player) {
-                if (this.isGameOver() || depth === 0) {
-                    return [this.evaluate(-1, player), -1];
-                }
-                if (isMaximizingPlayer) {
-                    let bestScore = -Infinity;
-                    let bestmove = -1
-                    for (let move of this.generateMoves(player)) {
-                        this.board.supa[move[0]][move[1]][move[2]].turned = player
-                        let score = this.minimax(depth - 1, false, player)[0];
-                        this.board.supa[move[0]][move[1]][move[2]].turned = 0
-                        if ((score > bestScore) || (score == bestScore && Math.random() < .05)) {
-                            bestmove = move
-                        }
-                        bestScore = Math.max(score, bestScore);
+            if (c2 < c1) {
+                return 1
+            }
+            return 0
+
+            return boo
+        }
+        evaluate(w, player) {
+            const winner = this.checkWinner();
+
+
+            b.board.storage.turn = b.board.turn
+
+            for (let t = 0; t < this.board.supa.length; t++) {
+                for (let k = 0; k < this.board.supa[t].length; k++) {
+                    for (let e = 0; e < this.board.supa[t][k].length; e++) {
+                        b.board.storage.supa[t][k][e].turned = b.board.supa[t][k][e].turned
+                        b.board.storage.supa[t][k][e].marked = b.board.supa[t][k][e].marked
                     }
-                    return [bestScore, bestmove];
-                } else {
-                    let bestScore = Infinity;
-                    let bestmove = -1
-                    for (let move of this.generateMoves(player)) {
-                        this.board.supa[move[0]][move[1]][move[2]].turned = player
-                        let score = this.minimax(depth - 1, true, player)[0];
-                        this.board.supa[move[0]][move[1]][move[2]].turned = 0
-                        if ((score < bestScore) || (score == bestScore && Math.random() < .05)) {
-                            bestmove = move
-                        }
-                        bestScore = Math.min(score, bestScore);
-                    }
-                    return [bestScore, bestmove];
                 }
             }
-            clean() {
-
-                this.board.draw()
-                if (this.left.marked == 1) {
-                    this.left.mutate()
-                    this.left.marked = 0
-                    if (Math.random() < .00032) {
-                        this.left.becomeNetworkFrom(this.right.log())
-                    }
-                    if (Math.random() < .0001) {
-                        // this.left = new Network(intus, [12, 12, (6*6*6)])
-                    }
-                    // ///////////////console.log("w")
+            b.board.storage.wholeSort(1)
+            b.board.storage.badwholeSort()
+            b.board.storage.turn++
+            b.board.storage.turn %= 2
+            b.board.storage.wholeSort(1)
+            b.board.storage.badwholeSort()
+            b.board.storage.turn++
+            b.board.storage.turn %= 2
+            let c1 = .5
+            let c2 = 0
+            let f1 = 0
+            let f2 = 0
+            // console.log(b.board.storage)
+            for (let t = 0; t < b.board.storage.dots.length; t++) {
+                if (b.board.storage.dots[t].mark == 1 || b.board.storage.dots[t].turned == 1) {
+                    c1++
                 }
-                if (this.right.marked == 1) {
-                    this.right.mutate()
-                    this.right.marked = 0
-                    if (Math.random() < .00031) {
-                        this.right.becomeNetworkFrom(this.left.log())
-                    }
-                    if (Math.random() < .0032) {
-                        // this.right = new Network(intus, [12, 12, (6*6*6)])
-                    }
-                    // ///////////////console.log("w")
+                if (b.board.storage.dots[t].mark == -1 || b.board.storage.dots[t].turned == -1) {
+                    c2++
                 }
-                this.board.clean()
-                this.left.turn = -1
-                this.right.turn = 1
+                if (b.board.storage.dots[t].turned == -1) {
+                    f1 = 1
+                }
+                if (b.board.storage.dots[t].turned == -1) {
+                    f2++
+                }
             }
-            fight() {
+            if (c2 >= ((b.board.size * b.board.size * b.board.size) - 10) && f2 == 1) { c2 = 1 }
 
-
-
-                if (!this.vicCheck()) {
-                    let data = this.board.export()
-                    data.push(new Data(this.board.turn))
-                    this.left.compute(data)
-                    this.right.compute(data)
-                    if (true) {
-                        let lmin = -99999
-                        let lk = -1
-                        let lmax = 99999
-                        let lt = -1
-                        for (let k = 0; k < this.left.outputs.length; k++) {
-                            if (this.left.outputs[k].valueOf() > lmin) {
-                                if (this.right.inputs[k].valueOf() == .5) {
-                                    lmin = this.left.outputs[k].valueOf()
-                                    lk = k
-                                }
-                            }
-                            if (this.left.outputs[k].valueOf() < lmax) {
-                                if (this.right.inputs[k].valueOf() == .5) {
-                                    lmax = this.left.outputs[k].valueOf()
-                                    lt = k
-                                }
-                            }
-                        }
-                        if (lt != -1) {
-                            this.board.dots[lt].marked = 1
-                            this.board.dots[lt].turned = 0
-                            if (this.board.turn == 0) {
-                                this.board.dots[lt].turned = -1
-                            }
-                            if (this.board.turn == 1) {
-                                this.board.dots[lt].turned = 1
-                            }
-                            this.board.dots[lt].r = this.board.colors[this.board.turn][0]
-                            this.board.dots[lt].g = this.board.colors[this.board.turn][1]
-                            this.board.dots[lt].b = this.board.colors[this.board.turn][2]
-                            this.board.turn += 1
-                            this.board.turn %= 2
-                        } else {
-                            this.left.marked = 1
-                        }
-
-                    }
-
-                } else {
-                    this.left.marked = 1
-                    this.clean()
-                    this.board.draw()
-                    return
+            let s1 = 0
+            let s2 = 0
+            for (let t = 0; t < b.board.storage.dots.length; t++) {
+                let n = b.board.storage.subneighbors(b.board.storage.dots[t])
+                if (b.board.storage.dots[t].turned == -1) {
+                    s2 += n.length
                 }
-                if (!this.vicCheck()) {
-
-                    let data = this.board.export()
-                    data.push(new Data(this.board.turn))
-                    this.left.compute(data)
-                    this.right.compute(data)
-
-                    if (true) {
-                        let lmin = -99999
-                        let lk = -1
-                        let lmax = 99999
-                        let lt = -1
-                        for (let k = 0; k < this.right.outputs.length; k++) {
-                            if (this.right.outputs[k].valueOf() > lmin) {
-                                if (this.right.inputs[k].valueOf() == .5) {
-                                    lmin = this.right.outputs[k].valueOf()
-                                    lk = k
-                                }
-                            }
-                            if (this.right.outputs[k].valueOf() < lmax) {
-                                if (this.right.inputs[k].valueOf() == .5) {
-                                    lmax = this.right.outputs[k].valueOf()
-                                    lt = k
-                                }
-                            }
-                        }
-                        if (lt != -1) {
-                            this.board.dots[lt].marked = 1
-                            this.board.dots[lt].turned = 0
-                            if (this.board.turn == 0) {
-                                this.board.dots[lt].turned = -1
-                            }
-                            if (this.board.turn == 1) {
-                                this.board.dots[lt].turned = 1
-                            }
-                            this.board.dots[lt].r = this.board.colors[this.board.turn][0]
-                            this.board.dots[lt].g = this.board.colors[this.board.turn][1]
-                            this.board.dots[lt].b = this.board.colors[this.board.turn][2]
-                            this.board.turn += 1
-                            this.board.turn %= 2
-                        } else {
-                            this.right.marked = 1
-                        }
-
-                    }
-                } else {
-                    this.right.marked = 1
-                    this.clean()
-                    this.board.draw()
-                    return
+                if (b.board.storage.dots[t].turned == 1) {
+                    s1 += n.length
                 }
+            }
+            for (let t = 0; t < b.board.storage.dots.length; t++) {
+                let n = b.board.storage.smartsubneighbors(b.board.storage.dots[t])
+                if (b.board.storage.dots[t].turned == -1) {
+                    s2 += n.length * .125
+                }
+                if (b.board.storage.dots[t].turned == 1) {
+                    s1 += n.length * .125
+                }
+            }
+            // if (player == 1) {
+            for (let t = 0; t < b.board.storage.dots.length; t++) {
+                let n = b.board.storage.stupidsubneighbors(b.board.storage.dots[t])
+                if (b.board.storage.dots[t].turned == -1) {
+                    s1 += n.length * .5
+                }
+                if (b.board.storage.dots[t].turned == 1) {
+                    s2 += n.length * .5
+                }
+            }
+            // }
 
-                this.board.draw()
+
+            c1 += s1 / 100
+            c2 += s2 / 100
+            // //console.log(player, c1, c2)
+
+            // for (let t = 0; t < b.board.storage.dots.length; t++) {
+            //     b.board.storage.dots[t].turned = b.board.storage.storage.dots[t].turned
+            //     b.board.storage.dots[t].marked = b.board.storage.storage.dots[t].marked
+            // }
+
+            if (player == 1) {
+                return c1
+            }
+            if (player == -1) {
+                return c2
             }
         }
+        isGameOver() {
+            // /////////////console.log(this.checkWinner(), this.generateMoves.length)
+            return (this.generateMoves(((b.board.turn - .5) * 2)).length == 0);
+        }
+        minimax(depth, isMaximizingPlayer, player) {
+            if (this.isGameOver() || depth === 0) {
+                return [this.evaluate(-1, player), -1];
+            }
+            if (isMaximizingPlayer) {
+                let bestScore = -Infinity;
+                let bestmove = -1
+                for (let move of this.generateMoves(player)) {
+                    this.board.supa[move[0]][move[1]][move[2]].turned = player
+                    let score = this.minimax(depth - 1, false, player)[0];
+                    this.board.supa[move[0]][move[1]][move[2]].turned = 0
+                    if ((score > bestScore) || (score == bestScore && Math.random() < .05)) {
+                        bestmove = move
+                    }
+                    bestScore = Math.max(score, bestScore);
+                }
+                return [bestScore, bestmove];
+            } else {
+                let bestScore = Infinity;
+                let bestmove = -1
+                for (let move of this.generateMoves(player)) {
+                    this.board.supa[move[0]][move[1]][move[2]].turned = player
+                    let score = this.minimax(depth - 1, true, player)[0];
+                    this.board.supa[move[0]][move[1]][move[2]].turned = 0
+                    if ((score < bestScore) || (score == bestScore && Math.random() < .05)) {
+                        bestmove = move
+                    }
+                    bestScore = Math.min(score, bestScore);
+                }
+                return [bestScore, bestmove];
+            }
+        }
+        clean() {
+
+            this.board.draw()
+            if (this.left.marked == 1) {
+                this.left.mutate()
+                this.left.marked = 0
+                if (Math.random() < .00032) {
+                    this.left.becomeNetworkFrom(this.right.log())
+                }
+                if (Math.random() < .0001) {
+                    // this.left = new Network(intus, [12, 12, (6*6*6)])
+                }
+                // ///////////////console.log("w")
+            }
+            if (this.right.marked == 1) {
+                this.right.mutate()
+                this.right.marked = 0
+                if (Math.random() < .00031) {
+                    this.right.becomeNetworkFrom(this.left.log())
+                }
+                if (Math.random() < .0032) {
+                    // this.right = new Network(intus, [12, 12, (6*6*6)])
+                }
+                // ///////////////console.log("w")
+            }
+            this.board.clean()
+            this.left.turn = -1
+            this.right.turn = 1
+        }
+        fight() {
+
+
+
+            if (!this.vicCheck()) {
+                let data = this.board.export()
+                data.push(new Data(this.board.turn))
+                this.left.compute(data)
+                this.right.compute(data)
+                if (true) {
+                    let lmin = -99999
+                    let lk = -1
+                    let lmax = 99999
+                    let lt = -1
+                    for (let k = 0; k < this.left.outputs.length; k++) {
+                        if (this.left.outputs[k].valueOf() > lmin) {
+                            if (this.right.inputs[k].valueOf() == .5) {
+                                lmin = this.left.outputs[k].valueOf()
+                                lk = k
+                            }
+                        }
+                        if (this.left.outputs[k].valueOf() < lmax) {
+                            if (this.right.inputs[k].valueOf() == .5) {
+                                lmax = this.left.outputs[k].valueOf()
+                                lt = k
+                            }
+                        }
+                    }
+                    if (lt != -1) {
+                        this.board.dots[lt].marked = 1
+                        this.board.dots[lt].turned = 0
+                        if (this.board.turn == 0) {
+                            this.board.dots[lt].turned = -1
+                        }
+                        if (this.board.turn == 1) {
+                            this.board.dots[lt].turned = 1
+                        }
+                        this.board.dots[lt].r = this.board.colors[this.board.turn][0]
+                        this.board.dots[lt].g = this.board.colors[this.board.turn][1]
+                        this.board.dots[lt].b = this.board.colors[this.board.turn][2]
+                        this.board.turn += 1
+                        this.board.turn %= 2
+                    } else {
+                        this.left.marked = 1
+                    }
+
+                }
+
+            } else {
+                this.left.marked = 1
+                this.clean()
+                this.board.draw()
+                return
+            }
+            if (!this.vicCheck()) {
+
+                let data = this.board.export()
+                data.push(new Data(this.board.turn))
+                this.left.compute(data)
+                this.right.compute(data)
+
+                if (true) {
+                    let lmin = -99999
+                    let lk = -1
+                    let lmax = 99999
+                    let lt = -1
+                    for (let k = 0; k < this.right.outputs.length; k++) {
+                        if (this.right.outputs[k].valueOf() > lmin) {
+                            if (this.right.inputs[k].valueOf() == .5) {
+                                lmin = this.right.outputs[k].valueOf()
+                                lk = k
+                            }
+                        }
+                        if (this.right.outputs[k].valueOf() < lmax) {
+                            if (this.right.inputs[k].valueOf() == .5) {
+                                lmax = this.right.outputs[k].valueOf()
+                                lt = k
+                            }
+                        }
+                    }
+                    if (lt != -1) {
+                        this.board.dots[lt].marked = 1
+                        this.board.dots[lt].turned = 0
+                        if (this.board.turn == 0) {
+                            this.board.dots[lt].turned = -1
+                        }
+                        if (this.board.turn == 1) {
+                            this.board.dots[lt].turned = 1
+                        }
+                        this.board.dots[lt].r = this.board.colors[this.board.turn][0]
+                        this.board.dots[lt].g = this.board.colors[this.board.turn][1]
+                        this.board.dots[lt].b = this.board.colors[this.board.turn][2]
+                        this.board.turn += 1
+                        this.board.turn %= 2
+                    } else {
+                        this.right.marked = 1
+                    }
+
+                }
+            } else {
+                this.right.marked = 1
+                this.clean()
+                this.board.draw()
+                return
+            }
+
+            this.board.draw()
+        }
+    }
 
     class Go {
         constructor(inData = [], offset = 0, yoffset) {
@@ -3240,8 +3240,8 @@
                     }
                 }
             }
-            if(boole && flag == 0){
-            // if(AI != 1 && boole){
+            if (boole && flag == 0) {
+                // if(AI != 1 && boole){
                 if (!b.strings.includes(b.export())) {
                     stonecollapse.play()
                 }
@@ -3711,13 +3711,20 @@
         }
         export() {
             let out = []
-            for (let t = 0; t < (b.board.size * b.board.size * b.board.size); t++) {
-                if (this.dots[t].turned == 1) {
-                    out.push(new Data(1))
-                } else if (this.dots[t].turned == -1) {
-                    out.push(new Data(0))
-                } else {
-                    out.push(new Data(.5))
+            // for (let t = 0; t < (b.board.size * b.board.size * b.board.size); t++) {
+
+
+            for (let t = 0; t < this.board.supa.length; t++) {
+                for (let k = 0; k < this.board.supa[t].length; k++) {
+                    for (let e = 0; e < this.board.supa[t][k].length; e++) {
+                        if (this.supa[t][k][e].turned == 1) {
+                            out.push(new Data(1))
+                        } else if (this.supa[t][k][e].turned == -1) {
+                            out.push(new Data(0))
+                        } else {
+                            out.push(new Data(.5))
+                        }
+                    }
                 }
             }
             return out
@@ -3884,7 +3891,7 @@
                                         this.link.object = this.dots[t].p
                                         this.link.target = this.dots[k].p
                                         this.link.color = gradient
-                                        this.link.width =( .5 + (Math.abs(this.dots[t].turned) * .5))+(((this.dots[k].scale-1)+(this.dots[t].scale-1))*3)
+                                        this.link.width = (.5 + (Math.abs(this.dots[t].turned) * .5)) + (((this.dots[k].scale - 1) + (this.dots[t].scale - 1)) * 3)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
 
@@ -3914,7 +3921,7 @@
                                         this.link.object = this.dots[t].p
                                         this.link.target = this.dots[k].p
                                         this.link.color = gradient
-                                        this.link.width =( .5 + (Math.abs(this.dots[t].turned) * .5))+(((this.dots[k].scale-1)+(this.dots[t].scale-1))*3)
+                                        this.link.width = (.5 + (Math.abs(this.dots[t].turned) * .5)) + (((this.dots[k].scale - 1) + (this.dots[t].scale - 1)) * 3)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
 
@@ -3945,7 +3952,7 @@
                                         this.link.object = this.dots[t].p
                                         this.link.target = this.dots[k].p
                                         this.link.color = gradient
-                                        this.link.width = ( .5 + (Math.abs(this.dots[t].turned) * .5))+(((this.dots[k].scale-1)+(this.dots[t].scale-1))*3)
+                                        this.link.width = (.5 + (Math.abs(this.dots[t].turned) * .5)) + (((this.dots[k].scale - 1) + (this.dots[t].scale - 1)) * 3)
                                         // let link2 = new LineOP(p1,p2, this.dots[t].valueShift(255 - (255 * ((Math.sqrt(Math.abs(this.dots[t].z)) * Math.sign(this.dots[t].z)) * 5 / 3))), .5)
                                         // link2.draw()
 
@@ -4154,7 +4161,7 @@
         window.addEventListener('pointerdown', e => {
             // b.board.rotateZ(1.2)
             // b.board.rotateY(.751)
-            for(let t = 0;t<b.board.dots.length;t++){
+            for (let t = 0; t < b.board.dots.length; t++) {
                 b.board.dots[t].last = 0
             }
             e.preventDefault()
@@ -4353,7 +4360,7 @@
         // flooble.draw()
 
         let fr = b.generateMoves(((b.board.turn - .5) * 2))
-        let fr2 = b.generateMoves(((b.board.turn - .5) * 2)*-1)
+        let fr2 = b.generateMoves(((b.board.turn - .5) * 2) * -1)
         let len = fr2.length + fr.length
         if (clicked >= 2 || clicked == 1) {
             canvas_context.font = "30px arial"
@@ -4369,9 +4376,9 @@
 
             if (clicked == 1) {
 
-            for(let t = 0;t<b.board.dots.length;t++){
-                b.board.dots[t].last = 0
-            }
+                for (let t = 0; t < b.board.dots.length; t++) {
+                    b.board.dots[t].last = 0
+                }
 
 
                 if (!b.isGameOver()) {
@@ -4384,10 +4391,10 @@
                     //     }
                     // }else{
                     // }
-                    if(len < 60){
+                    if (len < 60) {
                         depth++
                     }
-                    if(len < 12){
+                    if (len < 12) {
                         depth++
                     }
                     let pair = []
@@ -4434,7 +4441,7 @@
                             b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = -1
                             if (b.strings.includes(b.export())) {
                                 b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].turned = 0
-                            b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].last = 0
+                                b.board.supa[pair[1][0]][pair[1][1]][pair[1][2]].last = 0
                                 b.board.turn++
                                 b.board.turn %= 2
                             } else {
@@ -4470,13 +4477,13 @@
                     // }
 
                     b.board.wholeSort()
-                b.board.badwholeSort()
-                b.board.turn++
-                b.board.turn %= 2
-                b.board.wholeSort(1)
-                b.board.badwholeSort()
-                b.board.turn++
-                b.board.turn %= 2
+                    b.board.badwholeSort()
+                    b.board.turn++
+                    b.board.turn %= 2
+                    b.board.wholeSort(1)
+                    b.board.badwholeSort()
+                    b.board.turn++
+                    b.board.turn %= 2
                 }
 
                 // b.board.rotateZ(.01)
@@ -4485,7 +4492,7 @@
             }
 
 
-        }else{
+        } else {
             clicked = 0
         }
         b.board.draw()
