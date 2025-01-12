@@ -5,7 +5,9 @@
 <head>
     <!-- <link rel="stylesheet" href="styles.css"> -->
 </head>
-<canvas id="canvas" width="1280" height="850"></canvas>
+
+<canvas style="touch-action: none;"  id="realcanvas" width="1280" height="850" class="canvas"></canvas>
+<canvas hidden id="canvas" width="1280" height="850"></canvas>
 <canvas hidden id="canvas2" width="1280" height="850"></canvas>
 <script>
 
@@ -44,6 +46,9 @@
     let canvas2 = document.getElementById('canvas2')
 
     let canvas_context2 = canvas2.getContext('2d');
+    const realcanvas = document.getElementById('realcanvas') //getting canvas from document
+
+    const realcanvas_context = realcanvas.getContext('2d');
     let canvas
     let canvas_context
     let keysPressed = {}
@@ -4072,6 +4077,7 @@
         canvas = canvas_pass
         canvas_context = canvas.getContext('2d');
         canvas.style.background = style
+        realcanvas.style.background = style
         window.setInterval(function () {
             if (startgame == 2) {
 
@@ -4155,6 +4161,8 @@
                 canvas_context.clearRect(0, 0, canvas.width, canvas.height)
                 canvas_context.drawImage(canvas2, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height)
             }
+
+        canvasScale()
         }, 40)
 
 
@@ -4168,13 +4176,17 @@
             canvas.focus();
             FLEX_engine = canvas.getBoundingClientRect();
             XS_engine = e.clientX - FLEX_engine.left;
-            YS_engine = e.clientY - FLEX_engine.top;
+            YS_engine = e.clientY - FLEX_engine.top; 
             if (scale == 1) {
                 TIP_engine.x = XS_engine * 3
                 TIP_engine.y = YS_engine * 3
+            TIP_engine.x = (XS_engine / xrat)*3 //*.666666
+            TIP_engine.y = (YS_engine / yrat)*3 //*.666666
             } else {
                 TIP_engine.x = XS_engine
                 TIP_engine.y = YS_engine
+                TIP_engine.x = XS_engine / xrat //*.666666
+                TIP_engine.y = YS_engine / yrat //*.666666
             }
             TIP_engine.body = TIP_engine
             if (spin1.isPointInside(TIP_engine)) {
@@ -4248,8 +4260,10 @@
             FLEX_engine = canvas.getBoundingClientRect();
             XS_engine = e.clientX - FLEX_engine.left;
             YS_engine = e.clientY - FLEX_engine.top;
-            TIP_engine.x = XS_engine
-            TIP_engine.y = YS_engine
+            // TIP_engine.x = XS_engine
+            // TIP_engine.y = YS_engine
+                TIP_engine.x = XS_engine / xrat //*.666666
+                TIP_engine.y = YS_engine / yrat //*.666666
             TIP_engine.body = TIP_engine
         }
     }
@@ -4546,8 +4560,52 @@
 
         // }
         // globlin.log()
+
     }
 
+    
+    var win = window,
+        doc = document,
+        docElem = doc.documentElement,
+        body = doc.getElementsByTagName('body')[0],
+        x = win.innerWidth || docElem.clientWidth || body.clientWidth,
+        y = win.innerHeight || docElem.clientHeight || body.clientHeight;
+    // canvas.width = x
+    // canvas.height = y
+    
+//     canvas.width = 1920 
+//     canvas.height = 1080
+
+     xrat = x / 1280
+     yrat = y / 850
+
+    function canvasScale() {
+        //    if(start != 1){
+   
+        var win = window,
+        doc = document,
+        docElem = doc.documentElement,
+        body = doc.getElementsByTagName('body')[0],
+        x = win.innerWidth || docElem.clientWidth || body.clientWidth,
+        y = win.innerHeight || docElem.clientHeight || body.clientHeight;
+    // canvas.width = x
+    // canvas.height = y
+    
+//     canvas.width = 1920 
+//     canvas.height = 1080
+
+     xrat = x / 1280
+     yrat = y / 850
+
+
+
+               realcanvas.width = window.innerWidth; 
+               realcanvas.height = window.innerHeight;
+           
+           
+               realcanvas_context.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, realcanvas.width, realcanvas.height)
+           
+   }
 
 
 
